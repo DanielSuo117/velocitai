@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VelocitAI — UI Automation Agent Harness</title>
+<style>
+  :root {
+    --bg: #FAFAF9;
+    --bg-card: #FFFFFF;
+    --bg-code: #F5F3EF;
+    --bg-hero: #1A1A1A;
+    --bg-hero-accent: #2A2A2A;
+    --text: #1A1A1A;
+    --text-secondary: #6B6560;
+    --text-muted: #9B958F;
+    --text-inverse: #F5F3EF;
+    --accent: #D4783C;
+    --accent-light: #E8A06A;
+    --accent-bg: #FDF3EC;
+    --border: #E8E4DF;
+    --border-light: #F0ECE7;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+    --max-w: 1120px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-light);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: var(--shadow-sm); }
+  .nav-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo {
+    font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em;
+    color: var(--text); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo .logo-icon {
+    width: 28px; height: 28px; background: var(--accent);
+    border-radius: 7px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 0.8rem;
+  }
+  .nav-links { display: flex; gap: 1.6rem; align-items: center; }
+  .nav-links a {
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-github {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 20px;
+    background: var(--text); color: #fff !important;
+    font-size: 0.8rem !important;
+    transition: background 0.2s;
+  }
+  .nav-github:hover { background: #333 !important; }
+  .nav-github svg { width: 16px; height: 16px; }
+
+  .mobile-menu-btn {
+    display: none; background: none; border: none;
+    cursor: pointer; padding: 4px;
+  }
+  .mobile-menu-btn svg { width: 24px; height: 24px; color: var(--text); }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--bg-hero);
+    padding: 10rem 2rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 20% 40%, rgba(212,120,60,0.12), transparent),
+      radial-gradient(ellipse 600px 400px at 80% 60%, rgba(212,120,60,0.06), transparent);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg-hero-accent);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 6px 16px;
+    font-size: 0.78rem; color: var(--accent-light);
+    margin-bottom: 2rem;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 800; color: var(--text-inverse);
+    line-height: 1.15; letter-spacing: -0.03em;
+    max-width: 700px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-desc {
+    margin-top: 1.5rem;
+    font-size: 1.15rem; color: rgba(245,243,239,0.6);
+    line-height: 1.8; max-width: 560px;
+  }
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+  .hero-stat { text-align: left; }
+  .hero-stat .num {
+    font-size: 2rem; font-weight: 800; color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .hero-stat .label {
+    font-size: 0.82rem; color: rgba(245,243,239,0.5);
+    margin-top: 2px;
+  }
+
+  /* ─── SECTION ─── */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: var(--max-w); margin: 0 auto; }
+  .section-label {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent); margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700; letter-spacing: -0.02em;
+    line-height: 1.25; margin-bottom: 0.6rem;
+  }
+  .section-desc {
+    font-size: 1rem; color: var(--text-secondary);
+    line-height: 1.7; max-width: 600px;
+  }
+
+  /* ─── ARCHITECTURE ─── */
+  .arch-section { background: var(--bg); }
+  .arch-diagram {
+    margin-top: 3rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+  }
+  .arch-layers { display: flex; flex-direction: column; gap: 0; }
+  .arch-layer {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.2rem 1.5rem;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .arch-layer:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .arch-layer + .arch-layer { margin-top: -1px; }
+  .arch-layer:nth-child(1) { border-color: var(--accent); background: var(--accent-bg); z-index: 4; }
+  .arch-layer:nth-child(2) { border-color: #A3C4BC; background: #F2F9F7; z-index: 3; }
+  .arch-layer:nth-child(3) { border-color: #B8A9D4; background: #F5F2FA; z-index: 2; }
+  .arch-layer:nth-child(4) { border-color: #C4B5A0; background: #FAF7F2; z-index: 1; }
+  .arch-layer-name {
+    font-weight: 700; font-size: 0.95rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .arch-layer-name code {
+    background: rgba(0,0,0,0.06); padding: 2px 8px;
+    border-radius: 4px; font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .arch-layer-desc {
+    font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;
+  }
+  .arch-arrow {
+    text-align: center; color: var(--text-muted);
+    font-size: 0.9rem; padding: 4px 0;
+  }
+
+  /* ─── GRID CARDS ─── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent);
+  }
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; margin-bottom: 1rem;
+  }
+  .card-icon.skill { background: var(--accent-bg); color: var(--accent); }
+  .card-icon.rule { background: #EDF5F2; color: #3D8B70; }
+  .card-icon.tool { background: #F0EDF7; color: #7B5CB8; }
+  .card h3 {
+    font-size: 0.95rem; font-weight: 700;
+    margin-bottom: 0.4rem; letter-spacing: -0.01em;
+  }
+  .card p {
+    font-size: 0.84rem; color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .card-tag {
+    display: inline-block; margin-top: 0.8rem;
+    font-size: 0.7rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 12px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .card-tag.gen { background: #FDF3EC; color: var(--accent); }
+  .card-tag.debug { background: #FEF1F0; color: #C0392B; }
+  .card-tag.config { background: #EDF5F2; color: #3D8B70; }
+  .card-tag.review { background: #F0EDF7; color: #7B5CB8; }
+
+  /* ─── RULES TABLE ─── */
+  .rules-section { background: #F5F3EF; }
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .rule-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rule-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .rule-card-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 0.8rem;
+  }
+  .rule-card-header .icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+  }
+  .rule-card-header h3 {
+    font-size: 0.9rem; font-weight: 700;
+  }
+  .rule-card ul {
+    list-style: none; padding: 0;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .rule-card li {
+    font-size: 0.82rem; color: var(--text-secondary);
+    padding-left: 1.2rem; position: relative;
+  }
+  .rule-card li::before {
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ─── CODE EXAMPLE ─── */
+  .code-section { background: var(--bg); }
+  .code-showcase {
+    margin-top: 2.5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+  .code-block {
+    background: var(--bg-hero);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .code-block-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .code-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .code-dot.red { background: #FF5F57; }
+  .code-dot.yellow { background: #FEBC2E; }
+  .code-dot.green { background: #28C840; }
+  .code-block-title {
+    flex: 1; text-align: center;
+    font-size: 0.75rem; color: rgba(255,255,255,0.4);
+    font-family: var(--font-mono);
+  }
+  .code-block pre {
+    padding: 1.2rem 1.5rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: #D4D4D4;
+  }
+  .code-block .kw { color: #C586C0; }
+  .code-block .fn { color: #DCDCAA; }
+  .code-block .str { color: #CE9178; }
+  .code-block .cmt { color: #6A9955; }
+  .code-block .cls { color: #4EC9B0; }
+  .code-block .var { color: #9CDCFE; }
+  .code-block .op { color: #D4D4D4; }
+  .code-block .num { color: #B5CEA8; }
+  .code-block .dec { color: #DCDCAA; }
+  .code-label {
+    display: inline-block; margin: 12px 16px;
+    font-size: 0.72rem; font-weight: 600; padding: 3px 10px;
+    border-radius: 10px;
+  }
+  .code-label.good { background: rgba(40,200,64,0.15); color: #28C840; }
+  .code-label.bad { background: rgba(255,95,87,0.15); color: #FF5F57; }
+
+  /* ─── WORKFLOW ─── */
+  .workflow-section { background: #F5F3EF; }
+  .workflow-steps {
+    margin-top: 2.5rem;
+    display: flex; flex-direction: column; gap: 0;
+    position: relative;
+  }
+  .workflow-steps::before {
+    content: '';
+    position: absolute; left: 24px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .wf-step {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    padding: 1.5rem 0;
+    position: relative;
+  }
+  .wf-step-num {
+    flex-shrink: 0;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--bg-card); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1.1rem; color: var(--accent);
+    position: relative; z-index: 1;
+    transition: all 0.2s;
+  }
+  .wf-step:hover .wf-step-num {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .wf-step-content h3 {
+    font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .wf-step-content p {
+    font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;
+  }
+  .wf-step-content code {
+    background: rgba(212,120,60,0.1); color: var(--accent);
+    padding: 1px 6px; border-radius: 4px;
+    font-family: var(--font-mono); font-size: 0.82rem;
+  }
+
+  /* ─── EVOLUTION ─── */
+  .evo-section { background: var(--bg); }
+  .evo-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .evo-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 1.8rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .evo-card:hover {
+    transform: translateY(-3px); box-shadow: var(--shadow-md);
+  }
+  .evo-card .evo-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .evo-card:nth-child(1) .evo-icon { background: var(--accent-bg); }
+  .evo-card:nth-child(2) .evo-icon { background: #EDF5F2; }
+  .evo-card:nth-child(3) .evo-icon { background: #F0EDF7; }
+  .evo-card h3 {
+    font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem;
+  }
+  .evo-card p {
+    font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6;
+  }
+  .evo-card .target {
+    margin-top: 0.8rem;
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--accent); background: var(--accent-bg);
+    padding: 4px 12px; border-radius: 6px;
+    display: inline-block;
+  }
+
+  /* ─── QUICK START ─── */
+  .qs-section { background: #F5F3EF; }
+  .qs-terminal {
+    margin-top: 2.5rem;
+    background: var(--bg-hero);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    max-width: 700px;
+  }
+  .qs-terminal-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .qs-terminal pre {
+    padding: 1.5rem 2rem;
+    font-family: var(--font-mono); font-size: 0.82rem;
+    line-height: 2;
+    color: #D4D4D4;
+    overflow-x: auto;
+  }
+  .qs-terminal .prompt { color: var(--accent); }
+  .qs-terminal .comment { color: #6A9955; }
+
+  /* ─── TECH STACK ─── */
+  .stack-section { background: var(--bg); }
+  .stack-grid {
+    display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem;
+    justify-content: center;
+  }
+  .stack-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.2rem 1.8rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 160px;
+  }
+  .stack-item:hover {
+    transform: translateY(-2px); box-shadow: var(--shadow-md);
+  }
+  .stack-item .stack-icon {
+    font-size: 2rem; margin-bottom: 0.5rem;
+  }
+  .stack-item h4 {
+    font-size: 0.9rem; font-weight: 700;
+  }
+  .stack-item p {
+    font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;
+  }
+  .stack-item .optional {
+    display: inline-block; margin-top: 6px;
+    font-size: 0.65rem; padding: 2px 8px;
+    border-radius: 8px;
+    background: #F0EDF7; color: #7B5CB8;
+  }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    background: var(--bg-hero);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+  .cta-section h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800; color: var(--text-inverse);
+    letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .cta-section p {
+    font-size: 1rem; color: rgba(245,243,239,0.5);
+    max-width: 500px; margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+  }
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: var(--text-inverse);
+    border: 1.5px solid rgba(255,255,255,0.15);
+  }
+  .btn-outline:hover {
+    border-color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 2.5rem 2rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  footer p {
+    font-size: 0.8rem; color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 56px; left: 0; right: 0;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem; gap: 1rem;
+    }
+    .mobile-menu-btn { display: block; }
+    .hero { padding: 8rem 1.5rem 3.5rem; }
+    .hero-stats { gap: 2rem; }
+    section { padding: 3.5rem 1.5rem; }
+    .code-showcase { grid-template-columns: 1fr; }
+    .evo-grid { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
+    .rules-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="logo-icon">V</div>
+      VelocitAI
+    </a>
+    <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#architecture">架构</a>
+      <a href="#skills">Skills</a>
+      <a href="#rules">Rules</a>
+      <a href="#workflow">工作流</a>
+      <a href="#quickstart">快速开始</a>
+      <a href="https://github.com/DanielSuo117/velocitai" class="nav-github" target="_blank">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="dot"></div>
+      Python + Playwright + pytest
+    </div>
+    <h1>用 AI Agent 驱动<br><span>UI 自动化测试</span></h1>
+    <p class="hero-desc">
+      VelocitAI 是一套通用 UI 自动化 Agent Harness —— 为 Claude Code 等 AI Agent 提供完整的 Skills、Rules 和自我进化机制，让 Agent 能自主生成、架构和执行企业级 UI 测试代码。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">12</div>
+        <div class="label">Skills 操作技能</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">8</div>
+        <div class="label">Playwright 规则</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">POM</div>
+        <div class="label">Page Object Model</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">P0‑P2</div>
+        <div class="label">分级代码审查</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section class="arch-section" id="architecture">
+  <div class="section-inner">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title">POM 四层分离架构</h2>
+    <p class="section-desc">
+      经典 Page Object Model 分层设计，按角色拆分测试、页面对象继承链、环境配置隔离、Fixture 自动管理。
+    </p>
+    <div class="arch-diagram">
+      <div class="arch-layers">
+        <div class="arch-layer">
+          <div class="arch-layer-name">
+            <code>tests/</code> 测试层
+          </div>
+          <div class="arch-layer-desc">按角色拆分文件：test_&lt;role&gt;_flow.py — 每个测试类继承 Base 或 Role-Base</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer">
+          <div class="arch-layer-name">
+            <code>pages/</code> 页面对象层
+          </div>
+          <div class="arch-layer-desc">BasePage ← LoginPage ← LandingPage ← … 定位符声明为类常量，标注 P0–P5 级别</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer">
+          <div class="arch-layer-name">
+            <code>config/</code> 配置层
+          </div>
+          <div class="arch-layer-desc">URL、Token、浏览器参数按环境（pre / prod）切换</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer">
+          <div class="arch-layer-name">
+            <code>conftest.py</code> Fixture 层
+          </div>
+          <div class="arch-layer-desc">browser → context → page → Role-specific base — 全自动生命周期管理</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label">Skills</div>
+    <h2 class="section-title">12 个操作技能，覆盖完整工作流</h2>
+    <p class="section-desc">
+      每个 Skill 是一份结构化的操作指南，指导 Agent 如何完成特定任务 —— 从生成 Page Object 到排查测试失败。
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon skill">⚡</div>
+        <h3>gen-page-test</h3>
+        <p>一键生成 PageObject 类和对应的测试文件。自动填充定位符、is_page_loaded 方法和测试骨架。</p>
+        <span class="card-tag gen">Generate</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">🔍</div>
+        <h3>locator-replacer</h3>
+        <p>六级定位符优先级策略（P0 ARIA → P5 XPath）。分析 DOM 结构，替换脆弱定位符为稳定版本。</p>
+        <span class="card-tag gen">Generate</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">▶</div>
+        <h3>test-runner</h3>
+        <p>运行测试并结构化分析结果。自动分类失败原因（定位符/等待/逻辑），输出可操作的修复建议。</p>
+        <span class="card-tag debug">Execute</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">🔧</div>
+        <h3>quick-debug</h3>
+        <p>免登录快速排查测试失败。按超时排查三步法定位根因：先确认页面 → 再检查 tab → 最后查定位符。</p>
+        <span class="card-tag debug">Debug</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">➕</div>
+        <h3>add-regression-point</h3>
+        <p>为已有页面新增回归测试点。定位插入位置，生成定位符 + 操作 + 断言，同步更新文档。</p>
+        <span class="card-tag gen">Generate</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">🏗</div>
+        <h3>architecture</h3>
+        <p>架构决策指南。新增角色、拆分模块、设计继承链时的决策树和分层原则。</p>
+        <span class="card-tag config">Architect</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">✅</div>
+        <h3>page-load-assertion</h3>
+        <p>设计 is_page_loaded() 方法。选择最稳定的页面加载完成标志，避免超时和误判。</p>
+        <span class="card-tag config">Config</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">⏱</div>
+        <h3>wait-strategy</h3>
+        <p>配置等待策略。全局隐式等待 + 慢路径显式 timeout，处理 SPA 异步渲染。</p>
+        <span class="card-tag config">Config</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">🖥</div>
+        <h3>browser-config</h3>
+        <p>浏览器 viewport、超时、Context 参数配置。处理 headless/headed 模式切换。</p>
+        <span class="card-tag config">Config</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">🔄</div>
+        <h3>case-round-trip</h3>
+        <p>用例往返闭合设计。确保测试执行前后系统状态一致，支持数据清理和回滚。</p>
+        <span class="card-tag config">Config</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">💾</div>
+        <h3>save-verify-strategy</h3>
+        <p>保存验证策略。表单提交后的成功/失败判断、Toast/弹窗检测、列表刷新确认。</p>
+        <span class="card-tag config">Config</span>
+      </div>
+      <div class="card">
+        <div class="card-icon skill">📊</div>
+        <h3>code-review-graph</h3>
+        <p>AST 知识图谱驱动的代码审查。利用 MCP 工具分析变更影响半径和测试覆盖。</p>
+        <span class="card-tag review">Review</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section class="rules-section" id="rules">
+  <div class="section-inner">
+    <div class="section-label">Rules</div>
+    <h2 class="section-title">严格规则，每条配反例 + 正例</h2>
+    <p class="section-desc">
+      Rules 是强制约束（Must / Must-not），确保 Agent 生成的代码符合项目规范。每条规则都包含 ❌ 反例和 ✅ 正例。
+    </p>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#EDF5F2;color:#3D8B70;">🎯</div>
+          <h3>定位符策略</h3>
+        </div>
+        <ul>
+          <li>六级优先级：P0 ARIA role → P5 相对 XPath</li>
+          <li>禁止哈希类名（sc-xxx / css-xxx）</li>
+          <li>禁止绝对 XPath</li>
+          <li>状态类 selector 必须配 text 锁定</li>
+          <li>text= 子串匹配的精确化处理</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#FDF3EC;color:#D4783C;">⏳</div>
+          <h3>超时 & 等待</h3>
+        </div>
+        <ul>
+          <li>超时先排查页面，再查定位符</li>
+          <li>SPA 切换后 networkidle ≠ 渲染完成</li>
+          <li>全局隐式等待 + 仅慢路径显式 timeout</li>
+          <li>禁止 time.sleep()</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#F0EDF7;color:#7B5CB8;">🧪</div>
+          <h3>断言模式</h3>
+        </div>
+        <ul>
+          <li>页面对象不包含断言（is_page_loaded 除外）</li>
+          <li>禁止无效断言（assert True）</li>
+          <li>列表搜索结果要验证内容不只验证数量</li>
+          <li>Toast/弹窗需带文本精确匹配</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#FEF1F0;color:#C0392B;">🌐</div>
+          <h3>浏览器上下文</h3>
+        </div>
+        <ul>
+          <li>禁止 session 级共享 context（跨域 cookie 污染）</li>
+          <li>同域 class 级共享需满足三个条件</li>
+          <li>认证通过 URL token 独立执行</li>
+          <li>不手动管理浏览器生命周期</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#EDF5F2;color:#3D8B70;">📑</div>
+          <h3>编码规范</h3>
+        </div>
+        <ul>
+          <li>类 PascalCase / 方法 snake_case / 常量 UPPER_SNAKE</li>
+          <li>定位符声明为类常量，行尾标注级别</li>
+          <li>导入顺序：标准库 → 第三方 → 项目内</li>
+          <li>新页面必须同步导出到 __init__.py</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#F0EDF7;color:#7B5CB8;">🛡</div>
+          <h3>Agent 行为边界</h3>
+        </div>
+        <ul>
+          <li>运行测试前必须确认 --env 参数</li>
+          <li>Git 操作（commit/push）需用户授权</li>
+          <li>禁止自行默认环境或无声纠偏</li>
+          <li>文档与代码冲突时必须询问</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#FDF3EC;color:#D4783C;">📊</div>
+          <h3>报告策略</h3>
+        </div>
+        <ul>
+          <li>仅失败时生成 HTML 报告</li>
+          <li>全绿跳过报告生成，避免堆积</li>
+          <li>标记变量覆盖全阶段（含 teardown）</li>
+          <li>域名统计无论通过与否都输出</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-header">
+          <div class="icon" style="background:#FEF1F0;color:#C0392B;">📏</div>
+          <h3>Performance API 隔离</h3>
+        </div>
+        <ul>
+          <li>收集后立即 clearResourceTimings()</li>
+          <li>清空必须在同一次 evaluate 内部</li>
+          <li>class 级共享 context 是高危场景</li>
+          <li>单独通过 + 批量失败 → 首查此项</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CODE EXAMPLES -->
+<section class="code-section" id="code-examples">
+  <div class="section-inner">
+    <div class="section-label">Best Practices</div>
+    <h2 class="section-title">每条规则都有 ❌ 反例 和 ✅ 正例</h2>
+    <p class="section-desc">
+      不只是抽象原则 —— 每条规则都给出具体的代码示例，让 Agent 和开发者都能直接对照执行。
+    </p>
+    <div class="code-showcase">
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-dot red"></span>
+          <span class="code-dot yellow"></span>
+          <span class="code-dot green"></span>
+          <span class="code-block-title">locator_bad.py</span>
+        </div>
+        <span class="code-label bad">❌ 反例</span>
+        <pre><span class="cmt"># 哈希类名 — 每次构建都会变化</span>
+<span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"css=.sc-bdVaJa.dKPpRt"</span>
+
+<span class="cmt"># 绝对 XPath — 任何 DOM 改动都会断</span>
+<span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"/html/body/div[1]/div[2]/input"</span>
+
+<span class="cmt"># text= 子串匹配 — 命中「收起筛选」</span>
+<span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">"text=筛选"</span></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-dot red"></span>
+          <span class="code-dot yellow"></span>
+          <span class="code-dot green"></span>
+          <span class="code-block-title">locator_good.py</span>
+        </div>
+        <span class="code-label good">✅ 正例</span>
+        <pre><span class="cmt"># P0: ARIA role — 语义稳定</span>
+<span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"role=button[name='提交']"</span>
+
+<span class="cmt"># P2: data-testid — 专为测试设计</span>
+<span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"[data-testid='name-input']"</span>
+
+<span class="cmt"># 精确匹配 — 不命中「收起筛选」</span>
+<span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">'text="筛选"'</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="workflow-section" id="workflow">
+  <div class="section-inner">
+    <div class="section-label">Workflow</div>
+    <h2 class="section-title">Agent 工作流：从需求到测试用例</h2>
+    <p class="section-desc">
+      Agent 按照 Skills 路由表自动编排任务，从分析页面到生成测试、运行验证、沉淀经验。
+    </p>
+    <div class="workflow-steps">
+      <div class="wf-step">
+        <div class="wf-step-num">1</div>
+        <div class="wf-step-content">
+          <h3>探索目标页面</h3>
+          <p>使用 <code>agent-browser</code> 获取页面 DOM 快照，分析元素结构和可用的定位策略。节省 82–93% 的 token 消耗。</p>
+        </div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-step-num">2</div>
+        <div class="wf-step-content">
+          <h3>生成 Page Object</h3>
+          <p>调用 <code>gen-page-test</code> Skill，自动生成 PageObject 类，包含定位符常量（标注 P0–P5）、操作方法和 <code>is_page_loaded()</code>。</p>
+        </div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-step-num">3</div>
+        <div class="wf-step-content">
+          <h3>编写测试用例</h3>
+          <p>基于 <code>add-regression-point</code> 和 <code>case-round-trip</code> Skills 生成回归测试，确保用例往返闭合、状态一致。</p>
+        </div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-step-num">4</div>
+        <div class="wf-step-content">
+          <h3>运行 & 调试</h3>
+          <p>通过 <code>test-runner</code> 执行测试，失败时 <code>quick-debug</code> 自动按三步法排查：确认页面 → 检查 tab → 查定位符。</p>
+        </div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-step-num">5</div>
+        <div class="wf-step-content">
+          <h3>代码审查</h3>
+          <p><code>code-reviewer</code> 代理按 P0/P1/P2 分级审查，结合 AST 知识图谱分析变更影响半径和测试覆盖率。</p>
+        </div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-step-num">6</div>
+        <div class="wf-step-content">
+          <h3>沉淀经验</h3>
+          <p>踩坑后自动将经验写入 Skills / Rules / Docs —— Agent 的「肌肉记忆」持续进化，同类问题不再复现。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVOLUTION -->
+<section class="evo-section" id="evolution">
+  <div class="section-inner">
+    <div class="section-label">Self-Evolution</div>
+    <h2 class="section-title">自我进化机制（P0 最高优先级）</h2>
+    <p class="section-desc">
+      Agent 在踩坑、被纠正、或发现重复问题时，自动将经验沉淀到项目知识库。
+    </p>
+    <div class="evo-grid">
+      <div class="evo-card">
+        <div class="evo-icon">💡</div>
+        <h3>经验（How-to）</h3>
+        <p>操作方法论和最佳实践。<br>指导 Agent 如何完成任务。</p>
+        <div class="target">.claude/skills/</div>
+      </div>
+      <div class="evo-card">
+        <div class="evo-icon">🚧</div>
+        <h3>规则（Must / Must-not）</h3>
+        <p>强制约束和边界条件。<br>每条必含 ❌ 反例 + ✅ 正例。</p>
+        <div class="target">.claude/rules/</div>
+      </div>
+      <div class="evo-card">
+        <div class="evo-icon">📋</div>
+        <h3>项目事实</h3>
+        <p>类名、URL、PageObject 清单。<br>可查询的项目知识库。</p>
+        <div class="target">docs/</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK START -->
+<section class="qs-section" id="quickstart">
+  <div class="section-inner">
+    <div class="section-label">Quick Start</div>
+    <h2 class="section-title">三步开始使用</h2>
+    <p class="section-desc">
+      将 Harness 复制到你的 Playwright + pytest 项目，配置环境，即可开始用 Agent 驱动测试。
+    </p>
+    <div class="qs-terminal">
+      <div class="qs-terminal-header">
+        <span class="code-dot red"></span>
+        <span class="code-dot yellow"></span>
+        <span class="code-dot green"></span>
+      </div>
+      <pre><span class="comment"># 1. 复制 Harness 到你的项目</span>
+<span class="prompt">$</span> cp -r .claude/ CLAUDE.md docs/  /path/to/your-project/
+
+<span class="comment"># 2. 安装依赖 & 浏览器</span>
+<span class="prompt">$</span> python -m venv .venv && source .venv/bin/activate
+<span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> playwright install chromium
+
+<span class="comment"># 3. 运行测试（--env 必须指定）</span>
+<span class="prompt">$</span> pytest tests/ --env=pre
+
+<span class="comment"># 查看报告</span>
+<span class="prompt">$</span> allure serve reports/allure-results</pre>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="stack-section" id="stack">
+  <div class="section-inner" style="text-align: center;">
+    <div class="section-label">Tech Stack</div>
+    <h2 class="section-title" style="margin: 0 auto 0.6rem;">技术栈</h2>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <div class="stack-icon">🐍</div>
+        <h4>Python 3.10+</h4>
+        <p>核心语言</p>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🎭</div>
+        <h4>Playwright</h4>
+        <p>浏览器自动化</p>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🧪</div>
+        <h4>pytest</h4>
+        <p>测试框架</p>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">📊</div>
+        <h4>Allure</h4>
+        <p>测试报告</p>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🌐</div>
+        <h4>agent-browser</h4>
+        <p>DOM 探索</p>
+        <span class="optional">可选</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🔗</div>
+        <h4>code-review-graph</h4>
+        <p>AST 图谱 MCP</p>
+        <span class="optional">可选</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILE STRUCTURE -->
+<section style="background:#F5F3EF;" id="structure">
+  <div class="section-inner">
+    <div class="section-label">Structure</div>
+    <h2 class="section-title">项目结构</h2>
+    <div style="margin-top:2rem;">
+      <div class="code-block" style="max-width:680px;">
+        <div class="code-block-header">
+          <span class="code-dot red"></span>
+          <span class="code-dot yellow"></span>
+          <span class="code-dot green"></span>
+          <span class="code-block-title">project tree</span>
+        </div>
+        <pre>
+<span class="str">velocitai/</span>
+├── <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent 入口索引 & 路由表</span>
+├── <span class="str">.claude/</span>
+│   ├── <span class="var">settings.json</span>      <span class="cmt"># 权限 + hooks</span>
+│   ├── <span class="str">agents/</span>            <span class="cmt"># 子代理定义</span>
+│   │   └── code-reviewer.md
+│   ├── <span class="str">rules/</span>             <span class="cmt"># 强制规则（Must/Must-not）</span>
+│   │   ├── agent-behavior/
+│   │   ├── coding-conventions/
+│   │   ├── playwright/      <span class="cmt"># 8 条 Playwright 专项规则</span>
+│   │   └── report-strategy/
+│   └── <span class="str">skills/</span>            <span class="cmt"># 操作技能（How-to）</span>
+│       ├── gen-page-test/
+│       ├── locator-replacer/
+│       ├── test-runner/
+│       ├── quick-debug/
+│       └── <span class="cmt">... (12 skills)</span>
+├── <span class="str">docs/</span>                  <span class="cmt"># 项目知识库</span>
+│   ├── architecture.md
+│   ├── pages-catalog.md
+│   ├── regression-points.md
+│   └── setup.md
+├── <span class="str">pages/</span>                 <span class="cmt"># PageObject 层（待填充）</span>
+├── <span class="str">tests/</span>                 <span class="cmt"># 测试用例层（待填充）</span>
+└── <span class="str">config/</span>                <span class="cmt"># 环境配置层（待填充）</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>准备好用 Agent 驱动测试了吗？</h2>
+  <p>
+    将 .claude/ 和 CLAUDE.md 复制到你的 Playwright 项目，立即获得 12 个 Skills + 8 条 Playwright 规则的完整 Agent 治理体系。
+  </p>
+  <div class="cta-buttons">
+    <a href="https://github.com/DanielSuo117/velocitai" class="btn btn-primary" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      查看 GitHub 仓库
+    </a>
+    <a href="#quickstart" class="btn btn-outline">快速开始 →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>VelocitAI — UI Automation Agent Harness &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; <a href="https://github.com/DanielSuo117/velocitai" target="_blank">GitHub</a></p>
+</footer>
+
+<script>
+  // Nav scroll shadow
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Mobile menu toggle
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+
+  // Intersection Observer for section fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('section:not(.hero)').forEach(section => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(30px)';
+    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(section);
+  });
+</script>
+
+</body>
+</html>
