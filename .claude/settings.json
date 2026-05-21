@@ -1,0 +1,68 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Bash(source .venv/bin/activate*)",
+      "Bash(pytest *)",
+      "Bash(python -c *)",
+      "Bash(pip install *)",
+      "Bash(playwright install *)",
+      "Bash(allure *)",
+      "Bash(git add *)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git show*)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(mkdir *)",
+      "Bash(code-review-graph *)",
+      "Bash(lsof -iTCP -sTCP:LISTEN -P)",
+      "Bash(agent-browser --version)",
+      "Bash(agent-browser launch *)",
+      "Bash(agent-browser --help)",
+      "Bash(agent-browser install *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(git checkout .*)",
+      "Bash(git clean *)"
+    ],
+    "ask": [
+      "Bash(git commit *)"
+    ],
+    "additionalDirectories": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "code-review-graph build",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "code-review-graph status",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
