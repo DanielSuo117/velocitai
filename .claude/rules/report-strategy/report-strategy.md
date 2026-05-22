@@ -2,6 +2,7 @@
 paths:
   - "conftest.py"
   - "utils/report_generator.py"
+  - "utils/log_config.py"
 ---
 
 # 测试报告生成策略
@@ -80,11 +81,77 @@ def pytest_sessionfinish(session, exitstatus):
 
 ---
 
-## 🟡 P1 · 报告文件清理
+## 🟡 P1 · 报告文件自动轮转
 
-**触发**：验证测试或调试后产生了临时报告文件。
+**触发**：`utils/report_generator.py` 生成报告后执行清理逻辑。
 
-**规则**：手动验证（故意失败测试）产生的报告文件必须在验证完成后清理，不入库。`reports/` 目录已在 `.gitignore` 中，但本地积累过多仍会占磁盘。
+**规则**：`reports/html/` 下最多保留 **10** 份 `report_*.html`，超出时按文件名排序删除最旧报告。
+
+**实现位置**：`utils/report_generator.py` 中独立的清理方法。
+
+```python
+def _cleanup_old_reports(output_dir: Path, max_count: int = 10):
+    reports = sorted(output_dir.glob("report_*.html"))
+    while len(reports) > max_count:
+        reports.pop(0).unlink()
+```
+
+**调用时机**：在 `generate_html_report()` 成功写入新报告后调用，与报告生成解耦（清理失败不影响报告写入）。
+
+❌ 反例：在报告生成前清理（可能删掉未读的报告）
+
+✅ 正例：先生成新报告 → 再清理超出上限的旧报告
+
+---
+
+## 🟡 P2 · 运行日志记录
+
+**触发**：每次 pytest session 启动时。
+
+**规则**：每次运行生成独立日志文件 `logs/test_run_<timestamp>.log`，同时维护 `logs/latest.log` 软链接指向最新日志。最多保留 **100** 份日志文件。
+
+**实现位置**：`utils/log_config.py` 中的 `setup_logging()` 函数。
+
+```python
+def setup_logging(log_dir: str = "logs", max_files: int = 100) -> str:
+    log_path = Path(log_dir)
+    log_path.mkdir(exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = log_path / f"test_run_{timestamp}.log"
+
+    # 配置 logging handler
+    handler = logging.FileHandler(log_file, encoding="utf-8")
+    handler.setFormatter(logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    ))
+    logging.root.addHandler(handler)
+
+    # 软链接
+    latest = log_path / "latest.log"
+    if latest.exists() or latest.is_symlink():
+        latest.unlink()
+    latest.symlink_to(log_file.name)
+
+    # 轮转
+    logs = sorted(log_path.glob("test_run_*.log"))
+    while len(logs) > max_files:
+        logs.pop(0).unlink()
+
+    return str(log_file)
+```
+
+**调用时机**：在 `conftest.py` 的 `pytest_configure` hook 中调用。
+
+```python
+def pytest_configure(config):
+    from utils.log_config import setup_logging
+    setup_logging()
+```
+
+❌ 反例：在 `pytest_sessionstart` 中调用（时机过晚，fixture 级日志丢失）
+
+✅ 正例：在 `pytest_configure` 中调用（pytest 最早可用 hook）
 
 ---
 
