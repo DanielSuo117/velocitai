@@ -71,7 +71,7 @@ from pages.<snake_name>_page import <ClassName>
 
 ### Step 4：在对应角色测试文件追加 story
 
-目标文件：对应角色 `tests/<role>/test_<role>_flow.py`（继承 `<Role>BaseTest`） `tests/<role>/test_<role>_flow.py` 的 `TestStudentHome` 类。
+目标文件：对应角色 `tests/<role>/test_<role>_flow.py`（继承 `<Role>BaseTest`）中的 `Test<Role>Flow` 类。
 
 对应角色示例：
 
