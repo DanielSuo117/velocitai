@@ -84,7 +84,7 @@ class <PageName>(BasePage):
 
 - ❌ 禁止 session 级跨 class 共享 context（跨 class 职责边界不清）
 - ❌ 禁止同一 class 内跨域（会污染共享 context）
-- 详细规则见 [.claude/rules/playwright/browser-context.md](../../rules/playwright/browser-context.md) "浏览器上下文"段
+- 详细规则见 [rules/playwright/browser-context.md](../../rules/playwright/browser-context.md) "浏览器上下文"段
 
 ---
 

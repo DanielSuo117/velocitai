@@ -1,0 +1,22 @@
+{
+  "name": "velocitai",
+  "description": "UI automation agent harness for Claude Code: Playwright + pytest POM skills, rules, and self-evolution",
+  "version": "1.0.0",
+  "author": {
+    "name": "Daniel Suo",
+    "email": "danielsuo117@gmail.com"
+  },
+  "homepage": "https://github.com/DanielSuo117/velocitai",
+  "repository": "https://github.com/DanielSuo117/velocitai",
+  "license": "MIT",
+  "keywords": [
+    "ui-automation",
+    "playwright",
+    "pytest",
+    "pom",
+    "skills",
+    "rules",
+    "self-evolution",
+    "agent-harness"
+  ]
+}

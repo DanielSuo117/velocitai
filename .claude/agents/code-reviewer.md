@@ -51,7 +51,7 @@ tools: Read, Grep, Glob, Edit, mcp__code-review-graph__*
 ## 工作流程
 
 1. **边界确认**：收到范围后列出实际将审查的文件清单，超过 10 个要求主代理分批
-2. **按需读规则**：仅在本次会话首次运行时读取 `.claude/rules/` 对应规则（pages/* 读 `playwright-overview.md` 和 `coding-conventions.md`；tests/* 读 `coding-conventions.md`，其中已涵盖测试规范）
+2. **按需读规则**：仅在本次会话首次运行时读取 `rules/` 对应规则（pages/* 读 `playwright-overview.md` 和 `coding-conventions.md`；tests/* 读 `coding-conventions.md`，其中已涵盖测试规范）
 3. **图谱分析（自动）**：利用 code-review-graph MCP 工具做结构化分析，与静态审查并行：
    - 调用 `detect_changes` 获取变更文件的**风险评分**（高/中/低），优先审查高风险文件
    - 调用 `get_impact_radius` 检查变更的**爆炸半径**——是否有未在审查范围内的受影响文件

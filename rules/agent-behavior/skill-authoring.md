@@ -1,15 +1,15 @@
 ---
 paths:
-  - ".claude/skills/**"
+  - "skills/**"
 ---
 
 # Skill 编写规则
 
-**触发**：新建 / 修改 `.claude/skills/**/SKILL.md`。
+**触发**：新建 / 修改 `skills/**/SKILL.md`。
 
 ## P0.5 · Skill 正文不得写入项目专有标识
 
-禁止写死项目专有类名 / URL / DOM 类名 / 业务术语；必须抽象为通用占位符；项目级细节放 `.claude/rules/` 或 `docs/`。
+禁止写死项目专有类名 / URL / DOM 类名 / 业务术语；必须抽象为通用占位符；项目级细节放 `rules/` 或 `docs/`。
 
 ❌ 在 skill 里写 "<角色>端 `/<具体路由>/*` 没有 `.<具体类名>`"
 ✅ skill 写 "用例跳转目标是否脱离门户布局？"

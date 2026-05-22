@@ -27,4 +27,4 @@
 
 ## 决策树
 
-详见 [architecture skill](../.claude/skills/architecture/SKILL.md)
+详见 [architecture skill](../skills/architecture/SKILL.md)

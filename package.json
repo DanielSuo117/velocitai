@@ -1,0 +1,24 @@
+{
+  "name": "velocitai",
+  "version": "1.0.0",
+  "description": "UI automation agent harness: Playwright + pytest POM skills, rules, and self-evolution for AI coding agents",
+  "type": "module",
+  "keywords": [
+    "ui-automation",
+    "playwright",
+    "pytest",
+    "page-object-model",
+    "agent-harness",
+    "claude-code",
+    "skills",
+    "rules",
+    "self-evolution"
+  ],
+  "author": "Daniel Suo <danielsuo117@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DanielSuo117/velocitai.git"
+  },
+  "homepage": "https://github.com/DanielSuo117/velocitai"
+}

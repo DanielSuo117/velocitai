@@ -1,0 +1,20 @@
+{
+  "name": "velocitai-dev",
+  "description": "Development marketplace for VelocitAI UI automation agent harness",
+  "owner": {
+    "name": "Daniel Suo",
+    "email": "danielsuo117@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "velocitai",
+      "description": "UI automation agent harness for Claude Code: Playwright + pytest POM skills, rules, and self-evolution",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Daniel Suo",
+        "email": "danielsuo117@gmail.com"
+      }
+    }
+  ]
+}

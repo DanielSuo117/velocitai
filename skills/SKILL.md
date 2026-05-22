@@ -20,7 +20,7 @@ description: UI 回归测试子 skill 路由入口。
 
 ## 引用索引
 
-编码规范、项目事实、行为规则等均由 [CLAUDE.md](../../CLAUDE.md) 统一指引，此处不重复。
+编码规范、项目事实、行为规则等均由 [CLAUDE.md](../CLAUDE.md) 统一指引，此处不重复。
 
 关键引用：
 - 命名 + 基类 + 用例组织 → [coding-conventions/](../rules/coding-conventions/)

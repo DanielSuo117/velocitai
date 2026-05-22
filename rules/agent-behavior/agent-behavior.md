@@ -15,13 +15,13 @@
 | 文档代码冲突 | —— | 向用户说明冲突点 + 两个方案，由用户决定 | 自行选边、无声纠偏 |
 | Git | 只读 + `git add`（仅暂存） | 明确授权才可 `commit` / `push` | 自动 `commit` / `push` / `--amend` / `--force` |
 
-项目事实速查（架构 / PageObject / 回归点 / 环境搭建）→ [CLAUDE.md 路由表](../../../CLAUDE.md)
+项目事实速查（架构 / PageObject / 回归点 / 环境搭建）→ [CLAUDE.md 路由表](../../CLAUDE.md)
 
 ---
 
 ## 🔴 P0.1 · 文档与代码不一致时必须询问
 
-**触发**：发现 `docs/` / `.claude/` 内容与源码冲突。
+**触发**：发现 `docs/` / `skills/` / `rules/` 内容与源码冲突。
 
 **规则**：禁止自行选边或无声纠偏，必须向用户说明冲突点 + 两个方案，由用户决定后再动手。
 
@@ -83,4 +83,4 @@ P0.4.1–P0.4.4 详细反例/正例见 [browser-tool-usage.md](./browser-tool-us
 
 ---
 
-P0.5–P0.7（Skill 编写规则）→ 仅在编辑 `.claude/skills/**` 时加载 → [skill-authoring.md](./skill-authoring.md)
+P0.5–P0.7（Skill 编写规则）→ 仅在编辑 `skills/**` 时加载 → [skill-authoring.md](./skill-authoring.md)

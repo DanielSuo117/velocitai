@@ -3,14 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VelocitAI — UI Automation Agent Harness</title>
+<title>VelocitAI — AI-Driven UI Automation Agent Harness</title>
+<meta name="description" content="VelocitAI 是一套通用 UI 自动化 Agent Harness，为 AI Agent 提供完整的 Skills、Rules 和自我进化机制，驱动企业级 UI 回归测试。">
+<meta name="keywords" content="AI, UI Automation, Playwright, pytest, Agent, Harness, POM, Page Object Model">
+<meta property="og:title" content="VelocitAI — AI-Driven UI Automation Agent Harness">
+<meta property="og:description" content="用 AI Agent 驱动 UI 自动化测试。13 个 Skills + 14 个 Rule 文件，4 倍编码提效，从生成到审查全自动化。">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23D4783C'/><text x='50' y='72' font-size='60' font-weight='bold' text-anchor='middle' fill='white'>V</text></svg>">
 <style>
   :root {
     --bg: #FAFAF9;
     --bg-card: #FFFFFF;
     --bg-code: #F5F3EF;
-    --bg-hero: #1A1A1A;
-    --bg-hero-accent: #2A2A2A;
+    --bg-hero: #0F0F0F;
+    --bg-hero-accent: #1A1A1A;
     --text: #1A1A1A;
     --text-secondary: #6B6560;
     --text-muted: #9B958F;
@@ -18,22 +24,29 @@
     --accent: #D4783C;
     --accent-light: #E8A06A;
     --accent-bg: #FDF3EC;
+    --accent-glow: rgba(212,120,60,0.3);
+    --green: #3D8B70;
+    --green-bg: #EDF5F2;
+    --purple: #7B5CB8;
+    --purple-bg: #F0EDF7;
+    --red: #C0392B;
+    --red-bg: #FEF1F0;
     --border: #E8E4DF;
     --border-light: #F0ECE7;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
     --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    --shadow-xl: 0 16px 48px rgba(0,0,0,0.16);
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 24px;
-    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
     --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-    --max-w: 1120px;
+    --max-w: 1140px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; font-size: 16px; }
 
   body {
@@ -42,50 +55,63 @@
     color: var(--text);
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* ─── NAV ─── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(250,250,249,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-light);
-    transition: box-shadow 0.3s;
+    background: rgba(250,250,249,0.82);
+    backdrop-filter: blur(20px) saturate(1.8);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
-  nav.scrolled { box-shadow: var(--shadow-sm); }
+  nav.scrolled {
+    border-bottom-color: var(--border-light);
+    box-shadow: var(--shadow-sm);
+  }
   .nav-inner {
     max-width: var(--max-w); margin: 0 auto;
     padding: 0 2rem;
     display: flex; align-items: center; justify-content: space-between;
-    height: 56px;
+    height: 60px;
   }
   .nav-logo {
-    font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em;
+    font-weight: 800; font-size: 1.1rem; letter-spacing: -0.03em;
     color: var(--text); text-decoration: none;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 10px;
   }
   .nav-logo .logo-icon {
-    width: 28px; height: 28px; background: var(--accent);
-    border-radius: 7px; display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 800; font-size: 0.8rem;
+    width: 30px; height: 30px; background: var(--accent);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 900; font-size: 0.85rem;
+    box-shadow: 0 2px 8px var(--accent-glow);
   }
-  .nav-links { display: flex; gap: 1.6rem; align-items: center; }
+  .nav-links { display: flex; gap: 1.8rem; align-items: center; }
   .nav-links a {
     color: var(--text-secondary); text-decoration: none;
-    font-size: 0.85rem; font-weight: 500;
+    font-size: 0.84rem; font-weight: 500;
     transition: color 0.2s;
+    position: relative;
   }
   .nav-links a:hover { color: var(--accent); }
+  .nav-links a:not(.nav-github)::after {
+    content: ''; position: absolute;
+    bottom: -4px; left: 0; right: 0; height: 2px;
+    background: var(--accent); border-radius: 1px;
+    transform: scaleX(0); transition: transform 0.2s;
+  }
+  .nav-links a:not(.nav-github):hover::after { transform: scaleX(1); }
   .nav-github {
     display: flex; align-items: center; gap: 6px;
-    padding: 6px 14px; border-radius: 20px;
+    padding: 7px 16px; border-radius: 8px;
     background: var(--text); color: #fff !important;
     font-size: 0.8rem !important;
-    transition: background 0.2s;
+    transition: all 0.2s;
   }
-  .nav-github:hover { background: #333 !important; }
+  .nav-github:hover { background: #333 !important; transform: translateY(-1px); }
   .nav-github svg { width: 16px; height: 16px; }
-
   .mobile-menu-btn {
     display: none; background: none; border: none;
     cursor: pointer; padding: 4px;
@@ -95,15 +121,23 @@
   /* ─── HERO ─── */
   .hero {
     background: var(--bg-hero);
-    padding: 10rem 2rem 5rem;
+    padding: 11rem 2rem 6rem;
     position: relative; overflow: hidden;
   }
   .hero::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background:
-      radial-gradient(ellipse 800px 600px at 20% 40%, rgba(212,120,60,0.12), transparent),
-      radial-gradient(ellipse 600px 400px at 80% 60%, rgba(212,120,60,0.06), transparent);
+      radial-gradient(ellipse 900px 700px at 15% 35%, rgba(212,120,60,0.15), transparent),
+      radial-gradient(ellipse 700px 500px at 85% 65%, rgba(123,92,184,0.08), transparent),
+      radial-gradient(ellipse 500px 300px at 50% 80%, rgba(61,139,112,0.06), transparent);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
     pointer-events: none;
   }
   .hero-inner {
@@ -114,65 +148,174 @@
     display: inline-flex; align-items: center; gap: 8px;
     background: var(--bg-hero-accent);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 20px; padding: 6px 16px;
+    border-radius: 24px; padding: 7px 18px;
     font-size: 0.78rem; color: var(--accent-light);
     margin-bottom: 2rem;
+    animation: fadeInUp 0.8s ease-out;
   }
   .hero-badge .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent); animation: pulse 2s infinite;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    animation: pulse 2s infinite;
   }
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent-glow); }
+    50% { opacity: 0.5; box-shadow: 0 0 16px var(--accent-glow); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   .hero h1 {
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
-    font-weight: 800; color: var(--text-inverse);
-    line-height: 1.15; letter-spacing: -0.03em;
-    max-width: 700px;
+    font-size: clamp(2.6rem, 5.5vw, 4rem);
+    font-weight: 900; color: var(--text-inverse);
+    line-height: 1.12; letter-spacing: -0.035em;
+    max-width: 750px;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
   }
-  .hero h1 span { color: var(--accent); }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
   .hero-desc {
     margin-top: 1.5rem;
-    font-size: 1.15rem; color: rgba(245,243,239,0.6);
-    line-height: 1.8; max-width: 560px;
+    font-size: 1.15rem; color: rgba(245,243,239,0.55);
+    line-height: 1.85; max-width: 580px;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
   }
-  .hero-stats {
-    display: flex; gap: 3rem; margin-top: 3rem;
-    flex-wrap: wrap;
+  .hero-actions {
+    margin-top: 2.5rem;
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
   }
-  .hero-stat { text-align: left; }
-  .hero-stat .num {
-    font-size: 2rem; font-weight: 800; color: var(--accent);
-    letter-spacing: -0.02em;
+  .hero-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 28px; border-radius: 10px;
+    font-size: 0.92rem; font-weight: 600;
+    text-decoration: none; transition: all 0.25s;
+    border: none; cursor: pointer;
   }
-  .hero-stat .label {
-    font-size: 0.82rem; color: rgba(245,243,239,0.5);
-    margin-top: 2px;
+  .hero-btn-primary {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 4px 16px var(--accent-glow);
+  }
+  .hero-btn-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--accent-glow);
+  }
+  .hero-btn-outline {
+    background: rgba(255,255,255,0.06); color: var(--text-inverse);
+    border: 1.5px solid rgba(255,255,255,0.12);
+  }
+  .hero-btn-outline:hover {
+    border-color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
   }
 
-  /* ─── SECTION ─── */
-  section { padding: 5rem 2rem; }
+  .hero-metrics {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; margin-top: 4rem;
+    background: rgba(255,255,255,0.06);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+  .hero-metric {
+    background: rgba(15,15,15,0.8);
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+    transition: background 0.3s;
+  }
+  .hero-metric:hover { background: rgba(25,25,25,0.9); }
+  .hero-metric .num {
+    font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-metric .label {
+    font-size: 0.78rem; color: rgba(245,243,239,0.4);
+    margin-top: 4px; font-weight: 500;
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 6rem 2rem; }
   .section-inner { max-width: var(--max-w); margin: 0 auto; }
+  .section-header { margin-bottom: 3rem; }
   .section-label {
-    display: inline-block;
+    display: inline-flex; align-items: center; gap: 6px;
     font-size: 0.72rem; font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.12em;
     color: var(--accent); margin-bottom: 0.8rem;
   }
+  .section-label::before {
+    content: ''; width: 16px; height: 2px;
+    background: var(--accent); border-radius: 1px;
+  }
   .section-title {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    font-weight: 700; letter-spacing: -0.02em;
-    line-height: 1.25; margin-bottom: 0.6rem;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.2; margin-bottom: 0.8rem;
   }
   .section-desc {
-    font-size: 1rem; color: var(--text-secondary);
-    line-height: 1.7; max-width: 600px;
+    font-size: 1.02rem; color: var(--text-secondary);
+    line-height: 1.75; max-width: 620px;
+  }
+
+  /* ─── PROBLEM → SOLUTION ─── */
+  .problem-section { background: var(--bg); }
+  .comparison-grid {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 2rem; align-items: start; margin-top: 3rem;
+  }
+  .comparison-card {
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    position: relative;
+  }
+  .comparison-card.before {
+    background: #FBF5F4;
+    border: 1.5px solid #EDD5D0;
+  }
+  .comparison-card.after {
+    background: #F2F9F7;
+    border: 1.5px solid #C5E0D8;
+  }
+  .comparison-card h3 {
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .comparison-card.before h3 { color: var(--red); }
+  .comparison-card.after h3 { color: var(--green); }
+  .comparison-card ul {
+    list-style: none; padding: 0;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .comparison-card li {
+    font-size: 0.88rem; color: var(--text-secondary);
+    padding-left: 1.6rem; position: relative; line-height: 1.6;
+  }
+  .comparison-card.before li::before {
+    content: '✕'; position: absolute; left: 0; top: 0;
+    color: var(--red); font-weight: 700; font-size: 0.8rem;
+  }
+  .comparison-card.after li::before {
+    content: '✓'; position: absolute; left: 0; top: 0;
+    color: var(--green); font-weight: 700; font-size: 0.8rem;
+  }
+  .comparison-arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; color: var(--accent);
+    padding-top: 3rem;
   }
 
   /* ─── ARCHITECTURE ─── */
-  .arch-section { background: var(--bg); }
+  .arch-section { background: #F5F3EF; }
   .arch-diagram {
     margin-top: 3rem;
     background: var(--bg-card);
@@ -186,7 +329,7 @@
   .arch-layer {
     border: 2px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 1.2rem 1.5rem;
+    padding: 1.3rem 1.5rem;
     position: relative;
     transition: transform 0.2s, box-shadow 0.2s;
   }
@@ -201,12 +344,12 @@
   .arch-layer:nth-child(4) { border-color: #C4B5A0; background: #FAF7F2; z-index: 1; }
   .arch-layer-name {
     font-weight: 700; font-size: 0.95rem;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 10px;
   }
   .arch-layer-name code {
-    background: rgba(0,0,0,0.06); padding: 2px 8px;
-    border-radius: 4px; font-family: var(--font-mono);
-    font-size: 0.82rem;
+    background: rgba(0,0,0,0.06); padding: 2px 10px;
+    border-radius: 5px; font-family: var(--font-mono);
+    font-size: 0.82rem; font-weight: 600;
   }
   .arch-layer-desc {
     font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;
@@ -216,7 +359,8 @@
     font-size: 0.9rem; padding: 4px 0;
   }
 
-  /* ─── GRID CARDS ─── */
+  /* ─── SKILLS CARDS ─── */
+  .skills-section { background: var(--bg); }
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -226,46 +370,53 @@
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 1.5rem;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    padding: 1.6rem;
+    transition: all 0.25s;
     cursor: default;
     position: relative;
     overflow: hidden;
   }
+  .card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    opacity: 0; transition: opacity 0.25s;
+  }
   .card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
     border-color: var(--accent);
   }
+  .card:hover::before { opacity: 1; }
   .card-icon {
-    width: 40px; height: 40px;
+    width: 42px; height: 42px;
     border-radius: var(--radius-sm);
     display: flex; align-items: center; justify-content: center;
     font-size: 1.2rem; margin-bottom: 1rem;
   }
   .card-icon.skill { background: var(--accent-bg); color: var(--accent); }
-  .card-icon.rule { background: #EDF5F2; color: #3D8B70; }
-  .card-icon.tool { background: #F0EDF7; color: #7B5CB8; }
+  .card-icon.rule { background: var(--green-bg); color: var(--green); }
+  .card-icon.tool { background: var(--purple-bg); color: var(--purple); }
   .card h3 {
     font-size: 0.95rem; font-weight: 700;
     margin-bottom: 0.4rem; letter-spacing: -0.01em;
   }
   .card p {
     font-size: 0.84rem; color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.65;
   }
   .card-tag {
     display: inline-block; margin-top: 0.8rem;
-    font-size: 0.7rem; font-weight: 600;
+    font-size: 0.68rem; font-weight: 600;
     padding: 3px 10px; border-radius: 12px;
-    text-transform: uppercase; letter-spacing: 0.05em;
+    text-transform: uppercase; letter-spacing: 0.06em;
   }
-  .card-tag.gen { background: #FDF3EC; color: var(--accent); }
-  .card-tag.debug { background: #FEF1F0; color: #C0392B; }
-  .card-tag.config { background: #EDF5F2; color: #3D8B70; }
-  .card-tag.review { background: #F0EDF7; color: #7B5CB8; }
+  .card-tag.gen { background: var(--accent-bg); color: var(--accent); }
+  .card-tag.debug { background: var(--red-bg); color: var(--red); }
+  .card-tag.config { background: var(--green-bg); color: var(--green); }
+  .card-tag.review { background: var(--purple-bg); color: var(--purple); }
 
-  /* ─── RULES TABLE ─── */
+  /* ─── RULES ─── */
   .rules-section { background: #F5F3EF; }
   .rules-grid {
     display: grid;
@@ -277,10 +428,10 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 1.5rem;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.25s;
   }
   .rule-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-md);
   }
   .rule-card-header {
@@ -288,20 +439,18 @@
     margin-bottom: 0.8rem;
   }
   .rule-card-header .icon {
-    width: 32px; height: 32px; border-radius: 8px;
+    width: 34px; height: 34px; border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.9rem;
+    font-size: 0.9rem; flex-shrink: 0;
   }
-  .rule-card-header h3 {
-    font-size: 0.9rem; font-weight: 700;
-  }
+  .rule-card-header h3 { font-size: 0.92rem; font-weight: 700; }
   .rule-card ul {
     list-style: none; padding: 0;
     display: flex; flex-direction: column; gap: 6px;
   }
   .rule-card li {
     font-size: 0.82rem; color: var(--text-secondary);
-    padding-left: 1.2rem; position: relative;
+    padding-left: 1.2rem; position: relative; line-height: 1.55;
   }
   .rule-card li::before {
     content: ''; position: absolute; left: 0; top: 8px;
@@ -309,33 +458,32 @@
     background: var(--accent);
   }
 
-  /* ─── CODE EXAMPLE ─── */
+  /* ─── CODE EXAMPLES ─── */
   .code-section { background: var(--bg); }
   .code-showcase {
     margin-top: 2.5rem;
     display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
   }
   .code-block {
-    background: var(--bg-hero);
+    background: #1E1E1E;
     border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255,255,255,0.06);
   }
   .code-block-header {
     display: flex; align-items: center; gap: 8px;
     padding: 12px 16px;
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.03);
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
-  .code-dot {
-    width: 10px; height: 10px; border-radius: 50%;
-  }
+  .code-dot { width: 10px; height: 10px; border-radius: 50%; }
   .code-dot.red { background: #FF5F57; }
   .code-dot.yellow { background: #FEBC2E; }
   .code-dot.green { background: #28C840; }
   .code-block-title {
     flex: 1; text-align: center;
-    font-size: 0.75rem; color: rgba(255,255,255,0.4);
+    font-size: 0.75rem; color: rgba(255,255,255,0.35);
     font-family: var(--font-mono);
   }
   .code-block pre {
@@ -373,7 +521,9 @@
   .workflow-steps::before {
     content: '';
     position: absolute; left: 24px; top: 0; bottom: 0;
-    width: 2px; background: var(--border);
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--green), var(--purple));
+    border-radius: 1px;
   }
   .wf-step {
     display: flex; gap: 1.2rem; align-items: flex-start;
@@ -387,10 +537,11 @@
     display: flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 1.1rem; color: var(--accent);
     position: relative; z-index: 1;
-    transition: all 0.2s;
+    transition: all 0.25s;
   }
   .wf-step:hover .wf-step-num {
     background: var(--accent); color: #fff; border-color: var(--accent);
+    box-shadow: 0 4px 12px var(--accent-glow);
   }
   .wf-step-content h3 {
     font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem;
@@ -400,62 +551,229 @@
   }
   .wf-step-content code {
     background: rgba(212,120,60,0.1); color: var(--accent);
-    padding: 1px 6px; border-radius: 4px;
+    padding: 1px 7px; border-radius: 4px;
     font-family: var(--font-mono); font-size: 0.82rem;
   }
 
+  /* ─── EFFICIENCY / DEV SPEED ─── */
+  .efficiency-section { background: var(--bg); }
+  .efficiency-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
+    margin-top: 3rem; align-items: start;
+  }
+  .efficiency-left { display: flex; flex-direction: column; gap: 2rem; }
+  .eff-bar-group { display: flex; flex-direction: column; gap: 1.2rem; }
+  .eff-bar { display: flex; flex-direction: column; gap: 5px; }
+  .eff-bar-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 0.84rem; font-weight: 600;
+  }
+  .eff-bar-label .days {
+    font-size: 1.1rem; font-weight: 800;
+  }
+  .eff-bar-label .days.slow { color: var(--red); }
+  .eff-bar-label .days.fast { color: var(--green); }
+  .eff-bar-track {
+    height: 36px; background: var(--border-light);
+    border-radius: 8px; overflow: hidden; position: relative;
+  }
+  .eff-bar-fill {
+    height: 100%; border-radius: 8px;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 0 14px;
+    font-size: 0.75rem; font-weight: 700; color: #fff;
+    transition: width 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+    width: 0;
+  }
+  .eff-bar-fill.manual { background: linear-gradient(90deg, #D4544C, var(--red)); }
+  .eff-bar-fill.ai { background: linear-gradient(90deg, #4DAF8B, var(--green)); }
+  .eff-bar-fill.animated.manual { width: 100%; }
+  .eff-bar-fill.animated.ai { width: 25%; }
+
+  .eff-callouts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .eff-callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.25s;
+  }
+  .eff-callout:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  .eff-callout .big {
+    font-size: 2.5rem; font-weight: 900; letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .eff-callout .big.accent {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .eff-callout .big.green { color: var(--green); }
+  .eff-callout .label {
+    font-size: 0.82rem; color: var(--text-secondary);
+    margin-top: 0.4rem; line-height: 1.5;
+  }
+
+  .eff-right {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .eff-right h3 {
+    font-size: 1.05rem; font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+  .eff-breakdown { display: flex; flex-direction: column; gap: 1rem; }
+  .eff-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .eff-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .eff-item-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .eff-item-text h4 {
+    font-size: 0.88rem; font-weight: 700; margin-bottom: 2px;
+  }
+  .eff-item-text p {
+    font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;
+  }
+  .eff-item-text .time-save {
+    display: inline-block; margin-top: 4px;
+    font-size: 0.7rem; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px;
+    background: var(--green-bg); color: var(--green);
+  }
+
+  /* ─── TOKEN SAVINGS ─── */
+  .savings-section { background: #F5F3EF; }
+  .savings-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    margin-top: 3rem; align-items: center;
+  }
+  .savings-chart {
+    display: flex; flex-direction: column; gap: 1.2rem;
+  }
+  .savings-bar {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .savings-bar-label {
+    display: flex; justify-content: space-between;
+    font-size: 0.82rem; font-weight: 600;
+  }
+  .savings-bar-label span:last-child { color: var(--text-muted); }
+  .savings-bar-track {
+    height: 28px; background: var(--border-light);
+    border-radius: 6px; overflow: hidden;
+    position: relative;
+  }
+  .savings-bar-fill {
+    height: 100%; border-radius: 6px;
+    display: flex; align-items: center;
+    padding: 0 10px;
+    font-size: 0.72rem; font-weight: 700; color: #fff;
+    transition: width 1.5s ease-out;
+  }
+  .savings-bar-fill.traditional { background: var(--red); width: 0; }
+  .savings-bar-fill.velocitai { background: var(--green); width: 0; }
+  .savings-bar-fill.visible.traditional { width: 100%; }
+  .savings-bar-fill.visible.velocitai { width: 12%; }
+  .savings-callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .savings-callout .big-number {
+    font-size: 3.5rem; font-weight: 900; letter-spacing: -0.04em;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; line-height: 1;
+  }
+  .savings-callout .desc {
+    font-size: 0.95rem; color: var(--text-secondary);
+    margin-top: 0.5rem; line-height: 1.6;
+  }
+  .savings-callout .detail {
+    font-size: 0.82rem; color: var(--text-muted);
+    margin-top: 1rem; line-height: 1.6;
+    border-top: 1px solid var(--border-light);
+    padding-top: 1rem;
+  }
+
   /* ─── EVOLUTION ─── */
-  .evo-section { background: var(--bg); }
+  .evo-section { background: #F5F3EF; }
   .evo-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1.2rem; margin-top: 2.5rem;
+    gap: 1.5rem; margin-top: 3rem;
   }
   .evo-card {
     background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius-md); padding: 1.8rem;
+    border-radius: var(--radius-lg); padding: 2rem;
     text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.25s;
+    position: relative; overflow: hidden;
   }
+  .evo-card::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
+  }
+  .evo-card:nth-child(1)::after { background: var(--accent); }
+  .evo-card:nth-child(2)::after { background: var(--green); }
+  .evo-card:nth-child(3)::after { background: var(--purple); }
   .evo-card:hover {
-    transform: translateY(-3px); box-shadow: var(--shadow-md);
+    transform: translateY(-4px); box-shadow: var(--shadow-lg);
   }
   .evo-card .evo-icon {
-    width: 56px; height: 56px; border-radius: 50%;
-    margin: 0 auto 1rem;
+    width: 60px; height: 60px; border-radius: 50%;
+    margin: 0 auto 1.2rem;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.5rem;
   }
   .evo-card:nth-child(1) .evo-icon { background: var(--accent-bg); }
-  .evo-card:nth-child(2) .evo-icon { background: #EDF5F2; }
-  .evo-card:nth-child(3) .evo-icon { background: #F0EDF7; }
+  .evo-card:nth-child(2) .evo-icon { background: var(--green-bg); }
+  .evo-card:nth-child(3) .evo-icon { background: var(--purple-bg); }
   .evo-card h3 {
-    font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem;
+    font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;
   }
   .evo-card p {
-    font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6;
+    font-size: 0.85rem; color: var(--text-secondary); line-height: 1.65;
   }
   .evo-card .target {
-    margin-top: 0.8rem;
+    margin-top: 1rem;
     font-family: var(--font-mono); font-size: 0.78rem;
     color: var(--accent); background: var(--accent-bg);
-    padding: 4px 12px; border-radius: 6px;
+    padding: 4px 14px; border-radius: 6px;
     display: inline-block;
   }
 
   /* ─── QUICK START ─── */
-  .qs-section { background: #F5F3EF; }
+  .qs-section { background: var(--bg); }
   .qs-terminal {
     margin-top: 2.5rem;
-    background: var(--bg-hero);
+    background: #1E1E1E;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    max-width: 700px;
+    box-shadow: var(--shadow-xl);
+    max-width: 720px;
+    border: 1px solid rgba(255,255,255,0.06);
   }
   .qs-terminal-header {
     display: flex; align-items: center; gap: 8px;
     padding: 14px 18px;
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.03);
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
   .qs-terminal pre {
@@ -469,104 +787,169 @@
   .qs-terminal .comment { color: #6A9955; }
 
   /* ─── TECH STACK ─── */
-  .stack-section { background: var(--bg); }
+  .stack-section { background: #F5F3EF; }
   .stack-grid {
-    display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem;
+    display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem;
     justify-content: center;
   }
   .stack-item {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 1.2rem 1.8rem;
+    padding: 1.3rem 2rem;
     text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.25s;
     min-width: 160px;
   }
   .stack-item:hover {
-    transform: translateY(-2px); box-shadow: var(--shadow-md);
+    transform: translateY(-3px); box-shadow: var(--shadow-md);
   }
-  .stack-item .stack-icon {
-    font-size: 2rem; margin-bottom: 0.5rem;
-  }
-  .stack-item h4 {
-    font-size: 0.9rem; font-weight: 700;
-  }
-  .stack-item p {
-    font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;
-  }
+  .stack-item .stack-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+  .stack-item h4 { font-size: 0.9rem; font-weight: 700; }
+  .stack-item p { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
   .stack-item .optional {
     display: inline-block; margin-top: 6px;
     font-size: 0.65rem; padding: 2px 8px;
     border-radius: 8px;
-    background: #F0EDF7; color: #7B5CB8;
+    background: var(--purple-bg); color: var(--purple);
+    font-weight: 600;
   }
+
+  /* ─── FILE STRUCTURE ─── */
+  .structure-section { background: var(--bg); }
+
+  /* ─── COMPATIBLE ─── */
+  .compat-section { background: #F5F3EF; }
+  .compat-grid {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    justify-content: center; margin-top: 2.5rem;
+  }
+  .compat-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.2rem 2rem;
+    text-align: center;
+    transition: all 0.25s;
+    min-width: 150px;
+  }
+  .compat-item:hover {
+    transform: translateY(-2px); box-shadow: var(--shadow-md);
+  }
+  .compat-item .icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .compat-item h4 { font-size: 0.88rem; font-weight: 700; }
+  .compat-item p { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
 
   /* ─── CTA ─── */
   .cta-section {
     background: var(--bg-hero);
-    padding: 5rem 2rem;
+    padding: 6rem 2rem;
     text-align: center;
+    position: relative; overflow: hidden;
   }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 50% 50%, rgba(212,120,60,0.12), transparent);
+    pointer-events: none;
+  }
+  .cta-section .section-inner { position: relative; z-index: 1; }
   .cta-section h2 {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    font-weight: 800; color: var(--text-inverse);
-    letter-spacing: -0.02em; margin-bottom: 1rem;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 900; color: var(--text-inverse);
+    letter-spacing: -0.025em; margin-bottom: 1rem;
   }
   .cta-section p {
     font-size: 1rem; color: rgba(245,243,239,0.5);
-    max-width: 500px; margin: 0 auto 2rem;
-    line-height: 1.7;
+    max-width: 540px; margin: 0 auto 2.5rem;
+    line-height: 1.75;
   }
   .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 28px; border-radius: 10px;
+    padding: 13px 28px; border-radius: 10px;
     font-size: 0.9rem; font-weight: 600;
-    text-decoration: none; transition: all 0.2s;
+    text-decoration: none; transition: all 0.25s;
     border: none; cursor: pointer;
   }
   .btn-primary {
     background: var(--accent); color: #fff;
+    box-shadow: 0 4px 16px var(--accent-glow);
   }
-  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
+  .btn-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--accent-glow);
+  }
   .btn-outline {
     background: transparent; color: var(--text-inverse);
     border: 1.5px solid rgba(255,255,255,0.15);
   }
   .btn-outline:hover {
     border-color: rgba(255,255,255,0.35);
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.06);
   }
 
   /* ─── FOOTER ─── */
   footer {
-    padding: 2.5rem 2rem;
+    padding: 3rem 2rem;
     border-top: 1px solid var(--border);
     text-align: center;
+    background: var(--bg);
   }
-  footer p {
-    font-size: 0.8rem; color: var(--text-muted);
+  .footer-inner {
+    max-width: var(--max-w); margin: 0 auto;
   }
-  footer a { color: var(--accent); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
+  .footer-links {
+    display: flex; justify-content: center; gap: 2rem;
+    margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .footer-links a {
+    font-size: 0.82rem; color: var(--text-secondary);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+  footer .copyright {
+    font-size: 0.78rem; color: var(--text-muted);
+  }
+  footer .copyright a { color: var(--accent); text-decoration: none; }
+  footer .copyright a:hover { text-decoration: underline; }
 
   /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .nav-links.open {
       display: flex; flex-direction: column;
-      position: absolute; top: 56px; left: 0; right: 0;
-      background: var(--bg); border-bottom: 1px solid var(--border);
+      position: absolute; top: 60px; left: 0; right: 0;
+      background: rgba(250,250,249,0.96);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
       padding: 1rem 2rem; gap: 1rem;
     }
     .mobile-menu-btn { display: block; }
-    .hero { padding: 8rem 1.5rem 3.5rem; }
-    .hero-stats { gap: 2rem; }
-    section { padding: 3.5rem 1.5rem; }
+    .hero { padding: 8rem 1.5rem 4rem; }
+    .hero-metrics { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 4rem 1.5rem; }
+    .comparison-grid { grid-template-columns: 1fr; }
+    .comparison-arrow { transform: rotate(90deg); padding: 0.5rem 0; }
     .code-showcase { grid-template-columns: 1fr; }
     .evo-grid { grid-template-columns: 1fr; }
     .card-grid { grid-template-columns: 1fr; }
     .rules-grid { grid-template-columns: 1fr; }
+    .savings-grid { grid-template-columns: 1fr; }
+    .efficiency-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+    #install .section-inner > div[style*="grid-template-columns"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* ─── UTILITIES ─── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
   }
 </style>
 </head>
@@ -583,11 +966,13 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <div class="nav-links" id="navLinks">
-      <a href="#architecture">架构</a>
+      <a href="#problem">Why</a>
+      <a href="#architecture">Architecture</a>
       <a href="#skills">Skills</a>
       <a href="#rules">Rules</a>
-      <a href="#workflow">工作流</a>
-      <a href="#quickstart">快速开始</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#efficiency">Efficiency</a>
+      <a href="#install">Install</a>
       <a href="https://github.com/DanielSuo117/velocitai" class="nav-github" target="_blank">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
@@ -601,41 +986,90 @@
   <div class="hero-inner">
     <div class="hero-badge">
       <div class="dot"></div>
-      Python + Playwright + pytest
+      Open Source &middot; Claude Code Plugin &middot; Multi-Agent Compatible
     </div>
-    <h1>用 AI Agent 驱动<br><span>UI 自动化测试</span></h1>
+    <h1>AI Agent 驱动的<br><span>UI 自动化测试引擎</span></h1>
     <p class="hero-desc">
-      VelocitAI 是一套通用 UI 自动化 Agent Harness —— 为 Claude Code 等 AI Agent 提供完整的 Skills、Rules 和自我进化机制，让 Agent 能自主生成、架构和执行企业级 UI 测试代码。
+      VelocitAI 是一套通用 UI 自动化 Agent Harness —— 不是又一个测试框架，而是让 AI Agent
+      获得 <strong style="color:rgba(245,243,239,0.85);">自主生成、执行和进化</strong> UI 测试代码的完整能力体系。
+      将原需 60 人天的测试工程工作压缩到 15 天交付。
     </p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="num">12</div>
-        <div class="label">Skills 操作技能</div>
+    <div class="hero-actions">
+      <a href="https://github.com/DanielSuo117/velocitai" class="hero-btn hero-btn-primary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Star on GitHub
+      </a>
+      <a href="#install" class="hero-btn hero-btn-outline">Install &rarr;</a>
+    </div>
+    <div class="hero-metrics">
+      <div class="hero-metric">
+        <div class="num">13</div>
+        <div class="label">Agent Skills</div>
       </div>
-      <div class="hero-stat">
-        <div class="num">8</div>
-        <div class="label">Playwright 规则</div>
+      <div class="hero-metric">
+        <div class="num">14</div>
+        <div class="label">Rule Files</div>
       </div>
-      <div class="hero-stat">
-        <div class="num">POM</div>
-        <div class="label">Page Object Model</div>
+      <div class="hero-metric">
+        <div class="num">4x</div>
+        <div class="label">Development Speed</div>
       </div>
-      <div class="hero-stat">
-        <div class="num">P0‑P2</div>
-        <div class="label">分级代码审查</div>
+      <div class="hero-metric">
+        <div class="num">75%</div>
+        <div class="label">Time Saved</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM → SOLUTION -->
+<section class="problem-section reveal" id="problem">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">AI Agent 写测试，为什么总是不靠谱？</h2>
+      <p class="section-desc">
+        没有治理体系的 AI Agent 就像没有规范的新人实习——能写代码，但写出来的测试脆弱、不稳定、无法维护。
+      </p>
+    </div>
+    <div class="comparison-grid">
+      <div class="comparison-card before">
+        <h3><span>&#10005;</span> 裸 Agent（无治理）</h3>
+        <ul>
+          <li>使用绝对 XPath、哈希类名等脆弱定位符</li>
+          <li>随意 time.sleep()，超时后盲目加秒</li>
+          <li>写出 assert True、assert len(x) > 0 等无效断言</li>
+          <li>不理解 SPA 路由切换、新 tab 上下文</li>
+          <li>同样的错误反复出现，没有记忆</li>
+          <li>跨域 cookie 污染导致批量失败</li>
+        </ul>
+      </div>
+      <div class="comparison-arrow">&rarr;</div>
+      <div class="comparison-card after">
+        <h3><span>&#10003;</span> VelocitAI 治理后</h3>
+        <ul>
+          <li>六级定位符优先级，P0 ARIA role 优先</li>
+          <li>隐式等待为主，仅慢路径用显式 timeout</li>
+          <li>断言必须验证具体内容和状态</li>
+          <li>内置新 tab 检测、SPA 渲染等待规则</li>
+          <li>踩坑后自动沉淀到 Skills/Rules，永不复犯</li>
+          <li>context 隔离策略，消除跨域污染</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ARCHITECTURE -->
-<section class="arch-section" id="architecture">
+<section class="arch-section reveal" id="architecture">
   <div class="section-inner">
-    <div class="section-label">Architecture</div>
-    <h2 class="section-title">POM 四层分离架构</h2>
-    <p class="section-desc">
-      经典 Page Object Model 分层设计，按角色拆分测试、页面对象继承链、环境配置隔离、Fixture 自动管理。
-    </p>
+    <div class="section-header">
+      <div class="section-label">Architecture</div>
+      <h2 class="section-title">POM 四层分离 &middot; 工业级架构</h2>
+      <p class="section-desc">
+        经典 Page Object Model 分层设计，按角色拆分测试、页面对象继承链、环境配置隔离、Fixture 自动管理。
+      </p>
+    </div>
     <div class="arch-diagram">
       <div class="arch-layers">
         <div class="arch-layer">
@@ -644,26 +1078,26 @@
           </div>
           <div class="arch-layer-desc">按角色拆分文件：test_&lt;role&gt;_flow.py — 每个测试类继承 Base 或 Role-Base</div>
         </div>
-        <div class="arch-arrow">↕</div>
+        <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
             <code>pages/</code> 页面对象层
           </div>
-          <div class="arch-layer-desc">BasePage ← LoginPage ← LandingPage ← … 定位符声明为类常量，标注 P0–P5 级别</div>
+          <div class="arch-layer-desc">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; 定位符声明为类常量，标注 P0&#8211;P5 级别</div>
         </div>
-        <div class="arch-arrow">↕</div>
+        <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
             <code>config/</code> 配置层
           </div>
           <div class="arch-layer-desc">URL、Token、浏览器参数按环境（pre / prod）切换</div>
         </div>
-        <div class="arch-arrow">↕</div>
+        <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
             <code>conftest.py</code> Fixture 层
           </div>
-          <div class="arch-layer-desc">browser → context → page → Role-specific base — 全自动生命周期管理</div>
+          <div class="arch-layer-desc">browser &rarr; context &rarr; page &rarr; Role-specific base &mdash; 全自动生命周期管理</div>
         </div>
       </div>
     </div>
@@ -671,127 +1105,138 @@
 </section>
 
 <!-- SKILLS -->
-<section id="skills">
+<section class="skills-section reveal" id="skills">
   <div class="section-inner">
-    <div class="section-label">Skills</div>
-    <h2 class="section-title">12 个操作技能，覆盖完整工作流</h2>
-    <p class="section-desc">
-      每个 Skill 是一份结构化的操作指南，指导 Agent 如何完成特定任务 —— 从生成 Page Object 到排查测试失败。
-    </p>
+    <div class="section-header">
+      <div class="section-label">Skills</div>
+      <h2 class="section-title">13 个操作技能，覆盖完整测试生命周期</h2>
+      <p class="section-desc">
+        1 个路由入口 + 12 个子 Skill，覆盖从页面探索到代码审查的完整工作流。
+        Agent 按 CLAUDE.md 路由表自动选择合适的 Skill 组合。
+      </p>
+    </div>
     <div class="card-grid">
       <div class="card">
-        <div class="card-icon skill">⚡</div>
+        <div class="card-icon skill">&#9889;</div>
         <h3>gen-page-test</h3>
         <p>一键生成 PageObject 类和对应的测试文件。自动填充定位符、is_page_loaded 方法和测试骨架。</p>
         <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">🔍</div>
+        <div class="card-icon skill">&#128269;</div>
         <h3>locator-replacer</h3>
-        <p>六级定位符优先级策略（P0 ARIA → P5 XPath）。分析 DOM 结构，替换脆弱定位符为稳定版本。</p>
+        <p>六级定位符优先级策略（P0 ARIA &rarr; P5 XPath）。分析 DOM 结构，替换脆弱定位符为稳定版本。</p>
         <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">▶</div>
+        <div class="card-icon skill">&#9654;</div>
         <h3>test-runner</h3>
         <p>运行测试并结构化分析结果。自动分类失败原因（定位符/等待/逻辑），输出可操作的修复建议。</p>
         <span class="card-tag debug">Execute</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">🔧</div>
+        <div class="card-icon skill">&#128295;</div>
         <h3>quick-debug</h3>
-        <p>免登录快速排查测试失败。按超时排查三步法定位根因：先确认页面 → 再检查 tab → 最后查定位符。</p>
+        <p>免登录快速排查测试失败。按超时排查三步法定位根因：先确认页面 &rarr; 再检查 tab &rarr; 最后查定位符。</p>
         <span class="card-tag debug">Debug</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">➕</div>
+        <div class="card-icon skill">&#10133;</div>
         <h3>add-regression-point</h3>
         <p>为已有页面新增回归测试点。定位插入位置，生成定位符 + 操作 + 断言，同步更新文档。</p>
         <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">🏗</div>
+        <div class="card-icon skill">&#127959;</div>
         <h3>architecture</h3>
         <p>架构决策指南。新增角色、拆分模块、设计继承链时的决策树和分层原则。</p>
         <span class="card-tag config">Architect</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">✅</div>
+        <div class="card-icon skill">&#9989;</div>
         <h3>page-load-assertion</h3>
-        <p>设计 is_page_loaded() 方法。选择最稳定的页面加载完成标志，避免超时和误判。</p>
+        <p>设计 is_page_loaded() 方法。四种验证模式，选择最稳定的页面加载完成标志，避免超时和误判。</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">⏱</div>
+        <div class="card-icon skill">&#9201;</div>
         <h3>wait-strategy</h3>
-        <p>配置等待策略。全局隐式等待 + 慢路径显式 timeout，处理 SPA 异步渲染。</p>
+        <p>配置等待策略。全局隐式等待 + 慢路径显式 timeout，处理 SPA 异步渲染和动态加载。</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">🖥</div>
+        <div class="card-icon skill">&#128421;</div>
         <h3>browser-config</h3>
-        <p>浏览器 viewport、超时、Context 参数配置。处理 headless/headed 模式切换。</p>
+        <p>浏览器 viewport、超时、Context 分层配置。处理 headless/headed 模式切换和录制。</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">🔄</div>
+        <div class="card-icon skill">&#128260;</div>
         <h3>case-round-trip</h3>
-        <p>用例往返闭合设计。确保测试执行前后系统状态一致，支持数据清理和回滚。</p>
+        <p>用例往返闭合设计。确保测试执行前后系统状态一致，共享 page 下必须 UI 返回并断言。</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">💾</div>
+        <div class="card-icon skill">&#128190;</div>
         <h3>save-verify-strategy</h3>
-        <p>保存验证策略。表单提交后的成功/失败判断、Toast/弹窗检测、列表刷新确认。</p>
+        <p>保存验证策略。Toast / 重定向 / 数据对比 / 富文本清空 — 四种验证模式覆盖全场景。</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
-        <div class="card-icon skill">📊</div>
+        <div class="card-icon skill">&#128202;</div>
         <h3>code-review-graph</h3>
-        <p>AST 知识图谱驱动的代码审查。利用 MCP 工具分析变更影响半径和测试覆盖。</p>
+        <p>AST 知识图谱驱动的代码审查。利用 MCP 工具分析变更影响半径、爆炸半径和测试覆盖。</p>
         <span class="card-tag review">Review</span>
+      </div>
+      <div class="card">
+        <div class="card-icon tool">&#128268;</div>
+        <h3>ui-automation-harness</h3>
+        <p>Skill 路由入口。自动编排多个子 Skill 的组合场景，如「新页面 + 替换定位符 + 运行验证」一条龙。</p>
+        <span class="card-tag review">Router</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- RULES -->
-<section class="rules-section" id="rules">
+<section class="rules-section reveal" id="rules">
   <div class="section-inner">
-    <div class="section-label">Rules</div>
-    <h2 class="section-title">严格规则，每条配反例 + 正例</h2>
-    <p class="section-desc">
-      Rules 是强制约束（Must / Must-not），确保 Agent 生成的代码符合项目规范。每条规则都包含 ❌ 反例和 ✅ 正例。
-    </p>
+    <div class="section-header">
+      <div class="section-label">Rules</div>
+      <h2 class="section-title">4 大规则域 &middot; 14 个规则文件 &middot; 每条配 &#10060; 反例 + &#9989; 正例</h2>
+      <p class="section-desc">
+        覆盖 Agent 行为边界、编码规范、Playwright 专项（8 个子文件）和报告策略。不是建议，是红线。
+      </p>
+    </div>
     <div class="rules-grid">
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#EDF5F2;color:#3D8B70;">🎯</div>
+          <div class="icon" style="background:var(--green-bg);color:var(--green);">&#127919;</div>
           <h3>定位符策略</h3>
         </div>
         <ul>
-          <li>六级优先级：P0 ARIA role → P5 相对 XPath</li>
+          <li>六级优先级：P0 ARIA role &rarr; P5 相对 XPath</li>
           <li>禁止哈希类名（sc-xxx / css-xxx）</li>
           <li>禁止绝对 XPath</li>
           <li>状态类 selector 必须配 text 锁定</li>
-          <li>text= 子串匹配的精确化处理</li>
+          <li>text= 子串匹配必须精确化处理</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#FDF3EC;color:#D4783C;">⏳</div>
+          <div class="icon" style="background:var(--accent-bg);color:var(--accent);">&#9203;</div>
           <h3>超时 & 等待</h3>
         </div>
         <ul>
-          <li>超时先排查页面，再查定位符</li>
-          <li>SPA 切换后 networkidle ≠ 渲染完成</li>
+          <li>超时先排查页面 URL，再查定位符</li>
+          <li>SPA 切换后 networkidle &#8800; 渲染完成</li>
           <li>全局隐式等待 + 仅慢路径显式 timeout</li>
-          <li>禁止 time.sleep()</li>
+          <li>禁止 time.sleep()，使用 Playwright 原生等待</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#F0EDF7;color:#7B5CB8;">🧪</div>
+          <div class="icon" style="background:var(--purple-bg);color:var(--purple);">&#129514;</div>
           <h3>断言模式</h3>
         </div>
         <ul>
@@ -803,7 +1248,7 @@
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#FEF1F0;color:#C0392B;">🌐</div>
+          <div class="icon" style="background:var(--red-bg);color:var(--red);">&#127760;</div>
           <h3>浏览器上下文</h3>
         </div>
         <ul>
@@ -815,19 +1260,19 @@
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#EDF5F2;color:#3D8B70;">📑</div>
+          <div class="icon" style="background:var(--green-bg);color:var(--green);">&#128209;</div>
           <h3>编码规范</h3>
         </div>
         <ul>
           <li>类 PascalCase / 方法 snake_case / 常量 UPPER_SNAKE</li>
           <li>定位符声明为类常量，行尾标注级别</li>
-          <li>导入顺序：标准库 → 第三方 → 项目内</li>
+          <li>导入顺序：标准库 &rarr; 第三方 &rarr; 项目内</li>
           <li>新页面必须同步导出到 __init__.py</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#F0EDF7;color:#7B5CB8;">🛡</div>
+          <div class="icon" style="background:var(--purple-bg);color:var(--purple);">&#128737;</div>
           <h3>Agent 行为边界</h3>
         </div>
         <ul>
@@ -839,26 +1284,26 @@
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#FDF3EC;color:#D4783C;">📊</div>
+          <div class="icon" style="background:var(--accent-bg);color:var(--accent);">&#128200;</div>
           <h3>报告策略</h3>
         </div>
         <ul>
-          <li>仅失败时生成 HTML 报告</li>
-          <li>全绿跳过报告生成，避免堆积</li>
+          <li>仅失败时生成 HTML 报告，全绿跳过</li>
           <li>标记变量覆盖全阶段（含 teardown）</li>
           <li>域名统计无论通过与否都输出</li>
+          <li>报告自动轮转，避免磁盘堆积</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
-          <div class="icon" style="background:#FEF1F0;color:#C0392B;">📏</div>
+          <div class="icon" style="background:var(--red-bg);color:var(--red);">&#128207;</div>
           <h3>Performance API 隔离</h3>
         </div>
         <ul>
           <li>收集后立即 clearResourceTimings()</li>
           <li>清空必须在同一次 evaluate 内部</li>
           <li>class 级共享 context 是高危场景</li>
-          <li>单独通过 + 批量失败 → 首查此项</li>
+          <li>单独通过 + 批量失败 &rarr; 首查此项</li>
         </ul>
       </div>
     </div>
@@ -866,13 +1311,15 @@
 </section>
 
 <!-- CODE EXAMPLES -->
-<section class="code-section" id="code-examples">
+<section class="code-section reveal" id="code-examples">
   <div class="section-inner">
-    <div class="section-label">Best Practices</div>
-    <h2 class="section-title">每条规则都有 ❌ 反例 和 ✅ 正例</h2>
-    <p class="section-desc">
-      不只是抽象原则 —— 每条规则都给出具体的代码示例，让 Agent 和开发者都能直接对照执行。
-    </p>
+    <div class="section-header">
+      <div class="section-label">Best Practices</div>
+      <h2 class="section-title">不是抽象原则，是可执行的代码规范</h2>
+      <p class="section-desc">
+        每条规则都给出具体的代码对照 —— Agent 看到反例就能自动规避，开发者也能直接 copy-paste。
+      </p>
+    </div>
     <div class="code-showcase">
       <div class="code-block">
         <div class="code-block-header">
@@ -881,15 +1328,18 @@
           <span class="code-dot green"></span>
           <span class="code-block-title">locator_bad.py</span>
         </div>
-        <span class="code-label bad">❌ 反例</span>
-        <pre><span class="cmt"># 哈希类名 — 每次构建都会变化</span>
+        <span class="code-label bad">&#10060; Anti-Pattern</span>
+        <pre><span class="cmt"># Hash class name - changes every build</span>
 <span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"css=.sc-bdVaJa.dKPpRt"</span>
 
-<span class="cmt"># 绝对 XPath — 任何 DOM 改动都会断</span>
+<span class="cmt"># Absolute XPath - any DOM change breaks</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"/html/body/div[1]/div[2]/input"</span>
 
-<span class="cmt"># text= 子串匹配 — 命中「收起筛选」</span>
-<span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">"text=筛选"</span></pre>
+<span class="cmt"># Substring match - hits "Collapse Filter"</span>
+<span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">"text=Filter"</span>
+
+<span class="cmt"># Hardcoded sleep - fragile and slow</span>
+<span class="fn">time</span><span class="op">.</span><span class="fn">sleep</span><span class="op">(</span><span class="num">5</span><span class="op">)</span></pre>
       </div>
       <div class="code-block">
         <div class="code-block-header">
@@ -898,41 +1348,46 @@
           <span class="code-dot green"></span>
           <span class="code-block-title">locator_good.py</span>
         </div>
-        <span class="code-label good">✅ 正例</span>
-        <pre><span class="cmt"># P0: ARIA role — 语义稳定</span>
-<span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"role=button[name='提交']"</span>
+        <span class="code-label good">&#9989; Best Practice</span>
+        <pre><span class="cmt"># P0: ARIA role - semantically stable</span>
+<span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"role=button[name='Submit']"</span>
 
-<span class="cmt"># P2: data-testid — 专为测试设计</span>
+<span class="cmt"># P2: data-testid - designed for testing</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"[data-testid='name-input']"</span>
 
-<span class="cmt"># 精确匹配 — 不命中「收起筛选」</span>
-<span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">'text="筛选"'</span></pre>
+<span class="cmt"># Exact match - no accidental hits</span>
+<span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">'text="Filter"'</span>
+
+<span class="cmt"># Playwright auto-wait - fast and reliable</span>
+<span class="fn">expect</span><span class="op">(</span><span class="var">locator</span><span class="op">).</span><span class="fn">to_be_visible</span><span class="op">()</span></pre>
       </div>
     </div>
   </div>
 </section>
 
 <!-- WORKFLOW -->
-<section class="workflow-section" id="workflow">
+<section class="workflow-section reveal" id="workflow">
   <div class="section-inner">
-    <div class="section-label">Workflow</div>
-    <h2 class="section-title">Agent 工作流：从需求到测试用例</h2>
-    <p class="section-desc">
-      Agent 按照 Skills 路由表自动编排任务，从分析页面到生成测试、运行验证、沉淀经验。
-    </p>
+    <div class="section-header">
+      <div class="section-label">Workflow</div>
+      <h2 class="section-title">从需求到稳定用例 &middot; 6 步闭环</h2>
+      <p class="section-desc">
+        Agent 按照 Skills 路由表自动编排任务。每一步都有对应的 Skill 和 Rule 保驾护航。
+      </p>
+    </div>
     <div class="workflow-steps">
       <div class="wf-step">
         <div class="wf-step-num">1</div>
         <div class="wf-step-content">
           <h3>探索目标页面</h3>
-          <p>使用 <code>agent-browser</code> 获取页面 DOM 快照，分析元素结构和可用的定位策略。节省 82–93% 的 token 消耗。</p>
+          <p>使用 <code>agent-browser</code> 获取页面 DOM 快照，分析元素结构和可用的定位策略。相比 Playwright MCP 节省 82&#8211;93% 的 token 消耗。</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">2</div>
         <div class="wf-step-content">
           <h3>生成 Page Object</h3>
-          <p>调用 <code>gen-page-test</code> Skill，自动生成 PageObject 类，包含定位符常量（标注 P0–P5）、操作方法和 <code>is_page_loaded()</code>。</p>
+          <p>调用 <code>gen-page-test</code> Skill，自动生成 PageObject 类，包含定位符常量（标注 P0&#8211;P5）、操作方法和 <code>is_page_loaded()</code>。</p>
         </div>
       </div>
       <div class="wf-step">
@@ -946,7 +1401,7 @@
         <div class="wf-step-num">4</div>
         <div class="wf-step-content">
           <h3>运行 & 调试</h3>
-          <p>通过 <code>test-runner</code> 执行测试，失败时 <code>quick-debug</code> 自动按三步法排查：确认页面 → 检查 tab → 查定位符。</p>
+          <p>通过 <code>test-runner</code> 执行测试，失败时 <code>quick-debug</code> 自动按三步法排查：确认页面 &rarr; 检查 tab &rarr; 查定位符。</p>
         </div>
       </div>
       <div class="wf-step">
@@ -959,8 +1414,139 @@
       <div class="wf-step">
         <div class="wf-step-num">6</div>
         <div class="wf-step-content">
-          <h3>沉淀经验</h3>
-          <p>踩坑后自动将经验写入 Skills / Rules / Docs —— Agent 的「肌肉记忆」持续进化，同类问题不再复现。</p>
+          <h3>沉淀进化</h3>
+          <p>踩坑后自动将经验写入 Skills / Rules / Docs &mdash; Agent 的「肌肉记忆」持续进化，同类问题不再复现。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEVELOPMENT EFFICIENCY -->
+<section class="efficiency-section reveal" id="efficiency">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Development Efficiency</div>
+      <h2 class="section-title">60 天的工作量，15 天交付</h2>
+      <p class="section-desc">
+        实测数据：构建完整的 UI 自动化 Agent Harness（含 13 个 Skills、14 个 Rule 文件、4 个文档、1 个 Sub-Agent），
+        VelocitAI + AI Agent 协作仅需 15 个工作日，传统人工编码预估需 60 个工作日。
+      </p>
+    </div>
+    <div class="efficiency-grid">
+      <div class="efficiency-left">
+        <div class="eff-bar-group">
+          <div class="eff-bar">
+            <div class="eff-bar-label">
+              <span>传统人工编码</span>
+              <span class="days slow">60 天</span>
+            </div>
+            <div class="eff-bar-track">
+              <div class="eff-bar-fill manual">12 周</div>
+            </div>
+          </div>
+          <div class="eff-bar">
+            <div class="eff-bar-label">
+              <span>VelocitAI + AI Agent</span>
+              <span class="days fast">15 天</span>
+            </div>
+            <div class="eff-bar-track">
+              <div class="eff-bar-fill ai">3 周</div>
+            </div>
+          </div>
+        </div>
+        <div class="eff-callouts">
+          <div class="eff-callout">
+            <div class="big accent">4x</div>
+            <div class="label">开发效率提升</div>
+          </div>
+          <div class="eff-callout">
+            <div class="big green">75%</div>
+            <div class="label">工时节省</div>
+          </div>
+        </div>
+      </div>
+      <div class="eff-right">
+        <h3>提效来自哪里？</h3>
+        <div class="eff-breakdown">
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--accent-bg);color:var(--accent);">&#9889;</div>
+            <div class="eff-item-text">
+              <h4>Skill 驱动的代码生成</h4>
+              <p>gen-page-test 一键生成 PageObject + 测试骨架，Agent 自动填充定位符和断言逻辑</p>
+              <span class="time-save">节省 ~70% 页面编码时间</span>
+            </div>
+          </div>
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--red-bg);color:var(--red);">&#128295;</div>
+            <div class="eff-item-text">
+              <h4>规则前置 &middot; 错误归零</h4>
+              <p>14 个 Rule 文件提前拦截脆弱定位符、无效断言、cookie 污染等常见错误，避免返工</p>
+              <span class="time-save">减少 ~80% 调试返工</span>
+            </div>
+          </div>
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--green-bg);color:var(--green);">&#128161;</div>
+            <div class="eff-item-text">
+              <h4>自我进化 &middot; 知识复利</h4>
+              <p>踩过的坑自动沉淀为 Skill/Rule，后续同类任务直接命中最佳实践，越用越快</p>
+              <span class="time-save">后期任务加速 ~50%</span>
+            </div>
+          </div>
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--purple-bg);color:var(--purple);">&#128202;</div>
+            <div class="eff-item-text">
+              <h4>code-reviewer 自动审查</h4>
+              <p>P0/P1/P2 分级审查 + AST 图谱影响分析，替代人工 Code Review 环节</p>
+              <span class="time-save">审查效率提升 ~3x</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOKEN SAVINGS -->
+<section class="savings-section reveal" id="savings">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Efficiency</div>
+      <h2 class="section-title">agent-browser 集成 &middot; Token 消耗直降 88%</h2>
+      <p class="section-desc">
+        传统 Playwright MCP 每次页面交互消耗大量 token。VelocitAI 集成 agent-browser，用 Rust CLI 替代 MCP 快照。
+      </p>
+    </div>
+    <div class="savings-grid">
+      <div class="savings-chart">
+        <div class="savings-bar">
+          <div class="savings-bar-label">
+            <span>Playwright MCP Snapshot</span>
+            <span>~3,500 tokens/次</span>
+          </div>
+          <div class="savings-bar-track">
+            <div class="savings-bar-fill traditional">3,500 tokens</div>
+          </div>
+        </div>
+        <div class="savings-bar">
+          <div class="savings-bar-label">
+            <span>agent-browser Snapshot</span>
+            <span>~200-400 tokens/次</span>
+          </div>
+          <div class="savings-bar-track">
+            <div class="savings-bar-fill velocitai">~300</div>
+          </div>
+        </div>
+      </div>
+      <div class="savings-callout">
+        <div class="big-number">82-93%</div>
+        <div class="desc">
+          单次 DOM 探索的 Token 节省率。<br>
+          10 个页面的回归测试生成流程，总计可节省 <strong>~30,000 tokens</strong>。
+        </div>
+        <div class="detail">
+          agent-browser 基于 CDP 协议直接获取无障碍树，绕过 MCP 序列化开销。
+          点击失败时自动降级到 JS eval，新 tab 自动 list &rarr; switch &rarr; snapshot。
         </div>
       </div>
     </div>
@@ -968,28 +1554,30 @@
 </section>
 
 <!-- EVOLUTION -->
-<section class="evo-section" id="evolution">
+<section class="evo-section reveal" id="evolution">
   <div class="section-inner">
-    <div class="section-label">Self-Evolution</div>
-    <h2 class="section-title">自我进化机制（P0 最高优先级）</h2>
-    <p class="section-desc">
-      Agent 在踩坑、被纠正、或发现重复问题时，自动将经验沉淀到项目知识库。
-    </p>
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;">Self-Evolution</div>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;">自我进化机制 &middot; Agent 的肌肉记忆</h2>
+      <p class="section-desc" style="margin:0 auto;">
+        P0 最高优先级。Agent 在踩坑、被纠正、或发现重复问题时，自动将经验沉淀到项目知识库。越用越聪明。
+      </p>
+    </div>
     <div class="evo-grid">
       <div class="evo-card">
-        <div class="evo-icon">💡</div>
+        <div class="evo-icon">&#128161;</div>
         <h3>经验（How-to）</h3>
         <p>操作方法论和最佳实践。<br>指导 Agent 如何完成任务。</p>
-        <div class="target">.claude/skills/</div>
+        <div class="target">skills/</div>
       </div>
       <div class="evo-card">
-        <div class="evo-icon">🚧</div>
+        <div class="evo-icon">&#128679;</div>
         <h3>规则（Must / Must-not）</h3>
-        <p>强制约束和边界条件。<br>每条必含 ❌ 反例 + ✅ 正例。</p>
-        <div class="target">.claude/rules/</div>
+        <p>强制约束和边界条件。<br>每条必含 &#10060; 反例 + &#9989; 正例。</p>
+        <div class="target">rules/</div>
       </div>
       <div class="evo-card">
-        <div class="evo-icon">📋</div>
+        <div class="evo-icon">&#128203;</div>
         <h3>项目事实</h3>
         <p>类名、URL、PageObject 清单。<br>可查询的项目知识库。</p>
         <div class="target">docs/</div>
@@ -998,118 +1586,201 @@
   </div>
 </section>
 
-<!-- QUICK START -->
-<section class="qs-section" id="quickstart">
+<!-- INSTALL -->
+<section class="qs-section reveal" id="install">
   <div class="section-inner">
-    <div class="section-label">Quick Start</div>
-    <h2 class="section-title">三步开始使用</h2>
-    <p class="section-desc">
-      将 Harness 复制到你的 Playwright + pytest 项目，配置环境，即可开始用 Agent 驱动测试。
-    </p>
-    <div class="qs-terminal">
+    <div class="section-header">
+      <div class="section-label">Installation</div>
+      <h2 class="section-title">多平台一键安装</h2>
+      <p class="section-desc">
+        Claude Code 原生插件安装，或手动集成到任意 AI Agent 项目。
+      </p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem;">
+      <div class="qs-terminal">
+        <div class="qs-terminal-header">
+          <span class="code-dot red"></span>
+          <span class="code-dot yellow"></span>
+          <span class="code-dot green"></span>
+          <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Claude Code</span>
+        </div>
+        <pre><span class="comment"># One-line plugin install</span>
+<span class="prompt">$</span> claude install-plugin velocitai
+
+<span class="comment"># Or manual setup</span>
+<span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
+<span class="prompt">$</span> cp -r velocitai/{skills,rules,hooks,docs,.claude,CLAUDE.md} \
+    your-project/</pre>
+      </div>
+      <div class="qs-terminal">
+        <div class="qs-terminal-header">
+          <span class="code-dot red"></span>
+          <span class="code-dot yellow"></span>
+          <span class="code-dot green"></span>
+          <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Copilot / Gemini / Others</span>
+        </div>
+        <pre><span class="comment"># Clone and integrate</span>
+<span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
+<span class="prompt">$</span> cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md} \
+    your-project/
+
+<span class="comment"># Copilot CLI — also copy AGENTS.md</span>
+<span class="prompt">$</span> cp velocitai/AGENTS.md your-project/
+
+<span class="comment"># Gemini CLI — also copy GEMINI.md</span>
+<span class="prompt">$</span> cp velocitai/GEMINI.md your-project/</pre>
+      </div>
+    </div>
+    <div class="qs-terminal" style="margin-top:1.5rem;max-width:100%;">
       <div class="qs-terminal-header">
         <span class="code-dot red"></span>
         <span class="code-dot yellow"></span>
         <span class="code-dot green"></span>
+        <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Setup & Run</span>
       </div>
-      <pre><span class="comment"># 1. 复制 Harness 到你的项目</span>
-<span class="prompt">$</span> cp -r .claude/ CLAUDE.md docs/  /path/to/your-project/
-
-<span class="comment"># 2. 安装依赖 & 浏览器</span>
+      <pre><span class="comment"># Install dependencies &amp; browser</span>
+<span class="prompt">$</span> cd your-project
 <span class="prompt">$</span> python -m venv .venv && source .venv/bin/activate
 <span class="prompt">$</span> pip install -r requirements.txt
 <span class="prompt">$</span> playwright install chromium
 
-<span class="comment"># 3. 运行测试（--env 必须指定）</span>
+<span class="comment"># Run tests (--env is REQUIRED, agent will ask if not specified)</span>
 <span class="prompt">$</span> pytest tests/ --env=pre
 
-<span class="comment"># 查看报告</span>
+<span class="comment"># View report</span>
 <span class="prompt">$</span> allure serve reports/allure-results</pre>
     </div>
   </div>
 </section>
 
 <!-- TECH STACK -->
-<section class="stack-section" id="stack">
-  <div class="section-inner" style="text-align: center;">
-    <div class="section-label">Tech Stack</div>
-    <h2 class="section-title" style="margin: 0 auto 0.6rem;">技术栈</h2>
+<section class="stack-section reveal" id="stack">
+  <div class="section-inner" style="text-align:center;">
+    <div class="section-label" style="justify-content:center;">Tech Stack</div>
+    <h2 class="section-title" style="margin:0 auto 0.6rem;">技术栈</h2>
+    <p class="section-desc" style="margin:0 auto;">基于成熟工具链，不造轮子，只做治理。</p>
     <div class="stack-grid">
       <div class="stack-item">
-        <div class="stack-icon">🐍</div>
+        <div class="stack-icon">&#128013;</div>
         <h4>Python 3.10+</h4>
         <p>核心语言</p>
       </div>
       <div class="stack-item">
-        <div class="stack-icon">🎭</div>
+        <div class="stack-icon">&#127917;</div>
         <h4>Playwright</h4>
         <p>浏览器自动化</p>
       </div>
       <div class="stack-item">
-        <div class="stack-icon">🧪</div>
+        <div class="stack-icon">&#129514;</div>
         <h4>pytest</h4>
         <p>测试框架</p>
       </div>
       <div class="stack-item">
-        <div class="stack-icon">📊</div>
+        <div class="stack-icon">&#128202;</div>
         <h4>Allure</h4>
         <p>测试报告</p>
       </div>
       <div class="stack-item">
-        <div class="stack-icon">🌐</div>
+        <div class="stack-icon">&#127760;</div>
         <h4>agent-browser</h4>
-        <p>DOM 探索</p>
-        <span class="optional">可选</span>
+        <p>DOM 探索（Rust CLI）</p>
+        <span class="optional">Optional</span>
       </div>
       <div class="stack-item">
-        <div class="stack-icon">🔗</div>
+        <div class="stack-icon">&#128279;</div>
         <h4>code-review-graph</h4>
         <p>AST 图谱 MCP</p>
-        <span class="optional">可选</span>
+        <span class="optional">Optional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPATIBLE AGENTS -->
+<section class="compat-section reveal" id="compatible">
+  <div class="section-inner" style="text-align:center;">
+    <div class="section-label" style="justify-content:center;">Compatibility</div>
+    <h2 class="section-title" style="margin:0 auto 0.6rem;">兼容主流 AI Agent 平台</h2>
+    <p class="section-desc" style="margin:0 auto;">
+      Harness 设计为平台无关。每个平台有专属入口文件，Skills/Rules 的结构化范式可迁移到任何 AI Agent。
+    </p>
+    <div class="compat-grid">
+      <div class="compat-item">
+        <div class="icon">&#9672;</div>
+        <h4>Claude Code</h4>
+        <p>原生插件 &middot; CLAUDE.md</p>
+      </div>
+      <div class="compat-item">
+        <div class="icon">&#9673;</div>
+        <h4>Copilot CLI</h4>
+        <p>Skills 适配 &middot; AGENTS.md</p>
+      </div>
+      <div class="compat-item">
+        <div class="icon">&#9674;</div>
+        <h4>Gemini CLI</h4>
+        <p>Skills 适配 &middot; GEMINI.md</p>
+      </div>
+      <div class="compat-item">
+        <div class="icon">&#9670;</div>
+        <h4>Cursor</h4>
+        <p>Rules 兼容 &middot; CLAUDE.md</p>
+      </div>
+      <div class="compat-item">
+        <div class="icon">&#9671;</div>
+        <h4>Windsurf</h4>
+        <p>Rules 兼容 &middot; CLAUDE.md</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FILE STRUCTURE -->
-<section style="background:#F5F3EF;" id="structure">
+<section class="structure-section reveal" id="structure">
   <div class="section-inner">
-    <div class="section-label">Structure</div>
-    <h2 class="section-title">项目结构</h2>
-    <div style="margin-top:2rem;">
-      <div class="code-block" style="max-width:680px;">
+    <div class="section-header">
+      <div class="section-label">Structure</div>
+      <h2 class="section-title">项目结构</h2>
+    </div>
+    <div style="margin-top:1rem;">
+      <div class="code-block" style="max-width:720px;">
         <div class="code-block-header">
           <span class="code-dot red"></span>
           <span class="code-dot yellow"></span>
           <span class="code-dot green"></span>
-          <span class="code-block-title">project tree</span>
+          <span class="code-block-title">velocitai/</span>
         </div>
         <pre>
 <span class="str">velocitai/</span>
-├── <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent 入口索引 & 路由表</span>
-├── <span class="str">.claude/</span>
-│   ├── <span class="var">settings.json</span>      <span class="cmt"># 权限 + hooks</span>
-│   ├── <span class="str">agents/</span>            <span class="cmt"># 子代理定义</span>
-│   │   └── code-reviewer.md
-│   ├── <span class="str">rules/</span>             <span class="cmt"># 强制规则（Must/Must-not）</span>
-│   │   ├── agent-behavior/
-│   │   ├── coding-conventions/
-│   │   ├── playwright/      <span class="cmt"># 8 条 Playwright 专项规则</span>
-│   │   └── report-strategy/
-│   └── <span class="str">skills/</span>            <span class="cmt"># 操作技能（How-to）</span>
-│       ├── gen-page-test/
-│       ├── locator-replacer/
-│       ├── test-runner/
-│       ├── quick-debug/
-│       └── <span class="cmt">... (12 skills)</span>
-├── <span class="str">docs/</span>                  <span class="cmt"># 项目知识库</span>
-│   ├── architecture.md
-│   ├── pages-catalog.md
-│   ├── regression-points.md
-│   └── setup.md
-├── <span class="str">pages/</span>                 <span class="cmt"># PageObject 层（待填充）</span>
-├── <span class="str">tests/</span>                 <span class="cmt"># 测试用例层（待填充）</span>
-└── <span class="str">config/</span>                <span class="cmt"># 环境配置层（待填充）</span></pre>
+&#9500;&#9472;&#9472; <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent entry point (Claude Code)</span>
+&#9500;&#9472;&#9472; <span class="var">AGENTS.md</span>             <span class="cmt"># Agent entry point (Copilot CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">GEMINI.md</span>             <span class="cmt"># Agent entry point (Gemini CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">package.json</span>          <span class="cmt"># npm distribution</span>
+&#9500;&#9472;&#9472; <span class="str">.claude-plugin/</span>       <span class="cmt"># Claude Code plugin config</span>
+&#9474;   &#9500;&#9472;&#9472; plugin.json
+&#9474;   &#9492;&#9472;&#9472; marketplace.json
+&#9500;&#9472;&#9472; <span class="str">.claude/</span>              <span class="cmt"># Claude-specific config</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="var">settings.json</span>      <span class="cmt"># Permissions + hooks</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="str">agents/</span>            <span class="cmt"># Sub-agent definitions</span>
+&#9474;       &#9492;&#9472;&#9472; code-reviewer.md
+&#9500;&#9472;&#9472; <span class="str">skills/</span>               <span class="cmt"># Operational skills (How-to)</span>
+&#9474;   &#9500;&#9472;&#9472; SKILL.md              <span class="cmt"># Router (composes sub-skills)</span>
+&#9474;   &#9500;&#9472;&#9472; gen-page-test/
+&#9474;   &#9500;&#9472;&#9472; locator-replacer/
+&#9474;   &#9500;&#9472;&#9472; test-runner/
+&#9474;   &#9500;&#9472;&#9472; quick-debug/
+&#9474;   &#9492;&#9472;&#9472; <span class="cmt">... (13 skills total)</span>
+&#9500;&#9472;&#9472; <span class="str">rules/</span>                <span class="cmt"># Enforced rules (Must/Must-not)</span>
+&#9474;   &#9500;&#9472;&#9472; agent-behavior/    <span class="cmt"># 3 files</span>
+&#9474;   &#9500;&#9472;&#9472; coding-conventions/<span class="cmt"># 1 file</span>
+&#9474;   &#9500;&#9472;&#9472; playwright/        <span class="cmt"># 8 files</span>
+&#9474;   &#9492;&#9472;&#9472; report-strategy/   <span class="cmt"># 1 file</span>
+&#9500;&#9472;&#9472; <span class="str">hooks/</span>                <span class="cmt"># Session &amp; tool hooks</span>
+&#9474;   &#9492;&#9472;&#9472; hooks.json
+&#9492;&#9472;&#9472; <span class="str">docs/</span>                 <span class="cmt"># Project knowledge base</span>
+    &#9500;&#9472;&#9472; architecture.md
+    &#9500;&#9472;&#9472; pages-catalog.md
+    &#9500;&#9472;&#9472; regression-points.md
+    &#9492;&#9472;&#9472; setup.md</pre>
       </div>
     </div>
   </div>
@@ -1117,58 +1788,110 @@
 
 <!-- CTA -->
 <section class="cta-section">
-  <h2>准备好用 Agent 驱动测试了吗？</h2>
-  <p>
-    将 .claude/ 和 CLAUDE.md 复制到你的 Playwright 项目，立即获得 12 个 Skills + 8 条 Playwright 规则的完整 Agent 治理体系。
-  </p>
-  <div class="cta-buttons">
-    <a href="https://github.com/DanielSuo117/velocitai" class="btn btn-primary" target="_blank">
-      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      查看 GitHub 仓库
-    </a>
-    <a href="#quickstart" class="btn btn-outline">快速开始 →</a>
+  <div class="section-inner">
+    <h2>让你的 Agent 从「能写测试」<br>进化到「写好测试」</h2>
+    <p>
+      一行命令安装 Claude Code 插件，或手动集成到 Copilot / Gemini / Cursor / Windsurf。
+      13 个 Skills + 14 个 Rule 文件 + 自我进化机制。实测 4 倍编码提效。
+    </p>
+    <div class="cta-buttons">
+      <a href="https://github.com/DanielSuo117/velocitai" class="btn btn-primary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Star on GitHub
+      </a>
+      <a href="#install" class="btn btn-outline">Install &rarr;</a>
+    </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <p>VelocitAI — UI Automation Agent Harness &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; <a href="https://github.com/DanielSuo117/velocitai" target="_blank">GitHub</a></p>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#architecture">Architecture</a>
+      <a href="#skills">Skills</a>
+      <a href="#rules">Rules</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#efficiency">Efficiency</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/DanielSuo117/velocitai" target="_blank">GitHub</a>
+    </div>
+    <p class="copyright">
+      VelocitAI &mdash; AI-Driven UI Automation Agent Harness &nbsp;&middot;&nbsp;
+      MIT License &nbsp;&middot;&nbsp;
+      Built by <a href="https://github.com/DanielSuo117" target="_blank">Daniel Suo</a>
+    </p>
+  </div>
 </footer>
 
 <script>
-  // Nav scroll shadow
+  // Nav scroll effect
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 10);
   });
 
-  // Mobile menu toggle
+  // Mobile menu
   function toggleMenu() {
     document.getElementById('navLinks').classList.toggle('open');
   }
-
-  // Close mobile menu on link click
   document.querySelectorAll('.nav-links a').forEach(a => {
     a.addEventListener('click', () => {
       document.getElementById('navLinks').classList.remove('open');
     });
   });
 
-  // Intersection Observer for section fade-in
-  const observer = new IntersectionObserver((entries) => {
+  // Reveal on scroll
+  const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+        entry.target.classList.add('visible');
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-  document.querySelectorAll('section:not(.hero)').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(30px)';
-    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(section);
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Token savings bar animation
+  const savingsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.savings-bar-fill').forEach(bar => {
+          bar.classList.add('visible');
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const savingsSection = document.querySelector('.savings-section');
+  if (savingsSection) savingsObserver.observe(savingsSection);
+
+  // Efficiency bar animation
+  const effObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.eff-bar-fill').forEach(bar => {
+          bar.classList.add('animated');
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  const effSection = document.querySelector('.efficiency-section');
+  if (effSection) effObserver.observe(effSection);
+
+  // Smooth nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a:not(.nav-github)');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 100;
+      if (scrollY >= top) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === '#' + current
+        ? 'var(--accent)' : '';
+    });
   });
 </script>
 
