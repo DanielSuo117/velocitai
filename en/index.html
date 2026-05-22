@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VelocitAI — AI 驱动的 UI 自动化 Agent Harness</title>
-<meta name="description" content="VelocitAI 是一套通用 UI 自动化 Agent Harness，为 AI Agent 提供完整的 Skills、Rules 和自我进化机制，驱动企业级 UI 回归测试。">
+<title>VelocitAI — AI-Driven UI Automation Agent Harness</title>
+<meta name="description" content="VelocitAI is a universal UI automation Agent Harness that provides AI agents with complete Skills, Rules, and self-evolution mechanisms to drive enterprise-grade UI regression testing.">
 <meta name="keywords" content="AI, UI Automation, Playwright, pytest, Agent, Harness, POM, Page Object Model">
-<meta property="og:title" content="VelocitAI — AI 驱动的 UI 自动化 Agent Harness">
-<meta property="og:description" content="用 AI Agent 驱动 UI 自动化测试。13 个 Skills + 14 个 Rule 文件，4 倍编码提效，从生成到审查全自动化。">
+<meta property="og:title" content="VelocitAI — AI-Driven UI Automation Agent Harness">
+<meta property="og:description" content="Drive UI automation testing with AI Agents. 13 Skills + 14 Rule files, 4x coding efficiency, fully automated from generation to review.">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23D4783C'/><text x='50' y='72' font-size='60' font-weight='bold' text-anchor='middle' fill='white'>V</text></svg>">
 <style>
@@ -42,7 +42,7 @@
     --radius-lg: 16px;
     --radius-xl: 24px;
     --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
     --max-w: 1140px;
   }
 
@@ -955,7 +955,7 @@
 </head>
 <body>
 
-<!-- 导航栏 -->
+<!-- NAV -->
 <nav id="navbar">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
@@ -966,13 +966,13 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <div class="nav-links" id="navLinks">
-      <a href="#problem">为什么</a>
-      <a href="#architecture">架构</a>
-      <a href="#skills">技能</a>
-      <a href="#rules">规则</a>
-      <a href="#workflow">工作流</a>
-      <a href="#efficiency">效率</a>
-      <a href="#install">安装</a>
+      <a href="#problem">Why</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#skills">Skills</a>
+      <a href="#rules">Rules</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#efficiency">Efficiency</a>
+      <a href="#install">Install</a>
       <a href="https://github.com/DanielSuo117/velocitai" class="nav-github" target="_blank">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
@@ -981,343 +981,345 @@
   </div>
 </nav>
 
-<!-- 首屏 Hero -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-badge">
       <div class="dot"></div>
-      开源项目 &middot; Claude Code 插件 &middot; 多 Agent 兼容
+      Open Source &middot; Claude Code Plugin &middot; Multi-Agent Compatible
     </div>
-    <h1>AI Agent 驱动的<br><span>UI 自动化测试引擎</span></h1>
+    <h1>AI Agent-Driven<br><span>UI Automation Testing Engine</span></h1>
     <p class="hero-desc">
-      VelocitAI 是一套通用 UI 自动化 Agent Harness —— 不是又一个测试框架，而是让 AI Agent
-      获得 <strong style="color:rgba(245,243,239,0.85);">自主生成、执行和进化</strong> UI 测试代码的完整能力体系。
-      将原需 60 人天的测试工程工作压缩到 15 天交付。
+      VelocitAI is a universal UI automation Agent Harness &mdash; not another testing framework,
+      but a complete capability system that enables AI agents to
+      <strong style="color:rgba(245,243,239,0.85);">autonomously generate, execute, and evolve</strong>
+      UI test code. Compresses 60 person-days of testing work into 15-day delivery.
     </p>
     <div class="hero-actions">
       <a href="https://github.com/DanielSuo117/velocitai" class="hero-btn hero-btn-primary" target="_blank">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        在 GitHub 上 Star
+        Star on GitHub
       </a>
-      <a href="#install" class="hero-btn hero-btn-outline">安装 &rarr;</a>
+      <a href="#install" class="hero-btn hero-btn-outline">Install &rarr;</a>
     </div>
     <div class="hero-metrics">
       <div class="hero-metric">
         <div class="num">13</div>
-        <div class="label">Agent 技能</div>
+        <div class="label">Agent Skills</div>
       </div>
       <div class="hero-metric">
         <div class="num">14</div>
-        <div class="label">规则文件</div>
+        <div class="label">Rule Files</div>
       </div>
       <div class="hero-metric">
         <div class="num">4x</div>
-        <div class="label">开发速度</div>
+        <div class="label">Development Speed</div>
       </div>
       <div class="hero-metric">
         <div class="num">75%</div>
-        <div class="label">节省时间</div>
+        <div class="label">Time Saved</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 问题 → 解决方案 -->
+<!-- PROBLEM → SOLUTION -->
 <section class="problem-section reveal" id="problem">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">问题所在</div>
-      <h2 class="section-title">AI Agent 写测试，为什么总是不靠谱？</h2>
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">Why Are AI Agent-Written Tests Always Unreliable?</h2>
       <p class="section-desc">
-        没有治理体系的 AI Agent 就像没有规范的新人实习——能写代码，但写出来的测试脆弱、不稳定、无法维护。
+        An AI Agent without a governance system is like an unsupervised intern &mdash; can write code,
+        but produces fragile, unstable, unmaintainable tests.
       </p>
     </div>
     <div class="comparison-grid">
       <div class="comparison-card before">
-        <h3><span>&#10005;</span> 裸 Agent（无治理）</h3>
+        <h3><span>&#10005;</span> Bare Agent (No Governance)</h3>
         <ul>
-          <li>使用绝对 XPath、哈希类名等脆弱定位符</li>
-          <li>随意 time.sleep()，超时后盲目加秒</li>
-          <li>写出 assert True、assert len(x) > 0 等无效断言</li>
-          <li>不理解 SPA 路由切换、新 tab 上下文</li>
-          <li>同样的错误反复出现，没有记忆</li>
-          <li>跨域 cookie 污染导致批量失败</li>
+          <li>Uses brittle locators like absolute XPath and hash class names</li>
+          <li>Randomly inserts time.sleep(), blindly adds seconds on timeout</li>
+          <li>Writes meaningless assertions like assert True or assert len(x) > 0</li>
+          <li>Does not understand SPA route transitions or new-tab contexts</li>
+          <li>Repeats the same mistakes with no memory</li>
+          <li>Cross-domain cookie contamination causes batch failures</li>
         </ul>
       </div>
       <div class="comparison-arrow">&rarr;</div>
       <div class="comparison-card after">
-        <h3><span>&#10003;</span> VelocitAI 治理后</h3>
+        <h3><span>&#10003;</span> With VelocitAI Governance</h3>
         <ul>
-          <li>六级定位符优先级，P0 ARIA role 优先</li>
-          <li>隐式等待为主，仅慢路径用显式 timeout</li>
-          <li>断言必须验证具体内容和状态</li>
-          <li>内置新 tab 检测、SPA 渲染等待规则</li>
-          <li>踩坑后自动沉淀到 Skills/Rules，永不复犯</li>
-          <li>context 隔离策略，消除跨域污染</li>
+          <li>Six-tier locator priority, P0 ARIA role first</li>
+          <li>Implicit wait by default, explicit timeout only for slow paths</li>
+          <li>Assertions must verify specific content and state</li>
+          <li>Built-in new-tab detection and SPA render-wait rules</li>
+          <li>Hard-won lessons auto-persist to Skills/Rules, never repeated</li>
+          <li>Context isolation strategy eliminates cross-domain contamination</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 架构 -->
+<!-- ARCHITECTURE -->
 <section class="arch-section reveal" id="architecture">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">架构</div>
-      <h2 class="section-title">POM 四层分离 &middot; 工业级架构</h2>
+      <div class="section-label">Architecture</div>
+      <h2 class="section-title">POM Four-Layer Separation &middot; Industrial-Grade Architecture</h2>
       <p class="section-desc">
-        经典 Page Object Model 分层设计，按角色拆分测试、页面对象继承链、环境配置隔离、Fixture 自动管理。
+        Classic Page Object Model layered design: role-based test splitting, page object inheritance chains, environment config isolation, and automatic Fixture lifecycle management.
       </p>
     </div>
     <div class="arch-diagram">
       <div class="arch-layers">
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>tests/</code> 测试层
+            <code>tests/</code> Test Layer
           </div>
-          <div class="arch-layer-desc">按角色拆分文件：test_&lt;role&gt;_flow.py — 每个测试类继承 Base 或 Role-Base</div>
+          <div class="arch-layer-desc">Split by role: test_&lt;role&gt;_flow.py &mdash; each test class inherits Base or Role-Base</div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>pages/</code> 页面对象层
+            <code>pages/</code> Page Object Layer
           </div>
-          <div class="arch-layer-desc">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; 定位符声明为类常量，标注 P0&#8211;P5 级别</div>
+          <div class="arch-layer-desc">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; Locators declared as class constants, annotated P0&ndash;P5</div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>config/</code> 配置层
+            <code>config/</code> Config Layer
           </div>
-          <div class="arch-layer-desc">URL、Token、浏览器参数按环境（pre / prod）切换</div>
+          <div class="arch-layer-desc">URLs, tokens, and browser parameters switch by environment (pre / prod)</div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>conftest.py</code> Fixture 层
+            <code>conftest.py</code> Fixture Layer
           </div>
-          <div class="arch-layer-desc">browser &rarr; context &rarr; page &rarr; Role-specific base &mdash; 全自动生命周期管理</div>
+          <div class="arch-layer-desc">browser &rarr; context &rarr; page &rarr; Role-specific base &mdash; fully automatic lifecycle management</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 技能 -->
+<!-- SKILLS -->
 <section class="skills-section reveal" id="skills">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">技能</div>
-      <h2 class="section-title">13 个操作技能，覆盖完整测试生命周期</h2>
+      <div class="section-label">Skills</div>
+      <h2 class="section-title">13 Operational Skills Covering the Full Test Lifecycle</h2>
       <p class="section-desc">
-        1 个路由入口 + 12 个子 Skill，覆盖从页面探索到代码审查的完整工作流。
-        Agent 按 CLAUDE.md 路由表自动选择合适的 Skill 组合。
+        1 router entry point + 12 sub-Skills covering the complete workflow from page exploration to code review.
+        The Agent automatically selects the right Skill combination via the CLAUDE.md routing table.
       </p>
     </div>
     <div class="card-grid">
       <div class="card">
         <div class="card-icon skill">&#9889;</div>
         <h3>gen-page-test</h3>
-        <p>一键生成 PageObject 类和对应的测试文件。自动填充定位符、is_page_loaded 方法和测试骨架。</p>
-        <span class="card-tag gen">生成</span>
+        <p>One-click generation of PageObject classes and corresponding test files. Auto-fills locators, the is_page_loaded method, and the test skeleton.</p>
+        <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128269;</div>
         <h3>locator-replacer</h3>
-        <p>六级定位符优先级策略（P0 ARIA &rarr; P5 XPath）。分析 DOM 结构，替换脆弱定位符为稳定版本。</p>
-        <span class="card-tag gen">生成</span>
+        <p>Six-tier locator priority strategy (P0 ARIA &rarr; P5 XPath). Analyzes DOM structure and replaces brittle locators with stable alternatives.</p>
+        <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9654;</div>
         <h3>test-runner</h3>
-        <p>运行测试并结构化分析结果。自动分类失败原因（定位符/等待/逻辑），输出可操作的修复建议。</p>
-        <span class="card-tag debug">执行</span>
+        <p>Runs tests and provides structured result analysis. Automatically classifies failure causes (locator / wait / logic) and outputs actionable fix suggestions.</p>
+        <span class="card-tag debug">Execute</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128295;</div>
         <h3>quick-debug</h3>
-        <p>免登录快速排查测试失败。按超时排查三步法定位根因：先确认页面 &rarr; 再检查 tab &rarr; 最后查定位符。</p>
-        <span class="card-tag debug">调试</span>
+        <p>Rapid failure diagnosis without re-login. Three-step timeout triage: confirm page URL &rarr; check tab context &rarr; inspect locator.</p>
+        <span class="card-tag debug">Debug</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#10133;</div>
         <h3>add-regression-point</h3>
-        <p>为已有页面新增回归测试点。定位插入位置，生成定位符 + 操作 + 断言，同步更新文档。</p>
-        <span class="card-tag gen">生成</span>
+        <p>Adds new regression test points to existing pages. Locates insertion position, generates locator + action + assertion, and syncs documentation.</p>
+        <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#127959;</div>
         <h3>architecture</h3>
-        <p>架构决策指南。新增角色、拆分模块、设计继承链时的决策树和分层原则。</p>
-        <span class="card-tag config">架构</span>
+        <p>Architecture decision guide. Decision tree and layering principles for adding new roles, splitting modules, and designing inheritance chains.</p>
+        <span class="card-tag config">Architect</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9989;</div>
         <h3>page-load-assertion</h3>
-        <p>设计 is_page_loaded() 方法。四种验证模式，选择最稳定的页面加载完成标志，避免超时和误判。</p>
-        <span class="card-tag config">配置</span>
+        <p>Designs the is_page_loaded() method. Four verification modes to select the most stable page-load completion signal, avoiding timeouts and false positives.</p>
+        <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9201;</div>
         <h3>wait-strategy</h3>
-        <p>配置等待策略。全局隐式等待 + 慢路径显式 timeout，处理 SPA 异步渲染和动态加载。</p>
-        <span class="card-tag config">配置</span>
+        <p>Configures wait strategies. Global implicit wait + explicit timeout only for slow paths, handling SPA async rendering and dynamic loading.</p>
+        <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128421;</div>
         <h3>browser-config</h3>
-        <p>浏览器 viewport、超时、Context 分层配置。处理 headless/headed 模式切换和录制。</p>
-        <span class="card-tag config">配置</span>
+        <p>Browser viewport, timeout, and Context layering configuration. Handles headless/headed mode switching and recording.</p>
+        <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128260;</div>
         <h3>case-round-trip</h3>
-        <p>用例往返闭合设计。确保测试执行前后系统状态一致，共享 page 下必须 UI 返回并断言。</p>
-        <span class="card-tag config">配置</span>
+        <p>Round-trip closure design for test cases. Ensures system state is consistent before and after test execution; shared-page tests must return via UI and assert.</p>
+        <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128190;</div>
         <h3>save-verify-strategy</h3>
-        <p>保存验证策略。Toast / 重定向 / 数据对比 / 富文本清空 — 四种验证模式覆盖全场景。</p>
-        <span class="card-tag config">配置</span>
+        <p>Save verification strategies. Toast / redirect / data comparison / rich-text clear &mdash; four verification modes covering all scenarios.</p>
+        <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128202;</div>
         <h3>code-review-graph</h3>
-        <p>AST 知识图谱驱动的代码审查。利用 MCP 工具分析变更影响半径、爆炸半径和测试覆盖。</p>
-        <span class="card-tag review">审查</span>
+        <p>AST knowledge graph-driven code review. Uses MCP tooling to analyze change impact radius, blast radius, and test coverage.</p>
+        <span class="card-tag review">Review</span>
       </div>
       <div class="card">
         <div class="card-icon tool">&#128268;</div>
         <h3>ui-automation-harness</h3>
-        <p>Skill 路由入口。自动编排多个子 Skill 的组合场景，如「新页面 + 替换定位符 + 运行验证」一条龙。</p>
-        <span class="card-tag review">路由</span>
+        <p>Skill router entry point. Automatically orchestrates multi-skill composite scenarios, e.g. "new page + replace locators + run verification" end-to-end.</p>
+        <span class="card-tag review">Router</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 规则 -->
+<!-- RULES -->
 <section class="rules-section reveal" id="rules">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">规则</div>
-      <h2 class="section-title">4 大规则域 &middot; 14 个规则文件 &middot; 每条配 &#10060; 反例 + &#9989; 正例</h2>
+      <div class="section-label">Rules</div>
+      <h2 class="section-title">4 Rule Domains &middot; 14 Rule Files &middot; Each with &#10060; Anti-Pattern + &#9989; Best Practice</h2>
       <p class="section-desc">
-        覆盖 Agent 行为边界、编码规范、Playwright 专项（8 个子文件）和报告策略。不是建议，是红线。
+        Covers Agent behavior boundaries, coding conventions, Playwright specifics (8 sub-files), and report strategy. Not suggestions &mdash; hard constraints.
       </p>
     </div>
     <div class="rules-grid">
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--green-bg);color:var(--green);">&#127919;</div>
-          <h3>定位符策略</h3>
+          <h3>Locator Strategy</h3>
         </div>
         <ul>
-          <li>六级优先级：P0 ARIA role &rarr; P5 相对 XPath</li>
-          <li>禁止哈希类名（sc-xxx / css-xxx）</li>
-          <li>禁止绝对 XPath</li>
-          <li>状态类 selector 必须配 text 锁定</li>
-          <li>text= 子串匹配必须精确化处理</li>
+          <li>Six-tier priority: P0 ARIA role &rarr; P5 relative XPath</li>
+          <li>Hash class names forbidden (sc-xxx / css-xxx)</li>
+          <li>Absolute XPath forbidden</li>
+          <li>State-class selectors must be anchored with text</li>
+          <li>text= substring matches must be made exact</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--accent-bg);color:var(--accent);">&#9203;</div>
-          <h3>超时 &amp; 等待</h3>
+          <h3>Timeout &amp; Wait</h3>
         </div>
         <ul>
-          <li>超时先排查页面 URL，再查定位符</li>
-          <li>SPA 切换后 networkidle &#8800; 渲染完成</li>
-          <li>全局隐式等待 + 仅慢路径显式 timeout</li>
-          <li>禁止 time.sleep()，使用 Playwright 原生等待</li>
+          <li>On timeout, check page URL first, then locator</li>
+          <li>After SPA transition, networkidle &#8800; render complete</li>
+          <li>Global implicit wait + explicit timeout only for slow paths</li>
+          <li>time.sleep() forbidden; use Playwright native waits</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--purple-bg);color:var(--purple);">&#129514;</div>
-          <h3>断言模式</h3>
+          <h3>Assertion Patterns</h3>
         </div>
         <ul>
-          <li>页面对象不包含断言（is_page_loaded 除外）</li>
-          <li>禁止无效断言（assert True）</li>
-          <li>列表搜索结果要验证内容不只验证数量</li>
-          <li>Toast/弹窗需带文本精确匹配</li>
+          <li>Page objects contain no assertions (except is_page_loaded)</li>
+          <li>Trivial assertions forbidden (assert True)</li>
+          <li>Search result lists must verify content, not just count</li>
+          <li>Toast/dialog assertions require exact text matching</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--red-bg);color:var(--red);">&#127760;</div>
-          <h3>浏览器上下文</h3>
+          <h3>Browser Context</h3>
         </div>
         <ul>
-          <li>禁止 session 级共享 context（跨域 cookie 污染）</li>
-          <li>同域 class 级共享需满足三个条件</li>
-          <li>认证通过 URL token 独立执行</li>
-          <li>不手动管理浏览器生命周期</li>
+          <li>Session-level shared context forbidden (cross-domain cookie contamination)</li>
+          <li>Same-domain class-level sharing requires three conditions</li>
+          <li>Authentication via URL token runs in isolated context</li>
+          <li>Do not manually manage browser lifecycle</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--green-bg);color:var(--green);">&#128209;</div>
-          <h3>编码规范</h3>
+          <h3>Coding Conventions</h3>
         </div>
         <ul>
-          <li>类 PascalCase / 方法 snake_case / 常量 UPPER_SNAKE</li>
-          <li>定位符声明为类常量，行尾标注级别</li>
-          <li>导入顺序：标准库 &rarr; 第三方 &rarr; 项目内</li>
-          <li>新页面必须同步导出到 __init__.py</li>
+          <li>Classes PascalCase / methods snake_case / constants UPPER_SNAKE</li>
+          <li>Locators declared as class constants, level annotated at end of line</li>
+          <li>Import order: stdlib &rarr; third-party &rarr; project-local</li>
+          <li>New pages must also be exported in __init__.py</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--purple-bg);color:var(--purple);">&#128737;</div>
-          <h3>Agent 行为边界</h3>
+          <h3>Agent Behavior Boundaries</h3>
         </div>
         <ul>
-          <li>运行测试前必须确认 --env 参数</li>
-          <li>Git 操作（commit/push）需用户授权</li>
-          <li>禁止自行默认环境或无声纠偏</li>
-          <li>文档与代码冲突时必须询问</li>
+          <li>--env parameter must be confirmed before running tests</li>
+          <li>Git operations (commit/push) require user authorization</li>
+          <li>Do not assume a default environment or silently correct it</li>
+          <li>Ask when documentation and code conflict</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--accent-bg);color:var(--accent);">&#128200;</div>
-          <h3>报告策略</h3>
+          <h3>Report Strategy</h3>
         </div>
         <ul>
-          <li>仅失败时生成 HTML 报告，全绿跳过</li>
-          <li>标记变量覆盖全阶段（含 teardown）</li>
-          <li>域名统计无论通过与否都输出</li>
-          <li>报告自动轮转，避免磁盘堆积</li>
+          <li>Generate HTML report only on failure; skip when all green</li>
+          <li>Marker variable covers all phases (including teardown)</li>
+          <li>Domain stats output regardless of pass/fail</li>
+          <li>Reports auto-rotate to prevent disk accumulation</li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--red-bg);color:var(--red);">&#128207;</div>
-          <h3>Performance API 隔离</h3>
+          <h3>Performance API Isolation</h3>
         </div>
         <ul>
-          <li>收集后立即 clearResourceTimings()</li>
-          <li>清空必须在同一次 evaluate 内部</li>
-          <li>class 级共享 context 是高危场景</li>
-          <li>单独通过 + 批量失败 &rarr; 首查此项</li>
+          <li>Call clearResourceTimings() immediately after collection</li>
+          <li>Clear must happen inside the same evaluate call</li>
+          <li>Class-level shared context is a high-risk scenario</li>
+          <li>Single test passes but batch fails &rarr; check this first</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 代码示例 -->
+<!-- CODE EXAMPLES -->
 <section class="code-section reveal" id="code-examples">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">最佳实践</div>
-      <h2 class="section-title">不是抽象原则，是可执行的代码规范</h2>
+      <div class="section-label">Best Practices</div>
+      <h2 class="section-title">Not Abstract Principles, But Executable Code Standards</h2>
       <p class="section-desc">
-        每条规则都给出具体的代码对照 —— Agent 看到反例就能自动规避，开发者也能直接 copy-paste。
+        Every rule comes with a concrete code comparison &mdash; the Agent can automatically avoid anti-patterns, and developers can copy-paste directly.
       </p>
     </div>
     <div class="code-showcase">
@@ -1328,17 +1330,17 @@
           <span class="code-dot green"></span>
           <span class="code-block-title">locator_bad.py</span>
         </div>
-        <span class="code-label bad">&#10060; 反模式</span>
-        <pre><span class="cmt"># 哈希类名 — 每次构建都会变化</span>
+        <span class="code-label bad">&#10060; Anti-Pattern</span>
+        <pre><span class="cmt"># Hash class name - changes every build</span>
 <span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"css=.sc-bdVaJa.dKPpRt"</span>
 
-<span class="cmt"># 绝对 XPath — DOM 结构变化即失效</span>
+<span class="cmt"># Absolute XPath - any DOM change breaks</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"/html/body/div[1]/div[2]/input"</span>
 
-<span class="cmt"># 子串匹配 — 会命中"收起筛选"等按钮</span>
+<span class="cmt"># Substring match - hits "Collapse Filter"</span>
 <span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">"text=Filter"</span>
 
-<span class="cmt"># 硬编码等待 — 脆弱且低效</span>
+<span class="cmt"># Hardcoded sleep - fragile and slow</span>
 <span class="fn">time</span><span class="op">.</span><span class="fn">sleep</span><span class="op">(</span><span class="num">5</span><span class="op">)</span></pre>
       </div>
       <div class="code-block">
@@ -1348,89 +1350,89 @@
           <span class="code-dot green"></span>
           <span class="code-block-title">locator_good.py</span>
         </div>
-        <span class="code-label good">&#9989; 最佳实践</span>
-        <pre><span class="cmt"># P0: ARIA role — 语义稳定</span>
+        <span class="code-label good">&#9989; Best Practice</span>
+        <pre><span class="cmt"># P0: ARIA role - semantically stable</span>
 <span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"role=button[name='Submit']"</span>
 
-<span class="cmt"># P2: data-testid — 专为测试设计</span>
+<span class="cmt"># P2: data-testid - designed for testing</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"[data-testid='name-input']"</span>
 
-<span class="cmt"># 精确匹配 — 不会误命中</span>
+<span class="cmt"># Exact match - no accidental hits</span>
 <span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">'text="Filter"'</span>
 
-<span class="cmt"># Playwright 自动等待 — 快速可靠</span>
+<span class="cmt"># Playwright auto-wait - fast and reliable</span>
 <span class="fn">expect</span><span class="op">(</span><span class="var">locator</span><span class="op">).</span><span class="fn">to_be_visible</span><span class="op">()</span></pre>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 工作流 -->
+<!-- WORKFLOW -->
 <section class="workflow-section reveal" id="workflow">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">工作流</div>
-      <h2 class="section-title">从需求到稳定用例 &middot; 6 步闭环</h2>
+      <div class="section-label">Workflow</div>
+      <h2 class="section-title">From Requirements to Stable Test Cases &middot; 6-Step Closed Loop</h2>
       <p class="section-desc">
-        Agent 按照 Skills 路由表自动编排任务。每一步都有对应的 Skill 和 Rule 保驾护航。
+        The Agent automatically orchestrates tasks according to the Skills routing table. Each step is guarded by a corresponding Skill and Rule.
       </p>
     </div>
     <div class="workflow-steps">
       <div class="wf-step">
         <div class="wf-step-num">1</div>
         <div class="wf-step-content">
-          <h3>探索目标页面</h3>
-          <p>使用 <code>agent-browser</code> 获取页面 DOM 快照，分析元素结构和可用的定位策略。相比 Playwright MCP 节省 82&#8211;93% 的 token 消耗。</p>
+          <h3>Explore Target Page</h3>
+          <p>Use <code>agent-browser</code> to capture a page DOM snapshot, analyze element structure and available locator strategies. Saves 82&ndash;93% of token consumption vs. Playwright MCP.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">2</div>
         <div class="wf-step-content">
-          <h3>生成 Page Object</h3>
-          <p>调用 <code>gen-page-test</code> Skill，自动生成 PageObject 类，包含定位符常量（标注 P0&#8211;P5）、操作方法和 <code>is_page_loaded()</code>。</p>
+          <h3>Generate Page Object</h3>
+          <p>Invoke the <code>gen-page-test</code> Skill to automatically generate a PageObject class, including locator constants (annotated P0&ndash;P5), action methods, and <code>is_page_loaded()</code>.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">3</div>
         <div class="wf-step-content">
-          <h3>编写测试用例</h3>
-          <p>基于 <code>add-regression-point</code> 和 <code>case-round-trip</code> Skills 生成回归测试，确保用例往返闭合、状态一致。</p>
+          <h3>Write Test Cases</h3>
+          <p>Generate regression tests using the <code>add-regression-point</code> and <code>case-round-trip</code> Skills, ensuring round-trip closure and consistent state.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">4</div>
         <div class="wf-step-content">
-          <h3>运行 &amp; 调试</h3>
-          <p>通过 <code>test-runner</code> 执行测试，失败时 <code>quick-debug</code> 自动按三步法排查：确认页面 &rarr; 检查 tab &rarr; 查定位符。</p>
+          <h3>Run &amp; Debug</h3>
+          <p>Execute tests via <code>test-runner</code>; on failure <code>quick-debug</code> automatically applies three-step triage: confirm page &rarr; check tab &rarr; inspect locator.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">5</div>
         <div class="wf-step-content">
-          <h3>代码审查</h3>
-          <p><code>code-reviewer</code> 代理按 P0/P1/P2 分级审查，结合 AST 知识图谱分析变更影响半径和测试覆盖率。</p>
+          <h3>Code Review</h3>
+          <p>The <code>code-reviewer</code> agent reviews at P0/P1/P2 severity levels, combining AST knowledge graph analysis of change impact radius and test coverage.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">6</div>
         <div class="wf-step-content">
-          <h3>沉淀进化</h3>
-          <p>踩坑后自动将经验写入 Skills / Rules / Docs &mdash; Agent 的「肌肉记忆」持续进化，同类问题不再复现。</p>
+          <h3>Knowledge Evolution</h3>
+          <p>Hard-won lessons are automatically written into Skills / Rules / Docs &mdash; the Agent's "muscle memory" continuously evolves, so the same problem never recurs.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 开发效率 -->
+<!-- DEVELOPMENT EFFICIENCY -->
 <section class="efficiency-section reveal" id="efficiency">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">开发效率</div>
-      <h2 class="section-title">60 天的工作量，15 天交付</h2>
+      <div class="section-label">Development Efficiency</div>
+      <h2 class="section-title">60 Days of Work, Delivered in 15</h2>
       <p class="section-desc">
-        实测数据：构建完整的 UI 自动化 Agent Harness（含 13 个 Skills、14 个 Rule 文件、4 个文档、1 个 Sub-Agent），
-        VelocitAI + AI Agent 协作仅需 15 个工作日，传统人工编码预估需 60 个工作日。
+        Real-world data: building a complete UI automation Agent Harness (13 Skills, 14 Rule files, 4 docs, 1 Sub-Agent)
+        took only 15 working days with VelocitAI + AI Agent collaboration, vs. an estimated 60 working days with traditional manual coding.
       </p>
     </div>
     <div class="efficiency-grid">
@@ -1438,67 +1440,67 @@
         <div class="eff-bar-group">
           <div class="eff-bar">
             <div class="eff-bar-label">
-              <span>传统人工编码</span>
-              <span class="days slow">60 天</span>
+              <span>Traditional Manual Coding</span>
+              <span class="days slow">60 days</span>
             </div>
             <div class="eff-bar-track">
-              <div class="eff-bar-fill manual">12 周</div>
+              <div class="eff-bar-fill manual">12 weeks</div>
             </div>
           </div>
           <div class="eff-bar">
             <div class="eff-bar-label">
               <span>VelocitAI + AI Agent</span>
-              <span class="days fast">15 天</span>
+              <span class="days fast">15 days</span>
             </div>
             <div class="eff-bar-track">
-              <div class="eff-bar-fill ai">3 周</div>
+              <div class="eff-bar-fill ai">3 weeks</div>
             </div>
           </div>
         </div>
         <div class="eff-callouts">
           <div class="eff-callout">
             <div class="big accent">4x</div>
-            <div class="label">开发效率提升</div>
+            <div class="label">Development Efficiency Boost</div>
           </div>
           <div class="eff-callout">
             <div class="big green">75%</div>
-            <div class="label">工时节省</div>
+            <div class="label">Time Saved</div>
           </div>
         </div>
       </div>
       <div class="eff-right">
-        <h3>提效来自哪里？</h3>
+        <h3>Where Does the Efficiency Come From?</h3>
         <div class="eff-breakdown">
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--accent-bg);color:var(--accent);">&#9889;</div>
             <div class="eff-item-text">
-              <h4>Skill 驱动的代码生成</h4>
-              <p>gen-page-test 一键生成 PageObject + 测试骨架，Agent 自动填充定位符和断言逻辑</p>
-              <span class="time-save">节省 ~70% 页面编码时间</span>
+              <h4>Skill-Driven Code Generation</h4>
+              <p>gen-page-test generates PageObject + test skeleton in one click; Agent auto-fills locators and assertion logic</p>
+              <span class="time-save">Saves ~70% of page coding time</span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--red-bg);color:var(--red);">&#128295;</div>
             <div class="eff-item-text">
-              <h4>规则前置 &middot; 错误归零</h4>
-              <p>14 个 Rule 文件提前拦截脆弱定位符、无效断言、cookie 污染等常见错误，避免返工</p>
-              <span class="time-save">减少 ~80% 调试返工</span>
+              <h4>Rules First &middot; Zero Errors</h4>
+              <p>14 Rule files pre-empt brittle locators, invalid assertions, cookie contamination, and other common errors, eliminating rework</p>
+              <span class="time-save">Reduces ~80% debug rework</span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--green-bg);color:var(--green);">&#128161;</div>
             <div class="eff-item-text">
-              <h4>自我进化 &middot; 知识复利</h4>
-              <p>踩过的坑自动沉淀为 Skill/Rule，后续同类任务直接命中最佳实践，越用越快</p>
-              <span class="time-save">后期任务加速 ~50%</span>
+              <h4>Self-Evolution &middot; Compounding Knowledge</h4>
+              <p>Lessons learned auto-persist as Skills/Rules; subsequent similar tasks hit best practices directly &mdash; gets faster over time</p>
+              <span class="time-save">Later tasks accelerate ~50%</span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--purple-bg);color:var(--purple);">&#128202;</div>
             <div class="eff-item-text">
-              <h4>code-reviewer 自动审查</h4>
-              <p>P0/P1/P2 分级审查 + AST 图谱影响分析，替代人工 Code Review 环节</p>
-              <span class="time-save">审查效率提升 ~3x</span>
+              <h4>code-reviewer Automated Review</h4>
+              <p>P0/P1/P2 severity review + AST graph impact analysis, replacing manual code review cycles</p>
+              <span class="time-save">Review efficiency up ~3x</span>
             </div>
           </div>
         </div>
@@ -1507,22 +1509,22 @@
   </div>
 </section>
 
-<!-- Token 节省 -->
+<!-- TOKEN SAVINGS -->
 <section class="savings-section reveal" id="savings">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">效率</div>
-      <h2 class="section-title">agent-browser 集成 &middot; Token 消耗直降 88%</h2>
+      <div class="section-label">Efficiency</div>
+      <h2 class="section-title">agent-browser Integration &middot; 88% Token Reduction</h2>
       <p class="section-desc">
-        传统 Playwright MCP 每次页面交互消耗大量 token。VelocitAI 集成 agent-browser，用 Rust CLI 替代 MCP 快照。
+        Traditional Playwright MCP consumes large numbers of tokens on every page interaction. VelocitAI integrates agent-browser, replacing MCP snapshots with a Rust CLI.
       </p>
     </div>
     <div class="savings-grid">
       <div class="savings-chart">
         <div class="savings-bar">
           <div class="savings-bar-label">
-            <span>Playwright MCP 快照</span>
-            <span>~3,500 tokens/次</span>
+            <span>Playwright MCP Snapshot</span>
+            <span>~3,500 tokens/call</span>
           </div>
           <div class="savings-bar-track">
             <div class="savings-bar-fill traditional">3,500 tokens</div>
@@ -1530,8 +1532,8 @@
         </div>
         <div class="savings-bar">
           <div class="savings-bar-label">
-            <span>agent-browser 快照</span>
-            <span>~200-400 tokens/次</span>
+            <span>agent-browser Snapshot</span>
+            <span>~200-400 tokens/call</span>
           </div>
           <div class="savings-bar-track">
             <div class="savings-bar-fill velocitai">~300</div>
@@ -1541,59 +1543,59 @@
       <div class="savings-callout">
         <div class="big-number">82-93%</div>
         <div class="desc">
-          单次 DOM 探索的 Token 节省率。<br>
-          10 个页面的回归测试生成流程，总计可节省 <strong>~30,000 tokens</strong>。
+          Token savings rate per DOM exploration.<br>
+          Generating regression tests for 10 pages saves a total of <strong>~30,000 tokens</strong>.
         </div>
         <div class="detail">
-          agent-browser 基于 CDP 协议直接获取无障碍树，绕过 MCP 序列化开销。
-          点击失败时自动降级到 JS eval，新 tab 自动 list &rarr; switch &rarr; snapshot。
+          agent-browser uses the CDP protocol to directly access the accessibility tree, bypassing MCP serialization overhead.
+          On click failure it automatically falls back to JS eval; new tabs are automatically handled via list &rarr; switch &rarr; snapshot.
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 自我进化 -->
+<!-- EVOLUTION -->
 <section class="evo-section reveal" id="evolution">
   <div class="section-inner">
     <div class="section-header" style="text-align:center;">
-      <div class="section-label" style="justify-content:center;">自我进化</div>
-      <h2 class="section-title" style="margin:0 auto 0.8rem;">自我进化机制 &middot; Agent 的肌肉记忆</h2>
+      <div class="section-label" style="justify-content:center;">Self-Evolution</div>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;">Self-Evolution Mechanism &middot; Agent's Muscle Memory</h2>
       <p class="section-desc" style="margin:0 auto;">
-        P0 最高优先级。Agent 在踩坑、被纠正、或发现重复问题时，自动将经验沉淀到项目知识库。越用越聪明。
+        P0 highest priority. When the Agent encounters a pitfall, is corrected, or detects a repeated problem, it automatically persists the lesson to the project knowledge base. Gets smarter the more it's used.
       </p>
     </div>
     <div class="evo-grid">
       <div class="evo-card">
         <div class="evo-icon">&#128161;</div>
-        <h3>经验（How-to）</h3>
-        <p>操作方法论和最佳实践。<br>指导 Agent 如何完成任务。</p>
+        <h3>Experience (How-to)</h3>
+        <p>Operational methodology and best practices.<br>Guides the Agent on how to complete tasks.</p>
         <div class="target">skills/</div>
       </div>
       <div class="evo-card">
         <div class="evo-icon">&#128679;</div>
-        <h3>规则（Must / Must-not）</h3>
-        <p>强制约束和边界条件。<br>每条必含 &#10060; 反例 + &#9989; 正例。</p>
+        <h3>Rules (Must / Must-not)</h3>
+        <p>Mandatory constraints and boundary conditions.<br>Each must include &#10060; anti-pattern + &#9989; best practice.</p>
         <div class="target">rules/</div>
       </div>
       <div class="evo-card">
         <div class="evo-icon">&#128203;</div>
-        <h3>项目事实</h3>
-        <p>类名、URL、PageObject 清单。<br>可查询的项目知识库。</p>
+        <h3>Project Facts</h3>
+        <p>Class names, URLs, PageObject catalog.<br>A queryable project knowledge base.</p>
         <div class="target">docs/</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 安装 -->
+<!-- INSTALL -->
 <section class="qs-section reveal" id="install">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">安装</div>
-      <h2 class="section-title">多平台一键安装</h2>
+      <div class="section-label">Installation</div>
+      <h2 class="section-title">Multi-Platform One-Click Install</h2>
       <p class="section-desc">
-        Claude Code 原生插件安装，或手动集成到任意 AI Agent 项目。
+        Native Claude Code plugin install, or manual integration into any AI Agent project.
       </p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem;">
@@ -1604,10 +1606,10 @@
           <span class="code-dot green"></span>
           <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Claude Code</span>
         </div>
-        <pre><span class="comment"># 一行命令安装插件</span>
+        <pre><span class="comment"># One-line plugin install</span>
 <span class="prompt">$</span> claude install-plugin velocitai
 
-<span class="comment"># 或手动安装</span>
+<span class="comment"># Or manual setup</span>
 <span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
 <span class="prompt">$</span> cp -r velocitai/{skills,rules,hooks,docs,.claude,CLAUDE.md} \
     your-project/</pre>
@@ -1617,17 +1619,17 @@
           <span class="code-dot red"></span>
           <span class="code-dot yellow"></span>
           <span class="code-dot green"></span>
-          <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Copilot / Gemini / 其他平台</span>
+          <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Copilot / Gemini / Others</span>
         </div>
-        <pre><span class="comment"># 克隆并集成</span>
+        <pre><span class="comment"># Clone and integrate</span>
 <span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
 <span class="prompt">$</span> cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md} \
     your-project/
 
-<span class="comment"># Copilot CLI — 同时复制 AGENTS.md</span>
+<span class="comment"># Copilot CLI — also copy AGENTS.md</span>
 <span class="prompt">$</span> cp velocitai/AGENTS.md your-project/
 
-<span class="comment"># Gemini CLI — 同时复制 GEMINI.md</span>
+<span class="comment"># Gemini CLI — also copy GEMINI.md</span>
 <span class="prompt">$</span> cp velocitai/GEMINI.md your-project/</pre>
       </div>
     </div>
@@ -1636,110 +1638,110 @@
         <span class="code-dot red"></span>
         <span class="code-dot yellow"></span>
         <span class="code-dot green"></span>
-        <span class="code-block-title" style="color:rgba(255,255,255,0.35)">安装 &amp; 运行</span>
+        <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Setup &amp; Run</span>
       </div>
-      <pre><span class="comment"># 安装依赖和浏览器</span>
+      <pre><span class="comment"># Install dependencies &amp; browser</span>
 <span class="prompt">$</span> cd your-project
 <span class="prompt">$</span> python -m venv .venv && source .venv/bin/activate
 <span class="prompt">$</span> pip install -r requirements.txt
 <span class="prompt">$</span> playwright install chromium
 
-<span class="comment"># 运行测试（--env 必须指定，未指定时 Agent 会询问）</span>
+<span class="comment"># Run tests (--env is REQUIRED, agent will ask if not specified)</span>
 <span class="prompt">$</span> pytest tests/ --env=pre
 
-<span class="comment"># 查看报告</span>
+<span class="comment"># View report</span>
 <span class="prompt">$</span> allure serve reports/allure-results</pre>
     </div>
   </div>
 </section>
 
-<!-- 技术栈 -->
+<!-- TECH STACK -->
 <section class="stack-section reveal" id="stack">
   <div class="section-inner" style="text-align:center;">
-    <div class="section-label" style="justify-content:center;">技术栈</div>
-    <h2 class="section-title" style="margin:0 auto 0.6rem;">技术栈</h2>
-    <p class="section-desc" style="margin:0 auto;">基于成熟工具链，不造轮子，只做治理。</p>
+    <div class="section-label" style="justify-content:center;">Tech Stack</div>
+    <h2 class="section-title" style="margin:0 auto 0.6rem;">Tech Stack</h2>
+    <p class="section-desc" style="margin:0 auto;">Built on mature toolchains &mdash; no reinventing the wheel, just governance.</p>
     <div class="stack-grid">
       <div class="stack-item">
         <div class="stack-icon">&#128013;</div>
         <h4>Python 3.10+</h4>
-        <p>核心语言</p>
+        <p>Core Language</p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#127917;</div>
         <h4>Playwright</h4>
-        <p>浏览器自动化</p>
+        <p>Browser Automation</p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#129514;</div>
         <h4>pytest</h4>
-        <p>测试框架</p>
+        <p>Test Framework</p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#128202;</div>
         <h4>Allure</h4>
-        <p>测试报告</p>
+        <p>Test Reports</p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#127760;</div>
         <h4>agent-browser</h4>
-        <p>DOM 探索（Rust CLI）</p>
-        <span class="optional">可选</span>
+        <p>DOM Exploration (Rust CLI)</p>
+        <span class="optional">Optional</span>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#128279;</div>
         <h4>code-review-graph</h4>
-        <p>AST 图谱 MCP</p>
-        <span class="optional">可选</span>
+        <p>AST Graph MCP</p>
+        <span class="optional">Optional</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 兼容平台 -->
+<!-- COMPATIBLE AGENTS -->
 <section class="compat-section reveal" id="compatible">
   <div class="section-inner" style="text-align:center;">
-    <div class="section-label" style="justify-content:center;">兼容性</div>
-    <h2 class="section-title" style="margin:0 auto 0.6rem;">兼容主流 AI Agent 平台</h2>
+    <div class="section-label" style="justify-content:center;">Compatibility</div>
+    <h2 class="section-title" style="margin:0 auto 0.6rem;">Compatible with Major AI Agent Platforms</h2>
     <p class="section-desc" style="margin:0 auto;">
-      Harness 设计为平台无关。每个平台有专属入口文件，Skills/Rules 的结构化范式可迁移到任何 AI Agent。
+      The Harness is designed to be platform-agnostic. Each platform has a dedicated entry file; the structured Skills/Rules paradigm is portable to any AI Agent.
     </p>
     <div class="compat-grid">
       <div class="compat-item">
         <div class="icon">&#9672;</div>
         <h4>Claude Code</h4>
-        <p>原生插件 &middot; CLAUDE.md</p>
+        <p>Native Plugin &middot; CLAUDE.md</p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9673;</div>
         <h4>Copilot CLI</h4>
-        <p>技能适配 &middot; AGENTS.md</p>
+        <p>Skills Adapter &middot; AGENTS.md</p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9674;</div>
         <h4>Gemini CLI</h4>
-        <p>技能适配 &middot; GEMINI.md</p>
+        <p>Skills Adapter &middot; GEMINI.md</p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9670;</div>
         <h4>Cursor</h4>
-        <p>规则兼容 &middot; CLAUDE.md</p>
+        <p>Rules Compatible &middot; CLAUDE.md</p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9671;</div>
         <h4>Windsurf</h4>
-        <p>规则兼容 &middot; CLAUDE.md</p>
+        <p>Rules Compatible &middot; CLAUDE.md</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 项目结构 -->
+<!-- FILE STRUCTURE -->
 <section class="structure-section reveal" id="structure">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">结构</div>
-      <h2 class="section-title">项目结构</h2>
+      <div class="section-label">Structure</div>
+      <h2 class="section-title">Project Structure</h2>
     </div>
     <div style="margin-top:1rem;">
       <div class="code-block" style="max-width:720px;">
@@ -1751,32 +1753,32 @@
         </div>
         <pre>
 <span class="str">velocitai/</span>
-&#9500;&#9472;&#9472; <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent 入口（Claude Code）</span>
-&#9500;&#9472;&#9472; <span class="var">AGENTS.md</span>             <span class="cmt"># Agent 入口（Copilot CLI）</span>
-&#9500;&#9472;&#9472; <span class="var">GEMINI.md</span>             <span class="cmt"># Agent 入口（Gemini CLI）</span>
-&#9500;&#9472;&#9472; <span class="var">package.json</span>          <span class="cmt"># npm 发布配置</span>
-&#9500;&#9472;&#9472; <span class="str">.claude-plugin/</span>       <span class="cmt"># Claude Code 插件配置</span>
+&#9500;&#9472;&#9472; <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent entry point (Claude Code)</span>
+&#9500;&#9472;&#9472; <span class="var">AGENTS.md</span>             <span class="cmt"># Agent entry point (Copilot CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">GEMINI.md</span>             <span class="cmt"># Agent entry point (Gemini CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">package.json</span>          <span class="cmt"># npm distribution</span>
+&#9500;&#9472;&#9472; <span class="str">.claude-plugin/</span>       <span class="cmt"># Claude Code plugin config</span>
 &#9474;   &#9500;&#9472;&#9472; plugin.json
 &#9474;   &#9492;&#9472;&#9472; marketplace.json
-&#9500;&#9472;&#9472; <span class="str">.claude/</span>              <span class="cmt"># Claude 专属配置</span>
-&#9474;   &#9500;&#9472;&#9472; <span class="var">settings.json</span>      <span class="cmt"># 权限 + hooks</span>
-&#9474;   &#9492;&#9472;&#9472; <span class="str">agents/</span>            <span class="cmt"># 子 Agent 定义</span>
+&#9500;&#9472;&#9472; <span class="str">.claude/</span>              <span class="cmt"># Claude-specific config</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="var">settings.json</span>      <span class="cmt"># Permissions + hooks</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="str">agents/</span>            <span class="cmt"># Sub-agent definitions</span>
 &#9474;       &#9492;&#9472;&#9472; code-reviewer.md
-&#9500;&#9472;&#9472; <span class="str">skills/</span>               <span class="cmt"># 操作技能（How-to）</span>
-&#9474;   &#9500;&#9472;&#9472; SKILL.md              <span class="cmt"># 路由（编排子技能）</span>
+&#9500;&#9472;&#9472; <span class="str">skills/</span>               <span class="cmt"># Operational skills (How-to)</span>
+&#9474;   &#9500;&#9472;&#9472; SKILL.md              <span class="cmt"># Router (composes sub-skills)</span>
 &#9474;   &#9500;&#9472;&#9472; gen-page-test/
 &#9474;   &#9500;&#9472;&#9472; locator-replacer/
 &#9474;   &#9500;&#9472;&#9472; test-runner/
 &#9474;   &#9500;&#9472;&#9472; quick-debug/
-&#9474;   &#9492;&#9472;&#9472; <span class="cmt">... （共 13 个技能）</span>
-&#9500;&#9472;&#9472; <span class="str">rules/</span>                <span class="cmt"># 强制规则（Must/Must-not）</span>
-&#9474;   &#9500;&#9472;&#9472; agent-behavior/    <span class="cmt"># 3 个文件</span>
-&#9474;   &#9500;&#9472;&#9472; coding-conventions/<span class="cmt"># 1 个文件</span>
-&#9474;   &#9500;&#9472;&#9472; playwright/        <span class="cmt"># 8 个文件</span>
-&#9474;   &#9492;&#9472;&#9472; report-strategy/   <span class="cmt"># 1 个文件</span>
-&#9500;&#9472;&#9472; <span class="str">hooks/</span>                <span class="cmt"># 会话与工具钩子</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="cmt">... (13 skills total)</span>
+&#9500;&#9472;&#9472; <span class="str">rules/</span>                <span class="cmt"># Enforced rules (Must/Must-not)</span>
+&#9474;   &#9500;&#9472;&#9472; agent-behavior/    <span class="cmt"># 3 files</span>
+&#9474;   &#9500;&#9472;&#9472; coding-conventions/<span class="cmt"># 1 file</span>
+&#9474;   &#9500;&#9472;&#9472; playwright/        <span class="cmt"># 8 files</span>
+&#9474;   &#9492;&#9472;&#9472; report-strategy/   <span class="cmt"># 1 file</span>
+&#9500;&#9472;&#9472; <span class="str">hooks/</span>                <span class="cmt"># Session &amp; tool hooks</span>
 &#9474;   &#9492;&#9472;&#9472; hooks.json
-&#9492;&#9472;&#9472; <span class="str">docs/</span>                 <span class="cmt"># 项目知识库</span>
+&#9492;&#9472;&#9472; <span class="str">docs/</span>                 <span class="cmt"># Project knowledge base</span>
     &#9500;&#9472;&#9472; architecture.md
     &#9500;&#9472;&#9472; pages-catalog.md
     &#9500;&#9472;&#9472; regression-points.md
@@ -1786,40 +1788,40 @@
   </div>
 </section>
 
-<!-- 行动号召 -->
+<!-- CTA -->
 <section class="cta-section">
   <div class="section-inner">
-    <h2>让你的 Agent 从「能写测试」<br>进化到「写好测试」</h2>
+    <h2>Evolve Your Agent from "Can Write Tests"<br>to "Writes Great Tests"</h2>
     <p>
-      一行命令安装 Claude Code 插件，或手动集成到 Copilot / Gemini / Cursor / Windsurf。
-      13 个 Skills + 14 个 Rule 文件 + 自我进化机制。实测 4 倍编码提效。
+      Install the Claude Code plugin in one command, or integrate manually with Copilot / Gemini / Cursor / Windsurf.
+      13 Skills + 14 Rule files + self-evolution mechanism. Proven 4x coding efficiency boost.
     </p>
     <div class="cta-buttons">
       <a href="https://github.com/DanielSuo117/velocitai" class="btn btn-primary" target="_blank">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        在 GitHub 上 Star
+        Star on GitHub
       </a>
-      <a href="#install" class="btn btn-outline">安装 &rarr;</a>
+      <a href="#install" class="btn btn-outline">Install &rarr;</a>
     </div>
   </div>
 </section>
 
-<!-- 页脚 -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div class="footer-links">
-      <a href="#architecture">架构</a>
-      <a href="#skills">技能</a>
-      <a href="#rules">规则</a>
-      <a href="#workflow">工作流</a>
-      <a href="#efficiency">效率</a>
-      <a href="#install">安装</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#skills">Skills</a>
+      <a href="#rules">Rules</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#efficiency">Efficiency</a>
+      <a href="#install">Install</a>
       <a href="https://github.com/DanielSuo117/velocitai" target="_blank">GitHub</a>
     </div>
     <p class="copyright">
-      VelocitAI &mdash; AI 驱动的 UI 自动化 Agent Harness &nbsp;&middot;&nbsp;
-      MIT 许可证 &nbsp;&middot;&nbsp;
-      由 <a href="https://github.com/DanielSuo117" target="_blank">Daniel Suo</a> 构建
+      VelocitAI &mdash; AI-Driven UI Automation Agent Harness &nbsp;&middot;&nbsp;
+      MIT License &nbsp;&middot;&nbsp;
+      Built by <a href="https://github.com/DanielSuo117" target="_blank">Daniel Suo</a>
     </p>
   </div>
 </footer>

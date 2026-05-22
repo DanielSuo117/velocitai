@@ -1,7 +1,7 @@
 {
   "name": "velocitai",
   "version": "1.0.0",
-  "description": "UI 自动化代理治理框架：为 AI 编程代理提供 Playwright + pytest POM 技能、规则和自我进化机制",
+  "description": "UI automation agent harness: Playwright + pytest POM skills, rules, and self-evolution for AI coding agents",
   "type": "module",
   "keywords": [
     "ui-automation",

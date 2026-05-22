@@ -1,0 +1,26 @@
+{
+  "hooks": [
+    {
+      "type": "PreToolUse",
+      "matcher": "Bash(git commit *)",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "code-review-graph build",
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "type": "SessionStart",
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "code-review-graph status",
+          "timeout": 10
+        }
+      ]
+    }
+  ]
+}

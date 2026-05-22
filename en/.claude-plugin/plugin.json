@@ -1,6 +1,6 @@
 {
   "name": "velocitai",
-  "description": "Claude Code 专用 UI 自动化代理治理框架：Playwright + pytest POM 技能、规则和自我进化机制",
+  "description": "UI automation agent harness for Claude Code: Playwright + pytest POM skills, rules, and self-evolution",
   "version": "1.0.0",
   "author": {
     "name": "Daniel Suo",
