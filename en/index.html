@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VelocitAI — AI-Driven UI Automation Agent Harness</title>
-<meta name="description" content="VelocitAI is a universal UI automation Agent Harness that provides AI agents with complete Skills, Rules, and self-evolution mechanisms to drive enterprise-grade UI regression testing.">
+<meta name="description" content="VelocitAI is a universal UI automation Agent Harness providing AI Agents with complete Skills, Rules, and self-evolution mechanisms to drive enterprise-grade UI regression testing.">
 <meta name="keywords" content="AI, UI Automation, Playwright, pytest, Agent, Harness, POM, Page Object Model">
 <meta property="og:title" content="VelocitAI — AI-Driven UI Automation Agent Harness">
 <meta property="og:description" content="Drive UI automation testing with AI Agents. 13 Skills + 14 Rule files, 4x coding efficiency, fully automated from generation to review.">
@@ -42,7 +42,7 @@
     --radius-lg: 16px;
     --radius-xl: 24px;
     --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
     --max-w: 1140px;
   }
 
@@ -951,11 +951,171 @@
   .reveal.visible {
     opacity: 1; transform: translateY(0);
   }
+
+  /* ─── TYPEWRITER ─── */
+  .typewriter-wrap {
+    display: inline;
+  }
+  .typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    background: var(--accent-light);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    height: 0.85em;
+    border-radius: 1px;
+    animation: cursorBlink 0.9s steps(1) infinite;
+  }
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* ─── CARD GLOW BORDER ─── */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-md);
+    border: 1.5px solid transparent;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light), var(--purple)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .card:hover::after { opacity: 1; }
+  .card::before { transition: opacity 0.35s ease; }
+
+  /* ─── WORKFLOW STAGGER ─── */
+  .wf-step {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .wf-step.wf-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ─── CTA PARTICLES ─── */
+  .cta-particles {
+    position: absolute; inset: 0;
+    pointer-events: none; overflow: hidden;
+  }
+  .cta-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(212,120,60,0.5);
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(1); opacity: var(--p-op); }
+    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+  }
+
+  /* ─── CTA BUTTON PULSE ─── */
+  .btn-primary {
+    animation: btnPulse 3s ease-in-out infinite;
+  }
+  .btn-primary:hover { animation: none; }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 4px 16px var(--accent-glow); }
+    50%       { box-shadow: 0 4px 32px rgba(212,120,60,0.55), 0 0 0 6px rgba(212,120,60,0.12); }
+  }
+
+  /* ─── LANGUAGE SWITCHER ─── */
+  .nav-lang {
+    display: flex; align-items: center;
+    background: var(--border-light);
+    border-radius: 7px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .nav-lang a {
+    padding: 5px 10px;
+    text-decoration: none;
+    color: var(--text-muted) !important;
+    transition: all 0.18s !important;
+    line-height: 1;
+  }
+  .nav-lang a.active {
+    background: var(--accent);
+    color: #fff !important;
+    border-radius: 5px;
+  }
+  .nav-lang a::after { display: none !important; }
+  .nav-lang a:hover:not(.active) { color: var(--accent) !important; background: var(--accent-bg); }
+
+  /* ─── EFFICIENCY BAR SHIMMER ─── */
+  .eff-bar-fill {
+    position: relative; overflow: hidden;
+  }
+  .eff-bar-fill::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; bottom: 0;
+    width: 60%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-15deg);
+    animation: shimmerSlide 0s linear;
+    opacity: 0;
+  }
+  .eff-bar-fill.animated::after {
+    animation: shimmerSlide 0.8s linear 1.9s forwards;
+  }
+  @keyframes shimmerSlide {
+    0%   { left: -100%; opacity: 1; }
+    100% { left: 150%; opacity: 1; }
+  }
+
+  /* ─── COPY BUTTON ─── */
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    padding: 5px 8px;
+    font-size: 0.7rem; font-weight: 600;
+    display: flex; align-items: center; gap: 5px;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .copy-btn:hover {
+    background: rgba(255,255,255,0.16);
+    color: rgba(255,255,255,0.85);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .copy-btn.copied {
+    background: rgba(40,200,64,0.18);
+    color: #28C840;
+    border-color: rgba(40,200,64,0.35);
+  }
+  .copy-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+  /* ─── STAGGERED CARD REVEAL ─── */
+  .card-stagger {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .card-stagger.cs-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- Navigation -->
 <nav id="navbar">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
@@ -966,13 +1126,17 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <div class="nav-links" id="navLinks">
-      <a href="#problem">Why</a>
+      <a href="#problem">Background</a>
       <a href="#architecture">Architecture</a>
       <a href="#skills">Skills</a>
       <a href="#rules">Rules</a>
       <a href="#workflow">Workflow</a>
       <a href="#efficiency">Efficiency</a>
       <a href="#install">Install</a>
+      <div class="nav-lang">
+        <a href="../index.html" title="Chinese">&#20013;</a>
+        <a href="./index.html" class="active" title="English">EN</a>
+      </div>
       <a href="https://github.com/DanielSuo117/velocitai" class="nav-github" target="_blank">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
@@ -981,19 +1145,18 @@
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- Hero Section -->
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-badge">
       <div class="dot"></div>
       Open Source &middot; Claude Code Plugin &middot; Multi-Agent Compatible
     </div>
-    <h1>AI Agent-Driven<br><span>UI Automation Testing Engine</span></h1>
+    <h1>AI Agent-Driven<br><span id="typewriterTarget" aria-label="UI Automation Test Engine"></span></h1>
     <p class="hero-desc">
-      VelocitAI is a universal UI automation Agent Harness &mdash; not another testing framework,
-      but a complete capability system that enables AI agents to
-      <strong style="color:rgba(245,243,239,0.85);">autonomously generate, execute, and evolve</strong>
-      UI test code. Compresses 60 person-days of testing work into 15-day delivery.
+      VelocitAI is a universal UI automation Agent Harness &mdash; not yet another testing framework, but a complete capability system that empowers AI Agents to
+      <strong style="color:rgba(245,243,239,0.85);">autonomously generate, execute, and evolve</strong> UI test code.
+      Compress what used to take 60 person-days of testing engineering work into 15 days.
     </p>
     <div class="hero-actions">
       <a href="https://github.com/DanielSuo117/velocitai" class="hero-btn hero-btn-primary" target="_blank">
@@ -1004,46 +1167,45 @@
     </div>
     <div class="hero-metrics">
       <div class="hero-metric">
-        <div class="num">13</div>
+        <div class="num" data-target="13" data-suffix="">0</div>
         <div class="label">Agent Skills</div>
       </div>
       <div class="hero-metric">
-        <div class="num">14</div>
+        <div class="num" data-target="14" data-suffix="">0</div>
         <div class="label">Rule Files</div>
       </div>
       <div class="hero-metric">
-        <div class="num">4x</div>
-        <div class="label">Development Speed</div>
+        <div class="num" data-target="4" data-suffix="x">0x</div>
+        <div class="label">Dev Speed</div>
       </div>
       <div class="hero-metric">
-        <div class="num">75%</div>
+        <div class="num" data-target="75" data-suffix="%">0%</div>
         <div class="label">Time Saved</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROBLEM → SOLUTION -->
+<!-- Problem → Solution -->
 <section class="problem-section reveal" id="problem">
   <div class="section-inner">
     <div class="section-header">
       <div class="section-label">The Problem</div>
-      <h2 class="section-title">Why Are AI Agent-Written Tests Always Unreliable?</h2>
+      <h2 class="section-title">Why Do AI Agents Always Write Unreliable Tests?</h2>
       <p class="section-desc">
-        An AI Agent without a governance system is like an unsupervised intern &mdash; can write code,
-        but produces fragile, unstable, unmaintainable tests.
+        An AI Agent without a governance system is like an untrained intern &mdash; it can write code, but the tests it produces are brittle, unstable, and unmaintainable.
       </p>
     </div>
     <div class="comparison-grid">
       <div class="comparison-card before">
         <h3><span>&#10005;</span> Bare Agent (No Governance)</h3>
         <ul>
-          <li>Uses brittle locators like absolute XPath and hash class names</li>
+          <li>Uses fragile locators like absolute XPath and hash class names</li>
           <li>Randomly inserts time.sleep(), blindly adds seconds on timeout</li>
-          <li>Writes meaningless assertions like assert True or assert len(x) > 0</li>
-          <li>Does not understand SPA route transitions or new-tab contexts</li>
+          <li>Writes useless assertions like assert True or assert len(x) > 0</li>
+          <li>Doesn't understand SPA route changes or new tab context</li>
           <li>Repeats the same mistakes with no memory</li>
-          <li>Cross-domain cookie contamination causes batch failures</li>
+          <li>Cross-domain cookie pollution causes batch failures</li>
         </ul>
       </div>
       <div class="comparison-arrow">&rarr;</div>
@@ -1053,23 +1215,23 @@
           <li>Six-tier locator priority, P0 ARIA role first</li>
           <li>Implicit wait by default, explicit timeout only for slow paths</li>
           <li>Assertions must verify specific content and state</li>
-          <li>Built-in new-tab detection and SPA render-wait rules</li>
-          <li>Hard-won lessons auto-persist to Skills/Rules, never repeated</li>
-          <li>Context isolation strategy eliminates cross-domain contamination</li>
+          <li>Built-in new tab detection and SPA render wait rules</li>
+          <li>Lessons learned auto-saved to Skills/Rules, never repeated</li>
+          <li>Context isolation strategy eliminates cross-domain pollution</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ARCHITECTURE -->
+<!-- Architecture -->
 <section class="arch-section reveal" id="architecture">
   <div class="section-inner">
     <div class="section-header">
       <div class="section-label">Architecture</div>
-      <h2 class="section-title">POM Four-Layer Separation &middot; Industrial-Grade Architecture</h2>
+      <h2 class="section-title">4-Layer POM Separation &middot; Industrial-Grade Architecture</h2>
       <p class="section-desc">
-        Classic Page Object Model layered design: role-based test splitting, page object inheritance chains, environment config isolation, and automatic Fixture lifecycle management.
+        Classic Page Object Model layered design: tests split by role, page object inheritance chain, environment config isolation, and automatic Fixture management.
       </p>
     </div>
     <div class="arch-diagram">
@@ -1078,21 +1240,21 @@
           <div class="arch-layer-name">
             <code>tests/</code> Test Layer
           </div>
-          <div class="arch-layer-desc">Split by role: test_&lt;role&gt;_flow.py &mdash; each test class inherits Base or Role-Base</div>
+          <div class="arch-layer-desc">Files split by role: test_&lt;role&gt;_flow.py &mdash; each test class inherits Base or Role-Base</div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
             <code>pages/</code> Page Object Layer
           </div>
-          <div class="arch-layer-desc">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; Locators declared as class constants, annotated P0&ndash;P5</div>
+          <div class="arch-layer-desc">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; Locators declared as class constants, annotated with P0&ndash;P5 priority</div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
             <code>config/</code> Config Layer
           </div>
-          <div class="arch-layer-desc">URLs, tokens, and browser parameters switch by environment (pre / prod)</div>
+          <div class="arch-layer-desc">URL, Token, browser parameters switch by environment (pre / prod)</div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
@@ -1106,14 +1268,14 @@
   </div>
 </section>
 
-<!-- SKILLS -->
+<!-- Skills -->
 <section class="skills-section reveal" id="skills">
   <div class="section-inner">
     <div class="section-header">
       <div class="section-label">Skills</div>
-      <h2 class="section-title">13 Operational Skills Covering the Full Test Lifecycle</h2>
+      <h2 class="section-title">13 Action Skills Covering the Complete Test Lifecycle</h2>
       <p class="section-desc">
-        1 router entry point + 12 sub-Skills covering the complete workflow from page exploration to code review.
+        1 router entry + 12 sub-Skills, covering the complete workflow from page exploration to code review.
         The Agent automatically selects the right Skill combination via the CLAUDE.md routing table.
       </p>
     </div>
@@ -1121,93 +1283,93 @@
       <div class="card">
         <div class="card-icon skill">&#9889;</div>
         <h3>gen-page-test</h3>
-        <p>One-click generation of PageObject classes and corresponding test files. Auto-fills locators, the is_page_loaded method, and the test skeleton.</p>
+        <p>Generate PageObject classes and corresponding test files in one step. Auto-fills locators, is_page_loaded method, and test skeleton.</p>
         <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128269;</div>
         <h3>locator-replacer</h3>
-        <p>Six-tier locator priority strategy (P0 ARIA &rarr; P5 XPath). Analyzes DOM structure and replaces brittle locators with stable alternatives.</p>
+        <p>Six-tier locator priority strategy (P0 ARIA &rarr; P5 XPath). Analyzes DOM structure and replaces fragile locators with stable versions.</p>
         <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9654;</div>
         <h3>test-runner</h3>
-        <p>Runs tests and provides structured result analysis. Automatically classifies failure causes (locator / wait / logic) and outputs actionable fix suggestions.</p>
+        <p>Run tests and analyze results in a structured way. Auto-categorizes failure causes (locator/wait/logic) and outputs actionable fix suggestions.</p>
         <span class="card-tag debug">Execute</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128295;</div>
         <h3>quick-debug</h3>
-        <p>Rapid failure diagnosis without re-login. Three-step timeout triage: confirm page URL &rarr; check tab context &rarr; inspect locator.</p>
+        <p>Fast diagnosis of test failures without login. Uses a 3-step timeout investigation to find root cause: confirm page &rarr; check tab &rarr; inspect locator.</p>
         <span class="card-tag debug">Debug</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#10133;</div>
         <h3>add-regression-point</h3>
-        <p>Adds new regression test points to existing pages. Locates insertion position, generates locator + action + assertion, and syncs documentation.</p>
+        <p>Add regression test points to existing pages. Identifies insertion location, generates locator + action + assertion, and updates documentation.</p>
         <span class="card-tag gen">Generate</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#127959;</div>
         <h3>architecture</h3>
-        <p>Architecture decision guide. Decision tree and layering principles for adding new roles, splitting modules, and designing inheritance chains.</p>
-        <span class="card-tag config">Architect</span>
+        <p>Architecture decision guide. Decision trees and layering principles for adding roles, splitting modules, and designing inheritance chains.</p>
+        <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9989;</div>
         <h3>page-load-assertion</h3>
-        <p>Designs the is_page_loaded() method. Four verification modes to select the most stable page-load completion signal, avoiding timeouts and false positives.</p>
+        <p>Design is_page_loaded() methods. Four validation modes to choose the most stable page load completion indicator, avoiding timeouts and false negatives.</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9201;</div>
         <h3>wait-strategy</h3>
-        <p>Configures wait strategies. Global implicit wait + explicit timeout only for slow paths, handling SPA async rendering and dynamic loading.</p>
+        <p>Configure wait strategies. Global implicit wait + explicit timeout for slow paths, handling SPA async rendering and dynamic loading.</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128421;</div>
         <h3>browser-config</h3>
-        <p>Browser viewport, timeout, and Context layering configuration. Handles headless/headed mode switching and recording.</p>
+        <p>Browser viewport, timeout, and Context layered configuration. Handles headless/headed mode switching and recording.</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128260;</div>
         <h3>case-round-trip</h3>
-        <p>Round-trip closure design for test cases. Ensures system state is consistent before and after test execution; shared-page tests must return via UI and assert.</p>
+        <p>Round-trip closure design for test cases. Ensures system state is consistent before and after test execution; shared page must return via UI with assertion.</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128190;</div>
         <h3>save-verify-strategy</h3>
-        <p>Save verification strategies. Toast / redirect / data comparison / rich-text clear &mdash; four verification modes covering all scenarios.</p>
+        <p>Save verification strategy. Toast / redirect / data comparison / rich text clear &mdash; four verification modes covering all scenarios.</p>
         <span class="card-tag config">Config</span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128202;</div>
         <h3>code-review-graph</h3>
-        <p>AST knowledge graph-driven code review. Uses MCP tooling to analyze change impact radius, blast radius, and test coverage.</p>
+        <p>AST knowledge graph-driven code review. Uses MCP tools to analyze change impact radius, blast radius, and test coverage.</p>
         <span class="card-tag review">Review</span>
       </div>
       <div class="card">
         <div class="card-icon tool">&#128268;</div>
         <h3>ui-automation-harness</h3>
-        <p>Skill router entry point. Automatically orchestrates multi-skill composite scenarios, e.g. "new page + replace locators + run verification" end-to-end.</p>
+        <p>Skill routing entry. Automatically orchestrates combinations of sub-Skills for composite scenarios like "new page + replace locators + run verification" end-to-end.</p>
         <span class="card-tag review">Router</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- RULES -->
+<!-- Rules -->
 <section class="rules-section reveal" id="rules">
   <div class="section-inner">
     <div class="section-header">
       <div class="section-label">Rules</div>
-      <h2 class="section-title">4 Rule Domains &middot; 14 Rule Files &middot; Each with &#10060; Anti-Pattern + &#9989; Best Practice</h2>
+      <h2 class="section-title">4 Rule Domains &middot; 14 Rule Files &middot; Each with &#10060; Anti-pattern + &#9989; Best Practice</h2>
       <p class="section-desc">
-        Covers Agent behavior boundaries, coding conventions, Playwright specifics (8 sub-files), and report strategy. Not suggestions &mdash; hard constraints.
+        Covers Agent behavior boundaries, coding conventions, Playwright specifics (8 sub-files), and report strategy. Not suggestions &mdash; these are hard limits.
       </p>
     </div>
     <div class="rules-grid">
@@ -1218,10 +1380,10 @@
         </div>
         <ul>
           <li>Six-tier priority: P0 ARIA role &rarr; P5 relative XPath</li>
-          <li>Hash class names forbidden (sc-xxx / css-xxx)</li>
-          <li>Absolute XPath forbidden</li>
-          <li>State-class selectors must be anchored with text</li>
-          <li>text= substring matches must be made exact</li>
+          <li>Hash class names prohibited (sc-xxx / css-xxx)</li>
+          <li>Absolute XPath prohibited</li>
+          <li>State-based selectors must be locked with text</li>
+          <li>text= substring matching must be handled with precision</li>
         </ul>
       </div>
       <div class="rule-card">
@@ -1230,10 +1392,10 @@
           <h3>Timeout &amp; Wait</h3>
         </div>
         <ul>
-          <li>On timeout, check page URL first, then locator</li>
+          <li>On timeout, check page URL first, then check locator</li>
           <li>After SPA transition, networkidle &#8800; render complete</li>
           <li>Global implicit wait + explicit timeout only for slow paths</li>
-          <li>time.sleep() forbidden; use Playwright native waits</li>
+          <li>time.sleep() prohibited; use Playwright native waits</li>
         </ul>
       </div>
       <div class="rule-card">
@@ -1242,10 +1404,10 @@
           <h3>Assertion Patterns</h3>
         </div>
         <ul>
-          <li>Page objects contain no assertions (except is_page_loaded)</li>
-          <li>Trivial assertions forbidden (assert True)</li>
-          <li>Search result lists must verify content, not just count</li>
-          <li>Toast/dialog assertions require exact text matching</li>
+          <li>Page objects must not contain assertions (except is_page_loaded)</li>
+          <li>Trivial assertions prohibited (assert True)</li>
+          <li>Search results must verify content, not just count</li>
+          <li>Toast/dialog must use exact text matching</li>
         </ul>
       </div>
       <div class="rule-card">
@@ -1254,9 +1416,9 @@
           <h3>Browser Context</h3>
         </div>
         <ul>
-          <li>Session-level shared context forbidden (cross-domain cookie contamination)</li>
+          <li>Session-level shared context prohibited (cross-domain cookie pollution)</li>
           <li>Same-domain class-level sharing requires three conditions</li>
-          <li>Authentication via URL token runs in isolated context</li>
+          <li>Auth via URL token executed independently</li>
           <li>Do not manually manage browser lifecycle</li>
         </ul>
       </div>
@@ -1266,10 +1428,10 @@
           <h3>Coding Conventions</h3>
         </div>
         <ul>
-          <li>Classes PascalCase / methods snake_case / constants UPPER_SNAKE</li>
-          <li>Locators declared as class constants, level annotated at end of line</li>
-          <li>Import order: stdlib &rarr; third-party &rarr; project-local</li>
-          <li>New pages must also be exported in __init__.py</li>
+          <li>Class PascalCase / method snake_case / constant UPPER_SNAKE</li>
+          <li>Locators declared as class constants with priority level annotation</li>
+          <li>Import order: stdlib &rarr; third-party &rarr; project</li>
+          <li>New pages must be simultaneously exported to __init__.py</li>
         </ul>
       </div>
       <div class="rule-card">
@@ -1278,10 +1440,10 @@
           <h3>Agent Behavior Boundaries</h3>
         </div>
         <ul>
-          <li>--env parameter must be confirmed before running tests</li>
+          <li>Must confirm --env parameter before running tests</li>
           <li>Git operations (commit/push) require user authorization</li>
-          <li>Do not assume a default environment or silently correct it</li>
-          <li>Ask when documentation and code conflict</li>
+          <li>Prohibited from silently defaulting environment or self-correcting</li>
+          <li>Must ask when documentation and code conflict</li>
         </ul>
       </div>
       <div class="rule-card">
@@ -1290,10 +1452,10 @@
           <h3>Report Strategy</h3>
         </div>
         <ul>
-          <li>Generate HTML report only on failure; skip when all green</li>
-          <li>Marker variable covers all phases (including teardown)</li>
+          <li>Generate HTML report only on failure; skip if all green</li>
+          <li>Marker variables cover all phases (including teardown)</li>
           <li>Domain stats output regardless of pass/fail</li>
-          <li>Reports auto-rotate to prevent disk accumulation</li>
+          <li>Reports auto-rotate to avoid disk accumulation</li>
         </ul>
       </div>
       <div class="rule-card">
@@ -1303,23 +1465,23 @@
         </div>
         <ul>
           <li>Call clearResourceTimings() immediately after collection</li>
-          <li>Clear must happen inside the same evaluate call</li>
+          <li>Clearing must happen inside the same evaluate call</li>
           <li>Class-level shared context is a high-risk scenario</li>
-          <li>Single test passes but batch fails &rarr; check this first</li>
+          <li>Single pass + batch failure &rarr; check this first</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CODE EXAMPLES -->
+<!-- Code Examples -->
 <section class="code-section reveal" id="code-examples">
   <div class="section-inner">
     <div class="section-header">
       <div class="section-label">Best Practices</div>
-      <h2 class="section-title">Not Abstract Principles, But Executable Code Standards</h2>
+      <h2 class="section-title">Not Abstract Principles &mdash; Executable Code Standards</h2>
       <p class="section-desc">
-        Every rule comes with a concrete code comparison &mdash; the Agent can automatically avoid anti-patterns, and developers can copy-paste directly.
+        Every rule comes with concrete code comparisons &mdash; Agents see the anti-pattern and automatically avoid it; developers can copy-paste directly.
       </p>
     </div>
     <div class="code-showcase">
@@ -1330,17 +1492,17 @@
           <span class="code-dot green"></span>
           <span class="code-block-title">locator_bad.py</span>
         </div>
-        <span class="code-label bad">&#10060; Anti-Pattern</span>
-        <pre><span class="cmt"># Hash class name - changes every build</span>
+        <span class="code-label bad">&#10060; Anti-pattern</span>
+        <pre><span class="cmt"># Hash class name — changes on every build</span>
 <span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"css=.sc-bdVaJa.dKPpRt"</span>
 
-<span class="cmt"># Absolute XPath - any DOM change breaks</span>
+<span class="cmt"># Absolute XPath — breaks when DOM structure changes</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"/html/body/div[1]/div[2]/input"</span>
 
-<span class="cmt"># Substring match - hits "Collapse Filter"</span>
+<span class="cmt"># Substring match — hits "Collapse Filter" and other buttons</span>
 <span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">"text=Filter"</span>
 
-<span class="cmt"># Hardcoded sleep - fragile and slow</span>
+<span class="cmt"># Hardcoded wait — fragile and inefficient</span>
 <span class="fn">time</span><span class="op">.</span><span class="fn">sleep</span><span class="op">(</span><span class="num">5</span><span class="op">)</span></pre>
       </div>
       <div class="code-block">
@@ -1351,30 +1513,30 @@
           <span class="code-block-title">locator_good.py</span>
         </div>
         <span class="code-label good">&#9989; Best Practice</span>
-        <pre><span class="cmt"># P0: ARIA role - semantically stable</span>
+        <pre><span class="cmt"># P0: ARIA role — semantically stable</span>
 <span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"role=button[name='Submit']"</span>
 
-<span class="cmt"># P2: data-testid - designed for testing</span>
+<span class="cmt"># P2: data-testid — designed for testing</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"[data-testid='name-input']"</span>
 
-<span class="cmt"># Exact match - no accidental hits</span>
+<span class="cmt"># Exact match — no false positives</span>
 <span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">'text="Filter"'</span>
 
-<span class="cmt"># Playwright auto-wait - fast and reliable</span>
+<span class="cmt"># Playwright auto-wait — fast and reliable</span>
 <span class="fn">expect</span><span class="op">(</span><span class="var">locator</span><span class="op">).</span><span class="fn">to_be_visible</span><span class="op">()</span></pre>
       </div>
     </div>
   </div>
 </section>
 
-<!-- WORKFLOW -->
+<!-- Workflow -->
 <section class="workflow-section reveal" id="workflow">
   <div class="section-inner">
     <div class="section-header">
       <div class="section-label">Workflow</div>
-      <h2 class="section-title">From Requirements to Stable Test Cases &middot; 6-Step Closed Loop</h2>
+      <h2 class="section-title">From Requirements to Stable Test Cases &middot; 6-Step Loop</h2>
       <p class="section-desc">
-        The Agent automatically orchestrates tasks according to the Skills routing table. Each step is guarded by a corresponding Skill and Rule.
+        The Agent automatically orchestrates tasks according to the Skills routing table. Every step is guarded by corresponding Skills and Rules.
       </p>
     </div>
     <div class="workflow-steps">
@@ -1382,57 +1544,57 @@
         <div class="wf-step-num">1</div>
         <div class="wf-step-content">
           <h3>Explore Target Page</h3>
-          <p>Use <code>agent-browser</code> to capture a page DOM snapshot, analyze element structure and available locator strategies. Saves 82&ndash;93% of token consumption vs. Playwright MCP.</p>
+          <p>Use <code>agent-browser</code> to capture a DOM snapshot, analyzing element structure and available locator strategies. Saves 82&ndash;93% of token consumption compared to Playwright MCP.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">2</div>
         <div class="wf-step-content">
           <h3>Generate Page Object</h3>
-          <p>Invoke the <code>gen-page-test</code> Skill to automatically generate a PageObject class, including locator constants (annotated P0&ndash;P5), action methods, and <code>is_page_loaded()</code>.</p>
+          <p>Invoke the <code>gen-page-test</code> Skill to auto-generate a PageObject class with locator constants (annotated P0&ndash;P5), action methods, and <code>is_page_loaded()</code>.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">3</div>
         <div class="wf-step-content">
           <h3>Write Test Cases</h3>
-          <p>Generate regression tests using the <code>add-regression-point</code> and <code>case-round-trip</code> Skills, ensuring round-trip closure and consistent state.</p>
+          <p>Generate regression tests using <code>add-regression-point</code> and <code>case-round-trip</code> Skills, ensuring round-trip closure and state consistency.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">4</div>
         <div class="wf-step-content">
           <h3>Run &amp; Debug</h3>
-          <p>Execute tests via <code>test-runner</code>; on failure <code>quick-debug</code> automatically applies three-step triage: confirm page &rarr; check tab &rarr; inspect locator.</p>
+          <p>Execute tests via <code>test-runner</code>; on failure <code>quick-debug</code> automatically applies the 3-step investigation: confirm page &rarr; check tab &rarr; inspect locator.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">5</div>
         <div class="wf-step-content">
           <h3>Code Review</h3>
-          <p>The <code>code-reviewer</code> agent reviews at P0/P1/P2 severity levels, combining AST knowledge graph analysis of change impact radius and test coverage.</p>
+          <p>The <code>code-reviewer</code> agent performs tiered P0/P1/P2 review, combined with AST knowledge graph analysis of change impact radius and test coverage.</p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">6</div>
         <div class="wf-step-content">
-          <h3>Knowledge Evolution</h3>
-          <p>Hard-won lessons are automatically written into Skills / Rules / Docs &mdash; the Agent's "muscle memory" continuously evolves, so the same problem never recurs.</p>
+          <h3>Evolve &amp; Persist</h3>
+          <p>Lessons learned are automatically written into Skills / Rules / Docs &mdash; the Agent's "muscle memory" continuously evolves so the same issue never recurs.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DEVELOPMENT EFFICIENCY -->
+<!-- Development Efficiency -->
 <section class="efficiency-section reveal" id="efficiency">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">Development Efficiency</div>
-      <h2 class="section-title">60 Days of Work, Delivered in 15</h2>
+      <div class="section-label">Dev Efficiency</div>
+      <h2 class="section-title">60 Days of Work, Delivered in 15 Days</h2>
       <p class="section-desc">
-        Real-world data: building a complete UI automation Agent Harness (13 Skills, 14 Rule files, 4 docs, 1 Sub-Agent)
-        took only 15 working days with VelocitAI + AI Agent collaboration, vs. an estimated 60 working days with traditional manual coding.
+        Real-world data: building a complete UI automation Agent Harness (including 13 Skills, 14 Rule files, 4 docs, 1 Sub-Agent),
+        VelocitAI + AI Agent collaboration takes only 15 working days, versus an estimated 60 working days with traditional manual coding.
       </p>
     </div>
     <div class="efficiency-grid">
@@ -1460,7 +1622,7 @@
         <div class="eff-callouts">
           <div class="eff-callout">
             <div class="big accent">4x</div>
-            <div class="label">Development Efficiency Boost</div>
+            <div class="label">Dev Efficiency Boost</div>
           </div>
           <div class="eff-callout">
             <div class="big green">75%</div>
@@ -1475,32 +1637,32 @@
             <div class="eff-item-icon" style="background:var(--accent-bg);color:var(--accent);">&#9889;</div>
             <div class="eff-item-text">
               <h4>Skill-Driven Code Generation</h4>
-              <p>gen-page-test generates PageObject + test skeleton in one click; Agent auto-fills locators and assertion logic</p>
-              <span class="time-save">Saves ~70% of page coding time</span>
+              <p>gen-page-test generates PageObject + test skeleton in one step; Agent auto-fills locators and assertion logic</p>
+              <span class="time-save">Save ~70% page coding time</span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--red-bg);color:var(--red);">&#128295;</div>
             <div class="eff-item-text">
-              <h4>Rules First &middot; Zero Errors</h4>
-              <p>14 Rule files pre-empt brittle locators, invalid assertions, cookie contamination, and other common errors, eliminating rework</p>
-              <span class="time-save">Reduces ~80% debug rework</span>
+              <h4>Rules-First &middot; Zero Errors</h4>
+              <p>14 Rule files pre-intercept fragile locators, invalid assertions, cookie pollution, and other common errors to prevent rework</p>
+              <span class="time-save">Reduce ~80% debug rework</span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--green-bg);color:var(--green);">&#128161;</div>
             <div class="eff-item-text">
               <h4>Self-Evolution &middot; Compounding Knowledge</h4>
-              <p>Lessons learned auto-persist as Skills/Rules; subsequent similar tasks hit best practices directly &mdash; gets faster over time</p>
-              <span class="time-save">Later tasks accelerate ~50%</span>
+              <p>Lessons learned are automatically saved as Skills/Rules; later tasks hit best practices directly, getting faster over time</p>
+              <span class="time-save">Accelerate later tasks ~50%</span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--purple-bg);color:var(--purple);">&#128202;</div>
             <div class="eff-item-text">
               <h4>code-reviewer Automated Review</h4>
-              <p>P0/P1/P2 severity review + AST graph impact analysis, replacing manual code review cycles</p>
-              <span class="time-save">Review efficiency up ~3x</span>
+              <p>P0/P1/P2 tiered review + AST graph impact analysis, replacing the manual code review step</p>
+              <span class="time-save">Review efficiency improved ~3x</span>
             </div>
           </div>
         </div>
@@ -1509,14 +1671,14 @@
   </div>
 </section>
 
-<!-- TOKEN SAVINGS -->
+<!-- Token Savings -->
 <section class="savings-section reveal" id="savings">
   <div class="section-inner">
     <div class="section-header">
       <div class="section-label">Efficiency</div>
-      <h2 class="section-title">agent-browser Integration &middot; 88% Token Reduction</h2>
+      <h2 class="section-title">agent-browser Integration &middot; Token Consumption Down 88%</h2>
       <p class="section-desc">
-        Traditional Playwright MCP consumes large numbers of tokens on every page interaction. VelocitAI integrates agent-browser, replacing MCP snapshots with a Rust CLI.
+        Traditional Playwright MCP consumes large amounts of tokens per page interaction. VelocitAI integrates agent-browser, replacing MCP snapshots with a Rust CLI.
       </p>
     </div>
     <div class="savings-grid">
@@ -1544,25 +1706,25 @@
         <div class="big-number">82-93%</div>
         <div class="desc">
           Token savings rate per DOM exploration.<br>
-          Generating regression tests for 10 pages saves a total of <strong>~30,000 tokens</strong>.
+          A 10-page regression test generation workflow can save a total of <strong>~30,000 tokens</strong>.
         </div>
         <div class="detail">
           agent-browser uses the CDP protocol to directly access the accessibility tree, bypassing MCP serialization overhead.
-          On click failure it automatically falls back to JS eval; new tabs are automatically handled via list &rarr; switch &rarr; snapshot.
+          Automatically falls back to JS eval on click failure; new tabs auto list &rarr; switch &rarr; snapshot.
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- EVOLUTION -->
+<!-- Self-Evolution -->
 <section class="evo-section reveal" id="evolution">
   <div class="section-inner">
     <div class="section-header" style="text-align:center;">
       <div class="section-label" style="justify-content:center;">Self-Evolution</div>
-      <h2 class="section-title" style="margin:0 auto 0.8rem;">Self-Evolution Mechanism &middot; Agent's Muscle Memory</h2>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;">Self-Evolution Mechanism &middot; The Agent's Muscle Memory</h2>
       <p class="section-desc" style="margin:0 auto;">
-        P0 highest priority. When the Agent encounters a pitfall, is corrected, or detects a repeated problem, it automatically persists the lesson to the project knowledge base. Gets smarter the more it's used.
+        P0 highest priority. When the Agent encounters a pitfall, gets corrected, or finds a recurring problem, it automatically saves the lesson to the project knowledge base. The more you use it, the smarter it gets.
       </p>
     </div>
     <div class="evo-grid">
@@ -1575,7 +1737,7 @@
       <div class="evo-card">
         <div class="evo-icon">&#128679;</div>
         <h3>Rules (Must / Must-not)</h3>
-        <p>Mandatory constraints and boundary conditions.<br>Each must include &#10060; anti-pattern + &#9989; best practice.</p>
+        <p>Hard constraints and boundary conditions.<br>Each must include &#10060; Anti-pattern + &#9989; Best Practice.</p>
         <div class="target">rules/</div>
       </div>
       <div class="evo-card">
@@ -1588,14 +1750,14 @@
   </div>
 </section>
 
-<!-- INSTALL -->
+<!-- Install -->
 <section class="qs-section reveal" id="install">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">Installation</div>
-      <h2 class="section-title">Multi-Platform One-Click Install</h2>
+      <div class="section-label">Install</div>
+      <h2 class="section-title">One-Click Installation for Multiple Platforms</h2>
       <p class="section-desc">
-        Native Claude Code plugin install, or manual integration into any AI Agent project.
+        Native Claude Code plugin installation, or manually integrate into any AI Agent project.
       </p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem;">
@@ -1606,10 +1768,10 @@
           <span class="code-dot green"></span>
           <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Claude Code</span>
         </div>
-        <pre><span class="comment"># One-line plugin install</span>
+        <pre><span class="comment"># Install plugin in one command</span>
 <span class="prompt">$</span> claude install-plugin velocitai
 
-<span class="comment"># Or manual setup</span>
+<span class="comment"># Or install manually</span>
 <span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
 <span class="prompt">$</span> cp -r velocitai/{skills,rules,hooks,docs,.claude,CLAUDE.md} \
     your-project/</pre>
@@ -1619,7 +1781,7 @@
           <span class="code-dot red"></span>
           <span class="code-dot yellow"></span>
           <span class="code-dot green"></span>
-          <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Copilot / Gemini / Others</span>
+          <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Copilot / Gemini / Other Platforms</span>
         </div>
         <pre><span class="comment"># Clone and integrate</span>
 <span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
@@ -1640,13 +1802,13 @@
         <span class="code-dot green"></span>
         <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Setup &amp; Run</span>
       </div>
-      <pre><span class="comment"># Install dependencies &amp; browser</span>
+      <pre><span class="comment"># Install dependencies and browser</span>
 <span class="prompt">$</span> cd your-project
 <span class="prompt">$</span> python -m venv .venv && source .venv/bin/activate
 <span class="prompt">$</span> pip install -r requirements.txt
 <span class="prompt">$</span> playwright install chromium
 
-<span class="comment"># Run tests (--env is REQUIRED, agent will ask if not specified)</span>
+<span class="comment"># Run tests (--env must be specified; Agent will ask if not provided)</span>
 <span class="prompt">$</span> pytest tests/ --env=pre
 
 <span class="comment"># View report</span>
@@ -1655,12 +1817,12 @@
   </div>
 </section>
 
-<!-- TECH STACK -->
+<!-- Tech Stack -->
 <section class="stack-section reveal" id="stack">
   <div class="section-inner" style="text-align:center;">
     <div class="section-label" style="justify-content:center;">Tech Stack</div>
     <h2 class="section-title" style="margin:0 auto 0.6rem;">Tech Stack</h2>
-    <p class="section-desc" style="margin:0 auto;">Built on mature toolchains &mdash; no reinventing the wheel, just governance.</p>
+    <p class="section-desc" style="margin:0 auto;">Built on a mature toolchain. No reinventing the wheel &mdash; just governance.</p>
     <div class="stack-grid">
       <div class="stack-item">
         <div class="stack-icon">&#128013;</div>
@@ -1698,7 +1860,7 @@
   </div>
 </section>
 
-<!-- COMPATIBLE AGENTS -->
+<!-- Compatible Platforms -->
 <section class="compat-section reveal" id="compatible">
   <div class="section-inner" style="text-align:center;">
     <div class="section-label" style="justify-content:center;">Compatibility</div>
@@ -1715,28 +1877,28 @@
       <div class="compat-item">
         <div class="icon">&#9673;</div>
         <h4>Copilot CLI</h4>
-        <p>Skills Adapter &middot; AGENTS.md</p>
+        <p>Skill Adapter &middot; AGENTS.md</p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9674;</div>
         <h4>Gemini CLI</h4>
-        <p>Skills Adapter &middot; GEMINI.md</p>
+        <p>Skill Adapter &middot; GEMINI.md</p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9670;</div>
         <h4>Cursor</h4>
-        <p>Rules Compatible &middot; CLAUDE.md</p>
+        <p>Rule Compatible &middot; CLAUDE.md</p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9671;</div>
         <h4>Windsurf</h4>
-        <p>Rules Compatible &middot; CLAUDE.md</p>
+        <p>Rule Compatible &middot; CLAUDE.md</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FILE STRUCTURE -->
+<!-- Project Structure -->
 <section class="structure-section reveal" id="structure">
   <div class="section-inner">
     <div class="section-header">
@@ -1753,30 +1915,30 @@
         </div>
         <pre>
 <span class="str">velocitai/</span>
-&#9500;&#9472;&#9472; <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent entry point (Claude Code)</span>
-&#9500;&#9472;&#9472; <span class="var">AGENTS.md</span>             <span class="cmt"># Agent entry point (Copilot CLI)</span>
-&#9500;&#9472;&#9472; <span class="var">GEMINI.md</span>             <span class="cmt"># Agent entry point (Gemini CLI)</span>
-&#9500;&#9472;&#9472; <span class="var">package.json</span>          <span class="cmt"># npm distribution</span>
+&#9500;&#9472;&#9472; <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent entry (Claude Code)</span>
+&#9500;&#9472;&#9472; <span class="var">AGENTS.md</span>             <span class="cmt"># Agent entry (Copilot CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">GEMINI.md</span>             <span class="cmt"># Agent entry (Gemini CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">package.json</span>          <span class="cmt"># npm publish config</span>
 &#9500;&#9472;&#9472; <span class="str">.claude-plugin/</span>       <span class="cmt"># Claude Code plugin config</span>
 &#9474;   &#9500;&#9472;&#9472; plugin.json
 &#9474;   &#9492;&#9472;&#9472; marketplace.json
 &#9500;&#9472;&#9472; <span class="str">.claude/</span>              <span class="cmt"># Claude-specific config</span>
 &#9474;   &#9500;&#9472;&#9472; <span class="var">settings.json</span>      <span class="cmt"># Permissions + hooks</span>
-&#9474;   &#9492;&#9472;&#9472; <span class="str">agents/</span>            <span class="cmt"># Sub-agent definitions</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="str">agents/</span>            <span class="cmt"># Sub-Agent definitions</span>
 &#9474;       &#9492;&#9472;&#9472; code-reviewer.md
-&#9500;&#9472;&#9472; <span class="str">skills/</span>               <span class="cmt"># Operational skills (How-to)</span>
-&#9474;   &#9500;&#9472;&#9472; SKILL.md              <span class="cmt"># Router (composes sub-skills)</span>
+&#9500;&#9472;&#9472; <span class="str">skills/</span>               <span class="cmt"># Action skills (How-to)</span>
+&#9474;   &#9500;&#9472;&#9472; SKILL.md              <span class="cmt"># Router (orchestrates sub-skills)</span>
 &#9474;   &#9500;&#9472;&#9472; gen-page-test/
 &#9474;   &#9500;&#9472;&#9472; locator-replacer/
 &#9474;   &#9500;&#9472;&#9472; test-runner/
 &#9474;   &#9500;&#9472;&#9472; quick-debug/
 &#9474;   &#9492;&#9472;&#9472; <span class="cmt">... (13 skills total)</span>
-&#9500;&#9472;&#9472; <span class="str">rules/</span>                <span class="cmt"># Enforced rules (Must/Must-not)</span>
+&#9500;&#9472;&#9472; <span class="str">rules/</span>                <span class="cmt"># Hard rules (Must/Must-not)</span>
 &#9474;   &#9500;&#9472;&#9472; agent-behavior/    <span class="cmt"># 3 files</span>
 &#9474;   &#9500;&#9472;&#9472; coding-conventions/<span class="cmt"># 1 file</span>
 &#9474;   &#9500;&#9472;&#9472; playwright/        <span class="cmt"># 8 files</span>
 &#9474;   &#9492;&#9472;&#9472; report-strategy/   <span class="cmt"># 1 file</span>
-&#9500;&#9472;&#9472; <span class="str">hooks/</span>                <span class="cmt"># Session &amp; tool hooks</span>
+&#9500;&#9472;&#9472; <span class="str">hooks/</span>                <span class="cmt"># Session and tool hooks</span>
 &#9474;   &#9492;&#9472;&#9472; hooks.json
 &#9492;&#9472;&#9472; <span class="str">docs/</span>                 <span class="cmt"># Project knowledge base</span>
     &#9500;&#9472;&#9472; architecture.md
@@ -1788,12 +1950,13 @@
   </div>
 </section>
 
-<!-- CTA -->
+<!-- Call to Action -->
 <section class="cta-section">
+  <div class="cta-particles" id="ctaParticles"></div>
   <div class="section-inner">
-    <h2>Evolve Your Agent from "Can Write Tests"<br>to "Writes Great Tests"</h2>
+    <h2>Evolve Your Agent from "Can Write Tests"<br>to "Writes Good Tests"</h2>
     <p>
-      Install the Claude Code plugin in one command, or integrate manually with Copilot / Gemini / Cursor / Windsurf.
+      Install the Claude Code plugin in one command, or manually integrate into Copilot / Gemini / Cursor / Windsurf.
       13 Skills + 14 Rule files + self-evolution mechanism. Proven 4x coding efficiency boost.
     </p>
     <div class="cta-buttons">
@@ -1806,7 +1969,7 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
   <div class="footer-inner">
     <div class="footer-links">
@@ -1827,13 +1990,13 @@
 </footer>
 
 <script>
-  // Nav scroll effect
+  // ─── NAV SCROLL ───
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 10);
   });
 
-  // Mobile menu
+  // ─── MOBILE MENU ───
   function toggleMenu() {
     document.getElementById('navLinks').classList.toggle('open');
   }
@@ -1843,7 +2006,7 @@
     });
   });
 
-  // Reveal on scroll
+  // ─── REVEAL ON SCROLL ───
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1851,10 +2014,9 @@
       }
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  // Token savings bar animation
+  // ─── TOKEN SAVINGS BAR ANIMATION ───
   const savingsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1864,11 +2026,10 @@
       }
     });
   }, { threshold: 0.3 });
-
   const savingsSection = document.querySelector('.savings-section');
   if (savingsSection) savingsObserver.observe(savingsSection);
 
-  // Efficiency bar animation
+  // ─── EFFICIENCY BAR ANIMATION ───
   const effObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1881,7 +2042,7 @@
   const effSection = document.querySelector('.efficiency-section');
   if (effSection) effObserver.observe(effSection);
 
-  // Smooth nav active state
+  // ─── SMOOTH NAV ACTIVE STATE ───
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a:not(.nav-github)');
   window.addEventListener('scroll', () => {
@@ -1891,10 +2052,187 @@
       if (scrollY >= top) current = section.getAttribute('id');
     });
     navLinks.forEach(link => {
-      link.style.color = link.getAttribute('href') === '#' + current
-        ? 'var(--accent)' : '';
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        link.style.color = href === '#' + current ? 'var(--accent)' : '';
+      }
     });
   });
+
+  // ─── 1. TYPEWRITER EFFECT ───
+  (function () {
+    const target = document.getElementById('typewriterTarget');
+    if (!target) return;
+    const text = 'UI Automation Test Engine';
+    const cursor = document.createElement('span');
+    cursor.className = 'typewriter-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+
+    let i = 0;
+    // small delay to let hero animation play first
+    setTimeout(() => {
+      target.textContent = '';
+      target.appendChild(cursor);
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          target.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+        } else {
+          clearInterval(interval);
+          // keep cursor blinking after done
+        }
+      }, 80);
+    }, 600);
+  })();
+
+  // ─── 2. HERO METRICS COUNT-UP ───
+  (function () {
+    const nums = document.querySelectorAll('.hero-metric .num[data-target]');
+    if (!nums.length) return;
+
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function animateNum(el) {
+      const target = parseInt(el.dataset.target, 10);
+      const suffix = el.dataset.suffix || '';
+      const duration = 2000;
+      const start = performance.now();
+
+      function step(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.round(easeOut(progress) * target);
+        el.textContent = value + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Animate when hero is visible (it's always visible on load, small delay)
+    setTimeout(() => {
+      nums.forEach(el => animateNum(el));
+    }, 400);
+  })();
+
+  // ─── 3. COPY BUTTON FOR CODE BLOCKS ───
+  (function () {
+    const clipIcon = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="9" height="11" rx="1.5"/><path d="M3 4H2a1 1 0 00-1 1v9a1 1 0 001 1h8a1 1 0 001-1v-1"/></svg>`;
+
+    document.querySelectorAll('.code-block, .qs-terminal').forEach(block => {
+      block.style.position = 'relative';
+      const pre = block.querySelector('pre');
+      if (!pre) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.innerHTML = clipIcon + '<span>Copy</span>';
+      btn.setAttribute('aria-label', 'Copy code');
+
+      btn.addEventListener('click', () => {
+        const code = pre.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.classList.add('copied');
+          btn.querySelector('span').textContent = 'Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.querySelector('span').textContent = 'Copy';
+          }, 2000);
+        }).catch(() => {
+          // fallback for older browsers
+          const ta = document.createElement('textarea');
+          ta.value = pre.innerText;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          btn.classList.add('copied');
+          btn.querySelector('span').textContent = 'Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.querySelector('span').textContent = 'Copy';
+          }, 2000);
+        });
+      });
+
+      block.appendChild(btn);
+    });
+  })();
+
+  // ─── 5. WORKFLOW STEPS STAGGERED ENTRY ───
+  (function () {
+    const steps = document.querySelectorAll('.wf-step');
+    if (!steps.length) return;
+
+    const wfObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const container = entry.target;
+          const items = container.querySelectorAll('.wf-step');
+          items.forEach((step, idx) => {
+            setTimeout(() => {
+              step.classList.add('wf-visible');
+            }, idx * 150);
+          });
+          wfObserver.unobserve(container);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const wfContainer = document.querySelector('.workflow-steps');
+    if (wfContainer) wfObserver.observe(wfContainer);
+  })();
+
+  // ─── 6. CTA PARTICLES ───
+  (function () {
+    const container = document.getElementById('ctaParticles');
+    if (!container) return;
+
+    const COUNT = 18;
+    for (let i = 0; i < COUNT; i++) {
+      const p = document.createElement('div');
+      p.className = 'cta-particle';
+      const size = Math.random() * 5 + 2; // 2–7px
+      const left = Math.random() * 100;
+      const delay = Math.random() * 12;
+      const duration = Math.random() * 10 + 10; // 10–20s
+      const opacity = (Math.random() * 0.35 + 0.1).toFixed(2); // 0.1–0.45
+      p.style.cssText = [
+        `width:${size}px`,
+        `height:${size}px`,
+        `left:${left}%`,
+        `bottom:${Math.random() * 30}%`,
+        `--p-op:${opacity}`,
+        `animation-duration:${duration}s`,
+        `animation-delay:-${delay}s`,
+      ].join(';');
+      container.appendChild(p);
+    }
+  })();
+
+  // ─── 10. STAGGERED CARD REVEAL ───
+  (function () {
+    const grids = document.querySelectorAll('.card-grid, .rules-grid');
+    grids.forEach(grid => {
+      const cards = grid.querySelectorAll('.card, .rule-card');
+      cards.forEach(card => card.classList.add('card-stagger'));
+
+      const gridObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const items = entry.target.querySelectorAll('.card-stagger');
+            items.forEach((card, idx) => {
+              setTimeout(() => card.classList.add('cs-visible'), idx * 80);
+            });
+            gridObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+      gridObserver.observe(grid);
+    });
+  })();
 </script>
 
 </body>

@@ -8,3 +8,8 @@ CLAUDE.local.md
 
 # 包含真实 token，禁止入库
 config/settings.py
+
+.playwright-mcp
+
+.claude-plugin
+

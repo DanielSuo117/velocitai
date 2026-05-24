@@ -1,4 +1,16 @@
+<div align="center">
+
 # VelocitAI
+
+**[中文](#中文) | [English](#english)**
+
+</div>
+
+---
+
+<a id="中文"></a>
+
+## 中文
 
 **为 AI 编程代理提供的完整 UI 自动化方法论，基于可组合技能和强制规则构建。**
 
@@ -8,15 +20,15 @@ VelocitAI 是一套 Agent Harness（代理治理框架）—— 不是又一个�
 
 ---
 
-## 安装
+### 安装
 
-### Claude Code（推荐）
+#### Claude Code（推荐）
 
 ```bash
 claude install-plugin velocitai
 ```
 
-### Copilot CLI
+#### Copilot CLI
 
 ```bash
 # 克隆并复制到你的项目
@@ -24,14 +36,14 @@ git clone https://github.com/DanielSuo117/velocitai.git
 cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,AGENTS.md} your-project/
 ```
 
-### Gemini CLI
+#### Gemini CLI
 
 ```bash
 git clone https://github.com/DanielSuo117/velocitai.git
 cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,GEMINI.md} your-project/
 ```
 
-### 手动安装
+#### 手动安装
 
 ```bash
 git clone https://github.com/DanielSuo117/velocitai.git
@@ -40,9 +52,9 @@ cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,docs,CLAUDE.md,AGENTS
 
 ---
 
-## 包含内容
+### 包含内容
 
-### 13 个技能（How-to）
+#### 13 个技能（How-to）
 
 技能告诉你的代理**如何**完成任务 —— 分步操作指南。
 
@@ -62,7 +74,7 @@ cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,docs,CLAUDE.md,AGENTS
 | `architecture` | 架构决策、继承设计、角色拆分 |
 | `code-review-graph` | AST 知识图谱驱动的代码审查 |
 
-### 14 个规则文件（Must / Must-not）
+#### 14 个规则文件（Must / Must-not）
 
 规则强制硬性约束。每条规则包含 ❌ 反模式 + ✅ 最佳实践。
 
@@ -73,11 +85,11 @@ cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,docs,CLAUDE.md,AGENTS
 | **Playwright** | 8 | 六级定位符优先级、禁止 `time.sleep()`、context 隔离 |
 | **报告策略** | 1 | 仅失败时生成 HTML 报告、自动轮转、域名统计 |
 
-### 1 个子代理
+#### 1 个子代理
 
 - **code-reviewer**：P0/P1/P2 分级审查 + AST 影响半径分析
 
-### 自我进化机制
+#### 自我进化机制
 
 VelocitAI 代理从错误中学习。遇到问题后，自动将经验持久化：
 
@@ -89,7 +101,7 @@ VelocitAI 代理从错误中学习。遇到问题后，自动将经验持久化�
 
 ---
 
-## 工作流
+### 工作流
 
 ```
 1. 探索页面       → agent-browser（相比 Playwright MCP 节省 82-93% token）
@@ -102,7 +114,7 @@ VelocitAI 代理从错误中学习。遇到问题后，自动将经验持久化�
 
 ---
 
-## 项目结构
+### 项目结构
 
 ```
 velocitai/
@@ -140,7 +152,7 @@ velocitai/
 
 ---
 
-## 兼容的 AI Agent 平台
+### 兼容的 AI Agent 平台
 
 | 平台 | 状态 | 入口文件 |
 |------|------|---------|
@@ -152,7 +164,7 @@ velocitai/
 
 ---
 
-## 技术栈
+### 技术栈
 
 - **Python 3.10+** — 核心语言
 - **Playwright** — 浏览器自动化
@@ -163,7 +175,7 @@ velocitai/
 
 ---
 
-## 快速开始
+### 快速开始
 
 ```bash
 # 1. 克隆并集成
@@ -185,6 +197,209 @@ allure serve reports/allure-results
 
 ---
 
-## 许可证
+### 许可证
 
 MIT
+
+<br>
+
+**[⬆ 回到顶部](#velocitai) | [Switch to English ⬇](#english)**
+
+---
+
+<a id="english"></a>
+
+## English
+
+**A complete UI automation methodology for your coding agents, built on composable skills and enforced rules.**
+
+VelocitAI is an agent harness — not another test framework — that gives AI agents the ability to **autonomously generate, execute, debug, and evolve** enterprise-grade UI test code using Python + Playwright + pytest.
+
+> 15 working days with AI Agent vs. 60 working days manual coding — **4x development speed**.
+
+---
+
+### Installation
+
+#### Claude Code (recommended)
+
+```bash
+claude install-plugin velocitai
+```
+
+#### Copilot CLI
+
+```bash
+# Clone and copy to your project
+git clone https://github.com/DanielSuo117/velocitai.git
+cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,AGENTS.md} your-project/
+```
+
+#### Gemini CLI
+
+```bash
+git clone https://github.com/DanielSuo117/velocitai.git
+cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,GEMINI.md} your-project/
+```
+
+#### Manual Setup
+
+```bash
+git clone https://github.com/DanielSuo117/velocitai.git
+cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,docs,CLAUDE.md,AGENTS.md,GEMINI.md} your-project/
+```
+
+---
+
+### What's Inside
+
+#### 13 Skills (How-to)
+
+Skills teach your agent _how_ to do things — step-by-step operational guides.
+
+| Skill | Purpose |
+|-------|---------|
+| `ui-automation-harness` | Router: composes sub-skills into multi-step workflows |
+| `gen-page-test` | Generate PageObject + test file from a target page |
+| `add-regression-point` | Add regression test points to existing pages |
+| `locator-replacer` | Replace fragile locators using 6-level priority (P0 ARIA → P5 XPath) |
+| `test-runner` | Run tests + structured failure analysis |
+| `quick-debug` | 3-step timeout triage: page → tab → locator |
+| `page-load-assertion` | Design `is_page_loaded()` with 4 verification modes |
+| `wait-strategy` | Configure implicit/explicit wait strategies |
+| `browser-config` | Viewport, timeout, context, headless/headed |
+| `case-round-trip` | Ensure test round-trip closure (state consistency) |
+| `save-verify-strategy` | Toast / redirect / data comparison / rich-text verification |
+| `architecture` | Architecture decisions, inheritance design, role splitting |
+| `code-review-graph` | AST knowledge graph driven code review |
+
+#### 14 Rule Files (Must / Must-not)
+
+Rules enforce hard constraints. Every rule includes ❌ anti-pattern + ✅ best practice.
+
+| Domain | Files | Key Rules |
+|--------|-------|-----------|
+| **Agent Behavior** | 3 | Confirm `--env` before tests; no auto-commit; ask on doc/code conflict |
+| **Coding Conventions** | 1 | PascalCase classes, snake_case methods, locator class constants |
+| **Playwright** | 8 | 6-level locator priority, no `time.sleep()`, context isolation |
+| **Report Strategy** | 1 | HTML report only on failure, auto-rotation, domain stats |
+
+#### 1 Sub-Agent
+
+- **code-reviewer**: P0/P1/P2 graded review + AST impact radius analysis
+
+#### Self-Evolution
+
+VelocitAI agents learn from mistakes. After encountering issues, they automatically persist learnings:
+
+| Type | Target |
+|------|--------|
+| How-to (experience) | `skills/<topic>/SKILL.md` |
+| Must/Must-not (rule) | `rules/<domain>/<rule>.md` |
+| Project facts | `docs/<file>.md` |
+
+---
+
+### Workflow
+
+```
+1. Explore page       → agent-browser (82-93% token savings vs Playwright MCP)
+2. Generate PageObject → gen-page-test skill
+3. Write test cases    → add-regression-point + case-round-trip
+4. Run & debug         → test-runner → quick-debug (auto 3-step triage)
+5. Code review         → code-reviewer agent + AST knowledge graph
+6. Evolve              → auto-persist to skills / rules / docs
+```
+
+---
+
+### Project Structure
+
+```
+velocitai/
+├── CLAUDE.md                 # Agent entry point & route table
+├── AGENTS.md                 # Copilot CLI entry point
+├── GEMINI.md                 # Gemini CLI entry point
+├── package.json              # npm distribution
+├── .claude-plugin/           # Claude Code plugin config
+│   ├── plugin.json
+│   └── marketplace.json
+├── .claude/                  # Claude-specific config
+│   ├── settings.json         # Permissions + hooks
+│   └── agents/               # Sub-agent definitions
+│       └── code-reviewer.md
+├── skills/                   # Operational skills (How-to)
+│   ├── SKILL.md              # Router (composes sub-skills)
+│   ├── gen-page-test/
+│   ├── locator-replacer/
+│   ├── test-runner/
+│   ├── quick-debug/
+│   └── ... (13 total)
+├── rules/                    # Enforced rules (Must/Must-not)
+│   ├── agent-behavior/       # 3 files
+│   ├── coding-conventions/   # 1 file
+│   ├── playwright/           # 8 files
+│   └── report-strategy/      # 1 file
+├── hooks/                    # Session & tool hooks
+│   └── hooks.json
+└── docs/                     # Project knowledge base
+    ├── architecture.md
+    ├── pages-catalog.md
+    ├── regression-points.md
+    └── setup.md
+```
+
+---
+
+### Compatible Agents
+
+| Platform | Status | Entry File |
+|----------|--------|------------|
+| **Claude Code** | Native support (plugin) | `CLAUDE.md` |
+| **GitHub Copilot CLI** | Skills compatible | `AGENTS.md` |
+| **Gemini CLI** | Skills compatible | `GEMINI.md` |
+| **Cursor** | Rules compatible | `CLAUDE.md` |
+| **Windsurf** | Rules compatible | `CLAUDE.md` |
+
+---
+
+### Tech Stack
+
+- **Python 3.10+** — Core language
+- **Playwright** — Browser automation
+- **pytest** — Test framework
+- **Allure** — Test reporting
+- **agent-browser** — AI browser DOM exploration (optional, Rust CLI)
+- **code-review-graph** — AST knowledge graph MCP (optional)
+
+---
+
+### Quick Start
+
+```bash
+# 1. Clone and integrate
+git clone https://github.com/DanielSuo117/velocitai.git
+cp -r velocitai/{skills,rules,hooks,docs,.claude,CLAUDE.md} your-project/
+
+# 2. Install dependencies
+cd your-project
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+playwright install chromium
+
+# 3. Run tests (--env is REQUIRED)
+pytest tests/ --env=pre
+
+# 4. View report
+allure serve reports/allure-results
+```
+
+---
+
+### License
+
+MIT
+
+<br>
+
+**[⬆ Back to top](#velocitai) | [切换到中文 ⬆](#中文)**

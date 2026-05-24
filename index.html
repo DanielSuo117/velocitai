@@ -951,6 +951,188 @@
   .reveal.visible {
     opacity: 1; transform: translateY(0);
   }
+
+  /* ─── TYPEWRITER ─── */
+  .typewriter-wrap {
+    display: inline;
+  }
+  #typewriterTarget {
+    display: inline;
+    min-height: 1.2em;
+    contain: layout style;
+  }
+  .typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    background: var(--accent-light);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    height: 0.85em;
+    border-radius: 1px;
+    animation: cursorBlink 0.9s steps(2, jump-none) infinite;
+    will-change: opacity;
+  }
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* ─── CARD GLOW BORDER ─── */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-md);
+    border: 1.5px solid transparent;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light), var(--purple)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .card:hover::after { opacity: 1; }
+  .card::before { transition: opacity 0.35s ease; }
+
+  /* ─── WORKFLOW STAGGER ─── */
+  .wf-step {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .wf-step.wf-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ─── CTA PARTICLES ─── */
+  .cta-particles {
+    position: absolute; inset: 0;
+    pointer-events: none; overflow: hidden;
+  }
+  .cta-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(212,120,60,0.5);
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(1); opacity: var(--p-op); }
+    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+  }
+
+  /* ─── CTA BUTTON PULSE ─── */
+  .btn-primary {
+    animation: btnPulse 3s ease-in-out infinite;
+  }
+  .btn-primary:hover { animation: none; }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 4px 16px var(--accent-glow); }
+    50%       { box-shadow: 0 4px 32px rgba(212,120,60,0.55), 0 0 0 6px rgba(212,120,60,0.12); }
+  }
+
+  /* ─── LANGUAGE SWITCHER ─── */
+  .nav-lang {
+    display: flex; align-items: center;
+    background: var(--border-light);
+    border-radius: 7px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .nav-lang button {
+    padding: 5px 10px;
+    text-decoration: none;
+    color: var(--text-muted) !important;
+    transition: all 0.18s !important;
+    line-height: 1;
+    border: none; cursor: pointer;
+    font-family: inherit; font-size: inherit; font-weight: inherit;
+    letter-spacing: inherit; background: none;
+  }
+  .nav-lang button.active {
+    background: var(--accent);
+    color: #fff !important;
+    border-radius: 5px;
+  }
+  .nav-lang button::after { display: none !important; }
+  .nav-lang button:hover:not(.active) { color: var(--accent) !important; background: var(--accent-bg); }
+
+  /* ─── EFFICIENCY BAR SHIMMER ─── */
+  .eff-bar-fill {
+    position: relative; overflow: hidden;
+  }
+  .eff-bar-fill::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; bottom: 0;
+    width: 60%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-15deg);
+    animation: shimmerSlide 0s linear;
+    opacity: 0;
+  }
+  .eff-bar-fill.animated::after {
+    animation: shimmerSlide 0.8s linear 1.9s forwards;
+  }
+  @keyframes shimmerSlide {
+    0%   { left: -100%; opacity: 1; }
+    100% { left: 150%; opacity: 1; }
+  }
+
+  /* ─── COPY BUTTON ─── */
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    padding: 5px 8px;
+    font-size: 0.7rem; font-weight: 600;
+    display: flex; align-items: center; gap: 5px;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .copy-btn:hover {
+    background: rgba(255,255,255,0.16);
+    color: rgba(255,255,255,0.85);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .copy-btn.copied {
+    background: rgba(40,200,64,0.18);
+    color: #28C840;
+    border-color: rgba(40,200,64,0.35);
+  }
+  .copy-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+  /* ─── STAGGERED CARD REVEAL ─── */
+  .card-stagger {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .card-stagger.cs-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── I18N ─── */
+  [data-lang] { display: none; }
+  html[lang="zh-CN"] [data-lang="zh"] { display: inline; }
+  html[lang="en"] [data-lang="en"] { display: inline; }
+  html[lang="zh-CN"] .i18n-block[data-lang="zh"] { display: block; }
+  html[lang="en"] .i18n-block[data-lang="en"] { display: block; }
+  html[lang="zh-CN"] .i18n-flex[data-lang="zh"] { display: flex; }
+  html[lang="en"] .i18n-flex[data-lang="en"] { display: flex; }
+  html[lang="zh-CN"] .i18n-inline-flex[data-lang="zh"] { display: inline-flex; }
+  html[lang="en"] .i18n-inline-flex[data-lang="en"] { display: inline-flex; }
+  html[lang="zh-CN"] .i18n-inline-block[data-lang="zh"] { display: inline-block; }
+  html[lang="en"] .i18n-inline-block[data-lang="en"] { display: inline-block; }
 </style>
 </head>
 <body>
@@ -966,13 +1148,17 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <div class="nav-links" id="navLinks">
-      <a href="#problem">为什么</a>
-      <a href="#architecture">架构</a>
-      <a href="#skills">技能</a>
-      <a href="#rules">规则</a>
-      <a href="#workflow">工作流</a>
-      <a href="#efficiency">效率</a>
-      <a href="#install">安装</a>
+      <a href="#problem"><span data-lang="zh">问题背景</span><span data-lang="en">Background</span></a>
+      <a href="#architecture"><span data-lang="zh">架构</span><span data-lang="en">Architecture</span></a>
+      <a href="#skills"><span data-lang="zh">技能</span><span data-lang="en">Skills</span></a>
+      <a href="#rules"><span data-lang="zh">规则</span><span data-lang="en">Rules</span></a>
+      <a href="#workflow"><span data-lang="zh">工作流</span><span data-lang="en">Workflow</span></a>
+      <a href="#efficiency"><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></a>
+      <a href="#install"><span data-lang="zh">安装</span><span data-lang="en">Install</span></a>
+      <div class="nav-lang">
+        <button onclick="switchLang('zh')" class="active" title="中文" id="langZh">中</button>
+        <button onclick="switchLang('en')" title="English" id="langEn">EN</button>
+      </div>
       <a href="https://github.com/DanielSuo117/velocitai" class="nav-github" target="_blank">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
@@ -986,37 +1172,45 @@
   <div class="hero-inner">
     <div class="hero-badge">
       <div class="dot"></div>
-      开源项目 &middot; Claude Code 插件 &middot; 多 Agent 兼容
+      <span data-lang="zh">开源项目 &middot; Claude Code 插件 &middot; 多 Agent 兼容</span>
+      <span data-lang="en">Open Source &middot; Claude Code Plugin &middot; Multi-Agent Compatible</span>
     </div>
-    <h1>AI Agent 驱动的<br><span>UI 自动化测试引擎</span></h1>
+    <h1><span data-lang="zh">AI Agent 驱动的</span><span data-lang="en">AI Agent-Driven</span><br><span id="typewriterTarget"></span></h1>
     <p class="hero-desc">
-      VelocitAI 是一套通用 UI 自动化 Agent Harness —— 不是又一个测试框架，而是让 AI Agent
-      获得 <strong style="color:rgba(245,243,239,0.85);">自主生成、执行和进化</strong> UI 测试代码的完整能力体系。
-      将原需 60 人天的测试工程工作压缩到 15 天交付。
+      <span data-lang="zh">
+        VelocitAI 是一套通用 UI 自动化 Agent Harness —— 不是又一个测试框架，而是让 AI Agent
+        获得 <strong style="color:rgba(245,243,239,0.85);">自主生成、执行和进化</strong> UI 测试代码的完整能力体系。
+        将原需 60 人天的测试工程工作压缩到 15 天交付。
+      </span>
+      <span data-lang="en">
+        VelocitAI is a universal UI automation Agent Harness &mdash; not yet another testing framework, but a complete capability system that empowers AI Agents to
+        <strong style="color:rgba(245,243,239,0.85);">autonomously generate, execute, and evolve</strong> UI test code.
+        Compress what used to take 60 person-days of testing engineering work into 15 days.
+      </span>
     </p>
     <div class="hero-actions">
       <a href="https://github.com/DanielSuo117/velocitai" class="hero-btn hero-btn-primary" target="_blank">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        在 GitHub 上 Star
+        <span data-lang="zh">在 GitHub 上 Star</span><span data-lang="en">Star on GitHub</span>
       </a>
-      <a href="#install" class="hero-btn hero-btn-outline">安装 &rarr;</a>
+      <a href="#install" class="hero-btn hero-btn-outline"><span data-lang="zh">安装 &rarr;</span><span data-lang="en">Install &rarr;</span></a>
     </div>
     <div class="hero-metrics">
       <div class="hero-metric">
-        <div class="num">13</div>
-        <div class="label">Agent 技能</div>
+        <div class="num" data-target="13" data-suffix="">0</div>
+        <div class="label"><span data-lang="zh">Agent 技能</span><span data-lang="en">Agent Skills</span></div>
       </div>
       <div class="hero-metric">
-        <div class="num">14</div>
-        <div class="label">规则文件</div>
+        <div class="num" data-target="14" data-suffix="">0</div>
+        <div class="label"><span data-lang="zh">规则文件</span><span data-lang="en">Rule Files</span></div>
       </div>
       <div class="hero-metric">
-        <div class="num">4x</div>
-        <div class="label">开发速度</div>
+        <div class="num" data-target="4" data-suffix="x">0x</div>
+        <div class="label"><span data-lang="zh">开发速度</span><span data-lang="en">Dev Speed</span></div>
       </div>
       <div class="hero-metric">
-        <div class="num">75%</div>
-        <div class="label">节省时间</div>
+        <div class="num" data-target="75" data-suffix="%">0%</div>
+        <div class="label"><span data-lang="zh">节省时间</span><span data-lang="en">Time Saved</span></div>
       </div>
     </div>
   </div>
@@ -1026,34 +1220,35 @@
 <section class="problem-section reveal" id="problem">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">问题所在</div>
-      <h2 class="section-title">AI Agent 写测试，为什么总是不靠谱？</h2>
+      <div class="section-label"><span data-lang="zh">问题所在</span><span data-lang="en">The Problem</span></div>
+      <h2 class="section-title"><span data-lang="zh">AI Agent 写测试，为什么总是不靠谱？</span><span data-lang="en">Why Do AI Agents Always Write Unreliable Tests?</span></h2>
       <p class="section-desc">
-        没有治理体系的 AI Agent 就像没有规范的新人实习——能写代码，但写出来的测试脆弱、不稳定、无法维护。
+        <span data-lang="zh">没有治理体系的 AI Agent 就像没有规范的新人实习——能写代码，但写出来的测试脆弱、不稳定、无法维护。</span>
+        <span data-lang="en">An AI Agent without a governance system is like an untrained intern &mdash; it can write code, but the tests it produces are brittle, unstable, and unmaintainable.</span>
       </p>
     </div>
     <div class="comparison-grid">
       <div class="comparison-card before">
-        <h3><span>&#10005;</span> 裸 Agent（无治理）</h3>
+        <h3><span>&#10005;</span> <span data-lang="zh">裸 Agent（无治理）</span><span data-lang="en">Bare Agent (No Governance)</span></h3>
         <ul>
-          <li>使用绝对 XPath、哈希类名等脆弱定位符</li>
-          <li>随意 time.sleep()，超时后盲目加秒</li>
-          <li>写出 assert True、assert len(x) > 0 等无效断言</li>
-          <li>不理解 SPA 路由切换、新 tab 上下文</li>
-          <li>同样的错误反复出现，没有记忆</li>
-          <li>跨域 cookie 污染导致批量失败</li>
+          <li><span data-lang="zh">使用绝对 XPath、哈希类名等脆弱定位符</span><span data-lang="en">Uses fragile locators like absolute XPath and hash class names</span></li>
+          <li><span data-lang="zh">随意 time.sleep()，超时后盲目加秒</span><span data-lang="en">Randomly inserts time.sleep(), blindly adds seconds on timeout</span></li>
+          <li><span data-lang="zh">写出 assert True、assert len(x) > 0 等无效断言</span><span data-lang="en">Writes useless assertions like assert True or assert len(x) > 0</span></li>
+          <li><span data-lang="zh">不理解 SPA 路由切换、新 tab 上下文</span><span data-lang="en">Doesn't understand SPA route changes or new tab context</span></li>
+          <li><span data-lang="zh">同样的错误反复出现，没有记忆</span><span data-lang="en">Repeats the same mistakes with no memory</span></li>
+          <li><span data-lang="zh">跨域 cookie 污染导致批量失败</span><span data-lang="en">Cross-domain cookie pollution causes batch failures</span></li>
         </ul>
       </div>
       <div class="comparison-arrow">&rarr;</div>
       <div class="comparison-card after">
-        <h3><span>&#10003;</span> VelocitAI 治理后</h3>
+        <h3><span>&#10003;</span> <span data-lang="zh">VelocitAI 治理后</span><span data-lang="en">With VelocitAI Governance</span></h3>
         <ul>
-          <li>六级定位符优先级，P0 ARIA role 优先</li>
-          <li>隐式等待为主，仅慢路径用显式 timeout</li>
-          <li>断言必须验证具体内容和状态</li>
-          <li>内置新 tab 检测、SPA 渲染等待规则</li>
-          <li>踩坑后自动沉淀到 Skills/Rules，永不复犯</li>
-          <li>context 隔离策略，消除跨域污染</li>
+          <li><span data-lang="zh">六级定位符优先级，P0 ARIA role 优先</span><span data-lang="en">Six-tier locator priority, P0 ARIA role first</span></li>
+          <li><span data-lang="zh">隐式等待为主，仅慢路径用显式 timeout</span><span data-lang="en">Implicit wait by default, explicit timeout only for slow paths</span></li>
+          <li><span data-lang="zh">断言必须验证具体内容和状态</span><span data-lang="en">Assertions must verify specific content and state</span></li>
+          <li><span data-lang="zh">内置新 tab 检测、SPA 渲染等待规则</span><span data-lang="en">Built-in new tab detection and SPA render wait rules</span></li>
+          <li><span data-lang="zh">踩坑后自动沉淀到 Skills/Rules，永不复犯</span><span data-lang="en">Lessons learned auto-saved to Skills/Rules, never repeated</span></li>
+          <li><span data-lang="zh">context 隔离策略，消除跨域污染</span><span data-lang="en">Context isolation strategy eliminates cross-domain pollution</span></li>
         </ul>
       </div>
     </div>
@@ -1064,40 +1259,41 @@
 <section class="arch-section reveal" id="architecture">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">架构</div>
-      <h2 class="section-title">POM 四层分离 &middot; 工业级架构</h2>
+      <div class="section-label"><span data-lang="zh">架构</span><span data-lang="en">Architecture</span></div>
+      <h2 class="section-title"><span data-lang="zh">POM 四层分离 &middot; 工业级架构</span><span data-lang="en">4-Layer POM Separation &middot; Industrial-Grade Architecture</span></h2>
       <p class="section-desc">
-        经典 Page Object Model 分层设计，按角色拆分测试、页面对象继承链、环境配置隔离、Fixture 自动管理。
+        <span data-lang="zh">经典 Page Object Model 分层设计，按角色拆分测试、页面对象继承链、环境配置隔离、Fixture 自动管理。</span>
+        <span data-lang="en">Classic Page Object Model layered design: tests split by role, page object inheritance chain, environment config isolation, and automatic Fixture management.</span>
       </p>
     </div>
     <div class="arch-diagram">
       <div class="arch-layers">
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>tests/</code> 测试层
+            <code>tests/</code> <span data-lang="zh">测试层</span><span data-lang="en">Test Layer</span>
           </div>
-          <div class="arch-layer-desc">按角色拆分文件：test_&lt;role&gt;_flow.py — 每个测试类继承 Base 或 Role-Base</div>
+          <div class="arch-layer-desc"><span data-lang="zh">按角色拆分文件：test_&lt;role&gt;_flow.py — 每个测试类继承 Base 或 Role-Base</span><span data-lang="en">Files split by role: test_&lt;role&gt;_flow.py &mdash; each test class inherits Base or Role-Base</span></div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>pages/</code> 页面对象层
+            <code>pages/</code> <span data-lang="zh">页面对象层</span><span data-lang="en">Page Object Layer</span>
           </div>
-          <div class="arch-layer-desc">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; 定位符声明为类常量，标注 P0&#8211;P5 级别</div>
+          <div class="arch-layer-desc"><span data-lang="zh">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; 定位符声明为类常量，标注 P0&#8211;P5 级别</span><span data-lang="en">BasePage &larr; LoginPage &larr; LandingPage &larr; &hellip; Locators declared as class constants, annotated with P0&ndash;P5 priority</span></div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>config/</code> 配置层
+            <code>config/</code> <span data-lang="zh">配置层</span><span data-lang="en">Config Layer</span>
           </div>
-          <div class="arch-layer-desc">URL、Token、浏览器参数按环境（pre / prod）切换</div>
+          <div class="arch-layer-desc"><span data-lang="zh">URL、Token、浏览器参数按环境（pre / prod）切换</span><span data-lang="en">URL, Token, browser parameters switch by environment (pre / prod)</span></div>
         </div>
         <div class="arch-arrow">&#8597;</div>
         <div class="arch-layer">
           <div class="arch-layer-name">
-            <code>conftest.py</code> Fixture 层
+            <code>conftest.py</code> <span data-lang="zh">Fixture 层</span><span data-lang="en">Fixture Layer</span>
           </div>
-          <div class="arch-layer-desc">browser &rarr; context &rarr; page &rarr; Role-specific base &mdash; 全自动生命周期管理</div>
+          <div class="arch-layer-desc"><span data-lang="zh">browser &rarr; context &rarr; page &rarr; Role-specific base &mdash; 全自动生命周期管理</span><span data-lang="en">browser &rarr; context &rarr; page &rarr; Role-specific base &mdash; fully automatic lifecycle management</span></div>
         </div>
       </div>
     </div>
@@ -1108,91 +1304,91 @@
 <section class="skills-section reveal" id="skills">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">技能</div>
-      <h2 class="section-title">13 个操作技能，覆盖完整测试生命周期</h2>
+      <div class="section-label"><span data-lang="zh">技能</span><span data-lang="en">Skills</span></div>
+      <h2 class="section-title"><span data-lang="zh">13 个操作技能，覆盖完整测试生命周期</span><span data-lang="en">13 Action Skills Covering the Complete Test Lifecycle</span></h2>
       <p class="section-desc">
-        1 个路由入口 + 12 个子 Skill，覆盖从页面探索到代码审查的完整工作流。
-        Agent 按 CLAUDE.md 路由表自动选择合适的 Skill 组合。
+        <span data-lang="zh">1 个路由入口 + 12 个子 Skill，覆盖从页面探索到代码审查的完整工作流。Agent 按 CLAUDE.md 路由表自动选择合适的 Skill 组合。</span>
+        <span data-lang="en">1 router entry + 12 sub-Skills, covering the complete workflow from page exploration to code review. The Agent automatically selects the right Skill combination via the CLAUDE.md routing table.</span>
       </p>
     </div>
     <div class="card-grid">
       <div class="card">
         <div class="card-icon skill">&#9889;</div>
         <h3>gen-page-test</h3>
-        <p>一键生成 PageObject 类和对应的测试文件。自动填充定位符、is_page_loaded 方法和测试骨架。</p>
-        <span class="card-tag gen">生成</span>
+        <p><span data-lang="zh">一键生成 PageObject 类和对应的测试文件。自动填充定位符、is_page_loaded 方法和测试骨架。</span><span data-lang="en">Generate PageObject classes and corresponding test files in one step. Auto-fills locators, is_page_loaded method, and test skeleton.</span></p>
+        <span class="card-tag gen"><span data-lang="zh">生成</span><span data-lang="en">Generate</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128269;</div>
         <h3>locator-replacer</h3>
-        <p>六级定位符优先级策略（P0 ARIA &rarr; P5 XPath）。分析 DOM 结构，替换脆弱定位符为稳定版本。</p>
-        <span class="card-tag gen">生成</span>
+        <p><span data-lang="zh">六级定位符优先级策略（P0 ARIA &rarr; P5 XPath）。分析 DOM 结构，替换脆弱定位符为稳定版本。</span><span data-lang="en">Six-tier locator priority strategy (P0 ARIA &rarr; P5 XPath). Analyzes DOM structure and replaces fragile locators with stable versions.</span></p>
+        <span class="card-tag gen"><span data-lang="zh">生成</span><span data-lang="en">Generate</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9654;</div>
         <h3>test-runner</h3>
-        <p>运行测试并结构化分析结果。自动分类失败原因（定位符/等待/逻辑），输出可操作的修复建议。</p>
-        <span class="card-tag debug">执行</span>
+        <p><span data-lang="zh">运行测试并结构化分析结果。自动分类失败原因（定位符/等待/逻辑），输出可操作的修复建议。</span><span data-lang="en">Run tests and analyze results in a structured way. Auto-categorizes failure causes (locator/wait/logic) and outputs actionable fix suggestions.</span></p>
+        <span class="card-tag debug"><span data-lang="zh">执行</span><span data-lang="en">Execute</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128295;</div>
         <h3>quick-debug</h3>
-        <p>免登录快速排查测试失败。按超时排查三步法定位根因：先确认页面 &rarr; 再检查 tab &rarr; 最后查定位符。</p>
-        <span class="card-tag debug">调试</span>
+        <p><span data-lang="zh">免登录快速排查测试失败。按超时排查三步法定位根因：先确认页面 &rarr; 再检查 tab &rarr; 最后查定位符。</span><span data-lang="en">Fast diagnosis of test failures without login. Uses a 3-step timeout investigation to find root cause: confirm page &rarr; check tab &rarr; inspect locator.</span></p>
+        <span class="card-tag debug"><span data-lang="zh">调试</span><span data-lang="en">Debug</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#10133;</div>
         <h3>add-regression-point</h3>
-        <p>为已有页面新增回归测试点。定位插入位置，生成定位符 + 操作 + 断言，同步更新文档。</p>
-        <span class="card-tag gen">生成</span>
+        <p><span data-lang="zh">为已有页面新增回归测试点。定位插入位置，生成定位符 + 操作 + 断言，同步更新文档。</span><span data-lang="en">Add regression test points to existing pages. Identifies insertion location, generates locator + action + assertion, and updates documentation.</span></p>
+        <span class="card-tag gen"><span data-lang="zh">生成</span><span data-lang="en">Generate</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#127959;</div>
         <h3>architecture</h3>
-        <p>架构决策指南。新增角色、拆分模块、设计继承链时的决策树和分层原则。</p>
-        <span class="card-tag config">架构</span>
+        <p><span data-lang="zh">架构决策指南。新增角色、拆分模块、设计继承链时的决策树和分层原则。</span><span data-lang="en">Architecture decision guide. Decision trees and layering principles for adding roles, splitting modules, and designing inheritance chains.</span></p>
+        <span class="card-tag config"><span data-lang="zh">架构</span><span data-lang="en">Config</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9989;</div>
         <h3>page-load-assertion</h3>
-        <p>设计 is_page_loaded() 方法。四种验证模式，选择最稳定的页面加载完成标志，避免超时和误判。</p>
-        <span class="card-tag config">配置</span>
+        <p><span data-lang="zh">设计 is_page_loaded() 方法。四种验证模式，选择最稳定的页面加载完成标志，避免超时和误判。</span><span data-lang="en">Design is_page_loaded() methods. Four validation modes to choose the most stable page load completion indicator, avoiding timeouts and false negatives.</span></p>
+        <span class="card-tag config"><span data-lang="zh">配置</span><span data-lang="en">Config</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#9201;</div>
         <h3>wait-strategy</h3>
-        <p>配置等待策略。全局隐式等待 + 慢路径显式 timeout，处理 SPA 异步渲染和动态加载。</p>
-        <span class="card-tag config">配置</span>
+        <p><span data-lang="zh">配置等待策略。全局隐式等待 + 慢路径显式 timeout，处理 SPA 异步渲染和动态加载。</span><span data-lang="en">Configure wait strategies. Global implicit wait + explicit timeout for slow paths, handling SPA async rendering and dynamic loading.</span></p>
+        <span class="card-tag config"><span data-lang="zh">配置</span><span data-lang="en">Config</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128421;</div>
         <h3>browser-config</h3>
-        <p>浏览器 viewport、超时、Context 分层配置。处理 headless/headed 模式切换和录制。</p>
-        <span class="card-tag config">配置</span>
+        <p><span data-lang="zh">浏览器 viewport、超时、Context 分层配置。处理 headless/headed 模式切换和录制。</span><span data-lang="en">Browser viewport, timeout, and Context layered configuration. Handles headless/headed mode switching and recording.</span></p>
+        <span class="card-tag config"><span data-lang="zh">配置</span><span data-lang="en">Config</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128260;</div>
         <h3>case-round-trip</h3>
-        <p>用例往返闭合设计。确保测试执行前后系统状态一致，共享 page 下必须 UI 返回并断言。</p>
-        <span class="card-tag config">配置</span>
+        <p><span data-lang="zh">用例往返闭合设计。确保测试执行前后系统状态一致，共享 page 下必须 UI 返回并断言。</span><span data-lang="en">Round-trip closure design for test cases. Ensures system state is consistent before and after test execution; shared page must return via UI with assertion.</span></p>
+        <span class="card-tag config"><span data-lang="zh">配置</span><span data-lang="en">Config</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128190;</div>
         <h3>save-verify-strategy</h3>
-        <p>保存验证策略。Toast / 重定向 / 数据对比 / 富文本清空 — 四种验证模式覆盖全场景。</p>
-        <span class="card-tag config">配置</span>
+        <p><span data-lang="zh">保存验证策略。Toast / 重定向 / 数据对比 / 富文本清空 — 四种验证模式覆盖全场景。</span><span data-lang="en">Save verification strategy. Toast / redirect / data comparison / rich text clear &mdash; four verification modes covering all scenarios.</span></p>
+        <span class="card-tag config"><span data-lang="zh">配置</span><span data-lang="en">Config</span></span>
       </div>
       <div class="card">
         <div class="card-icon skill">&#128202;</div>
         <h3>code-review-graph</h3>
-        <p>AST 知识图谱驱动的代码审查。利用 MCP 工具分析变更影响半径、爆炸半径和测试覆盖。</p>
-        <span class="card-tag review">审查</span>
+        <p><span data-lang="zh">AST 知识图谱驱动的代码审查。利用 MCP 工具分析变更影响半径、爆炸半径和测试覆盖。</span><span data-lang="en">AST knowledge graph-driven code review. Uses MCP tools to analyze change impact radius, blast radius, and test coverage.</span></p>
+        <span class="card-tag review"><span data-lang="zh">审查</span><span data-lang="en">Review</span></span>
       </div>
       <div class="card">
         <div class="card-icon tool">&#128268;</div>
         <h3>ui-automation-harness</h3>
-        <p>Skill 路由入口。自动编排多个子 Skill 的组合场景，如「新页面 + 替换定位符 + 运行验证」一条龙。</p>
-        <span class="card-tag review">路由</span>
+        <p><span data-lang="zh">Skill 路由入口。自动编排多个子 Skill 的组合场景，如「新页面 + 替换定位符 + 运行验证」一条龙。</span><span data-lang="en">Skill routing entry. Automatically orchestrates combinations of sub-Skills for composite scenarios like "new page + replace locators + run verification" end-to-end.</span></p>
+        <span class="card-tag review"><span data-lang="zh">路由</span><span data-lang="en">Router</span></span>
       </div>
     </div>
   </div>
@@ -1202,108 +1398,109 @@
 <section class="rules-section reveal" id="rules">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">规则</div>
-      <h2 class="section-title">4 大规则域 &middot; 14 个规则文件 &middot; 每条配 &#10060; 反例 + &#9989; 正例</h2>
+      <div class="section-label"><span data-lang="zh">规则</span><span data-lang="en">Rules</span></div>
+      <h2 class="section-title"><span data-lang="zh">4 大规则域 &middot; 14 个规则文件 &middot; 每条配 &#10060; 反例 + &#9989; 正例</span><span data-lang="en">4 Rule Domains &middot; 14 Rule Files &middot; Each with &#10060; Anti-pattern + &#9989; Best Practice</span></h2>
       <p class="section-desc">
-        覆盖 Agent 行为边界、编码规范、Playwright 专项（8 个子文件）和报告策略。不是建议，是红线。
+        <span data-lang="zh">覆盖 Agent 行为边界、编码规范、Playwright 专项（8 个子文件）和报告策略。不是建议，是红线。</span>
+        <span data-lang="en">Covers Agent behavior boundaries, coding conventions, Playwright specifics (8 sub-files), and report strategy. Not suggestions &mdash; these are hard limits.</span>
       </p>
     </div>
     <div class="rules-grid">
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--green-bg);color:var(--green);">&#127919;</div>
-          <h3>定位符策略</h3>
+          <h3><span data-lang="zh">定位符策略</span><span data-lang="en">Locator Strategy</span></h3>
         </div>
         <ul>
-          <li>六级优先级：P0 ARIA role &rarr; P5 相对 XPath</li>
-          <li>禁止哈希类名（sc-xxx / css-xxx）</li>
-          <li>禁止绝对 XPath</li>
-          <li>状态类 selector 必须配 text 锁定</li>
-          <li>text= 子串匹配必须精确化处理</li>
+          <li><span data-lang="zh">六级优先级：P0 ARIA role &rarr; P5 相对 XPath</span><span data-lang="en">Six-tier priority: P0 ARIA role &rarr; P5 relative XPath</span></li>
+          <li><span data-lang="zh">禁止哈希类名（sc-xxx / css-xxx）</span><span data-lang="en">Hash class names prohibited (sc-xxx / css-xxx)</span></li>
+          <li><span data-lang="zh">禁止绝对 XPath</span><span data-lang="en">Absolute XPath prohibited</span></li>
+          <li><span data-lang="zh">状态类 selector 必须配 text 锁定</span><span data-lang="en">State-based selectors must be locked with text</span></li>
+          <li><span data-lang="zh">text= 子串匹配必须精确化处理</span><span data-lang="en">text= substring matching must be handled with precision</span></li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--accent-bg);color:var(--accent);">&#9203;</div>
-          <h3>超时 &amp; 等待</h3>
+          <h3><span data-lang="zh">超时 &amp; 等待</span><span data-lang="en">Timeout &amp; Wait</span></h3>
         </div>
         <ul>
-          <li>超时先排查页面 URL，再查定位符</li>
-          <li>SPA 切换后 networkidle &#8800; 渲染完成</li>
-          <li>全局隐式等待 + 仅慢路径显式 timeout</li>
-          <li>禁止 time.sleep()，使用 Playwright 原生等待</li>
+          <li><span data-lang="zh">超时先排查页面 URL，再查定位符</span><span data-lang="en">On timeout, check page URL first, then check locator</span></li>
+          <li><span data-lang="zh">SPA 切换后 networkidle &#8800; 渲染完成</span><span data-lang="en">After SPA transition, networkidle &#8800; render complete</span></li>
+          <li><span data-lang="zh">全局隐式等待 + 仅慢路径显式 timeout</span><span data-lang="en">Global implicit wait + explicit timeout only for slow paths</span></li>
+          <li><span data-lang="zh">禁止 time.sleep()，使用 Playwright 原生等待</span><span data-lang="en">time.sleep() prohibited; use Playwright native waits</span></li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--purple-bg);color:var(--purple);">&#129514;</div>
-          <h3>断言模式</h3>
+          <h3><span data-lang="zh">断言模式</span><span data-lang="en">Assertion Patterns</span></h3>
         </div>
         <ul>
-          <li>页面对象不包含断言（is_page_loaded 除外）</li>
-          <li>禁止无效断言（assert True）</li>
-          <li>列表搜索结果要验证内容不只验证数量</li>
-          <li>Toast/弹窗需带文本精确匹配</li>
+          <li><span data-lang="zh">页面对象不包含断言（is_page_loaded 除外）</span><span data-lang="en">Page objects must not contain assertions (except is_page_loaded)</span></li>
+          <li><span data-lang="zh">禁止无效断言（assert True）</span><span data-lang="en">Trivial assertions prohibited (assert True)</span></li>
+          <li><span data-lang="zh">列表搜索结果要验证内容不只验证数量</span><span data-lang="en">Search results must verify content, not just count</span></li>
+          <li><span data-lang="zh">Toast/弹窗需带文本精确匹配</span><span data-lang="en">Toast/dialog must use exact text matching</span></li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--red-bg);color:var(--red);">&#127760;</div>
-          <h3>浏览器上下文</h3>
+          <h3><span data-lang="zh">浏览器上下文</span><span data-lang="en">Browser Context</span></h3>
         </div>
         <ul>
-          <li>禁止 session 级共享 context（跨域 cookie 污染）</li>
-          <li>同域 class 级共享需满足三个条件</li>
-          <li>认证通过 URL token 独立执行</li>
-          <li>不手动管理浏览器生命周期</li>
+          <li><span data-lang="zh">禁止 session 级共享 context（跨域 cookie 污染）</span><span data-lang="en">Session-level shared context prohibited (cross-domain cookie pollution)</span></li>
+          <li><span data-lang="zh">同域 class 级共享需满足三个条件</span><span data-lang="en">Same-domain class-level sharing requires three conditions</span></li>
+          <li><span data-lang="zh">认证通过 URL token 独立执行</span><span data-lang="en">Auth via URL token executed independently</span></li>
+          <li><span data-lang="zh">不手动管理浏览器生命周期</span><span data-lang="en">Do not manually manage browser lifecycle</span></li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--green-bg);color:var(--green);">&#128209;</div>
-          <h3>编码规范</h3>
+          <h3><span data-lang="zh">编码规范</span><span data-lang="en">Coding Conventions</span></h3>
         </div>
         <ul>
-          <li>类 PascalCase / 方法 snake_case / 常量 UPPER_SNAKE</li>
-          <li>定位符声明为类常量，行尾标注级别</li>
-          <li>导入顺序：标准库 &rarr; 第三方 &rarr; 项目内</li>
-          <li>新页面必须同步导出到 __init__.py</li>
+          <li><span data-lang="zh">类 PascalCase / 方法 snake_case / 常量 UPPER_SNAKE</span><span data-lang="en">Class PascalCase / method snake_case / constant UPPER_SNAKE</span></li>
+          <li><span data-lang="zh">定位符声明为类常量，行尾标注级别</span><span data-lang="en">Locators declared as class constants with priority level annotation</span></li>
+          <li><span data-lang="zh">导入顺序：标准库 &rarr; 第三方 &rarr; 项目内</span><span data-lang="en">Import order: stdlib &rarr; third-party &rarr; project</span></li>
+          <li><span data-lang="zh">新页面必须同步导出到 __init__.py</span><span data-lang="en">New pages must be simultaneously exported to __init__.py</span></li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--purple-bg);color:var(--purple);">&#128737;</div>
-          <h3>Agent 行为边界</h3>
+          <h3><span data-lang="zh">Agent 行为边界</span><span data-lang="en">Agent Behavior Boundaries</span></h3>
         </div>
         <ul>
-          <li>运行测试前必须确认 --env 参数</li>
-          <li>Git 操作（commit/push）需用户授权</li>
-          <li>禁止自行默认环境或无声纠偏</li>
-          <li>文档与代码冲突时必须询问</li>
+          <li><span data-lang="zh">运行测试前必须确认 --env 参数</span><span data-lang="en">Must confirm --env parameter before running tests</span></li>
+          <li><span data-lang="zh">Git 操作（commit/push）需用户授权</span><span data-lang="en">Git operations (commit/push) require user authorization</span></li>
+          <li><span data-lang="zh">禁止自行默认环境或无声纠偏</span><span data-lang="en">Prohibited from silently defaulting environment or self-correcting</span></li>
+          <li><span data-lang="zh">文档与代码冲突时必须询问</span><span data-lang="en">Must ask when documentation and code conflict</span></li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--accent-bg);color:var(--accent);">&#128200;</div>
-          <h3>报告策略</h3>
+          <h3><span data-lang="zh">报告策略</span><span data-lang="en">Report Strategy</span></h3>
         </div>
         <ul>
-          <li>仅失败时生成 HTML 报告，全绿跳过</li>
-          <li>标记变量覆盖全阶段（含 teardown）</li>
-          <li>域名统计无论通过与否都输出</li>
-          <li>报告自动轮转，避免磁盘堆积</li>
+          <li><span data-lang="zh">仅失败时生成 HTML 报告，全绿跳过</span><span data-lang="en">Generate HTML report only on failure; skip if all green</span></li>
+          <li><span data-lang="zh">标记变量覆盖全阶段（含 teardown）</span><span data-lang="en">Marker variables cover all phases (including teardown)</span></li>
+          <li><span data-lang="zh">域名统计无论通过与否都输出</span><span data-lang="en">Domain stats output regardless of pass/fail</span></li>
+          <li><span data-lang="zh">报告自动轮转，避免磁盘堆积</span><span data-lang="en">Reports auto-rotate to avoid disk accumulation</span></li>
         </ul>
       </div>
       <div class="rule-card">
         <div class="rule-card-header">
           <div class="icon" style="background:var(--red-bg);color:var(--red);">&#128207;</div>
-          <h3>Performance API 隔离</h3>
+          <h3>Performance API <span data-lang="zh">隔离</span><span data-lang="en">Isolation</span></h3>
         </div>
         <ul>
-          <li>收集后立即 clearResourceTimings()</li>
-          <li>清空必须在同一次 evaluate 内部</li>
-          <li>class 级共享 context 是高危场景</li>
-          <li>单独通过 + 批量失败 &rarr; 首查此项</li>
+          <li><span data-lang="zh">收集后立即 clearResourceTimings()</span><span data-lang="en">Call clearResourceTimings() immediately after collection</span></li>
+          <li><span data-lang="zh">清空必须在同一次 evaluate 内部</span><span data-lang="en">Clearing must happen inside the same evaluate call</span></li>
+          <li><span data-lang="zh">class 级共享 context 是高危场景</span><span data-lang="en">Class-level shared context is a high-risk scenario</span></li>
+          <li><span data-lang="zh">单独通过 + 批量失败 &rarr; 首查此项</span><span data-lang="en">Single pass + batch failure &rarr; check this first</span></li>
         </ul>
       </div>
     </div>
@@ -1314,10 +1511,11 @@
 <section class="code-section reveal" id="code-examples">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">最佳实践</div>
-      <h2 class="section-title">不是抽象原则，是可执行的代码规范</h2>
+      <div class="section-label"><span data-lang="zh">最佳实践</span><span data-lang="en">Best Practices</span></div>
+      <h2 class="section-title"><span data-lang="zh">不是抽象原则，是可执行的代码规范</span><span data-lang="en">Not Abstract Principles &mdash; Executable Code Standards</span></h2>
       <p class="section-desc">
-        每条规则都给出具体的代码对照 —— Agent 看到反例就能自动规避，开发者也能直接 copy-paste。
+        <span data-lang="zh">每条规则都给出具体的代码对照 —— Agent 看到反例就能自动规避，开发者也能直接 copy-paste。</span>
+        <span data-lang="en">Every rule comes with concrete code comparisons &mdash; Agents see the anti-pattern and automatically avoid it; developers can copy-paste directly.</span>
       </p>
     </div>
     <div class="code-showcase">
@@ -1328,17 +1526,17 @@
           <span class="code-dot green"></span>
           <span class="code-block-title">locator_bad.py</span>
         </div>
-        <span class="code-label bad">&#10060; 反模式</span>
-        <pre><span class="cmt"># 哈希类名 — 每次构建都会变化</span>
+        <span class="code-label bad">&#10060; <span data-lang="zh">反模式</span><span data-lang="en">Anti-pattern</span></span>
+        <pre><span data-lang="zh" class="cmt"># 哈希类名 — 每次构建都会变化</span><span data-lang="en" class="cmt"># Hash class name — changes on every build</span>
 <span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"css=.sc-bdVaJa.dKPpRt"</span>
 
-<span class="cmt"># 绝对 XPath — DOM 结构变化即失效</span>
+<span data-lang="zh" class="cmt"># 绝对 XPath — DOM 结构变化即失效</span><span data-lang="en" class="cmt"># Absolute XPath — breaks when DOM structure changes</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"/html/body/div[1]/div[2]/input"</span>
 
-<span class="cmt"># 子串匹配 — 会命中"收起筛选"等按钮</span>
+<span data-lang="zh" class="cmt"># 子串匹配 — 会命中"收起筛选"等按钮</span><span data-lang="en" class="cmt"># Substring match — hits "Collapse Filter" and other buttons</span>
 <span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">"text=Filter"</span>
 
-<span class="cmt"># 硬编码等待 — 脆弱且低效</span>
+<span data-lang="zh" class="cmt"># 硬编码等待 — 脆弱且低效</span><span data-lang="en" class="cmt"># Hardcoded wait — fragile and inefficient</span>
 <span class="fn">time</span><span class="op">.</span><span class="fn">sleep</span><span class="op">(</span><span class="num">5</span><span class="op">)</span></pre>
       </div>
       <div class="code-block">
@@ -1348,17 +1546,17 @@
           <span class="code-dot green"></span>
           <span class="code-block-title">locator_good.py</span>
         </div>
-        <span class="code-label good">&#9989; 最佳实践</span>
-        <pre><span class="cmt"># P0: ARIA role — 语义稳定</span>
+        <span class="code-label good">&#9989; <span data-lang="zh">最佳实践</span><span data-lang="en">Best Practice</span></span>
+        <pre><span data-lang="zh" class="cmt"># P0: ARIA role — 语义稳定</span><span data-lang="en" class="cmt"># P0: ARIA role — semantically stable</span>
 <span class="var">SUBMIT_BTN</span> <span class="op">=</span> <span class="str">"role=button[name='Submit']"</span>
 
-<span class="cmt"># P2: data-testid — 专为测试设计</span>
+<span data-lang="zh" class="cmt"># P2: data-testid — 专为测试设计</span><span data-lang="en" class="cmt"># P2: data-testid — designed for testing</span>
 <span class="var">NAME_INPUT</span> <span class="op">=</span> <span class="str">"[data-testid='name-input']"</span>
 
-<span class="cmt"># 精确匹配 — 不会误命中</span>
+<span data-lang="zh" class="cmt"># 精确匹配 — 不会误命中</span><span data-lang="en" class="cmt"># Exact match — no false positives</span>
 <span class="var">FILTER_BTN</span> <span class="op">=</span> <span class="str">'text="Filter"'</span>
 
-<span class="cmt"># Playwright 自动等待 — 快速可靠</span>
+<span data-lang="zh" class="cmt"># Playwright 自动等待 — 快速可靠</span><span data-lang="en" class="cmt"># Playwright auto-wait — fast and reliable</span>
 <span class="fn">expect</span><span class="op">(</span><span class="var">locator</span><span class="op">).</span><span class="fn">to_be_visible</span><span class="op">()</span></pre>
       </div>
     </div>
@@ -1369,53 +1567,54 @@
 <section class="workflow-section reveal" id="workflow">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">工作流</div>
-      <h2 class="section-title">从需求到稳定用例 &middot; 6 步闭环</h2>
+      <div class="section-label"><span data-lang="zh">工作流</span><span data-lang="en">Workflow</span></div>
+      <h2 class="section-title"><span data-lang="zh">从需求到稳定用例 &middot; 6 步闭环</span><span data-lang="en">From Requirements to Stable Test Cases &middot; 6-Step Loop</span></h2>
       <p class="section-desc">
-        Agent 按照 Skills 路由表自动编排任务。每一步都有对应的 Skill 和 Rule 保驾护航。
+        <span data-lang="zh">Agent 按照 Skills 路由表自动编排任务。每一步都有对应的 Skill 和 Rule 保驾护航。</span>
+        <span data-lang="en">The Agent automatically orchestrates tasks according to the Skills routing table. Every step is guarded by corresponding Skills and Rules.</span>
       </p>
     </div>
     <div class="workflow-steps">
       <div class="wf-step">
         <div class="wf-step-num">1</div>
         <div class="wf-step-content">
-          <h3>探索目标页面</h3>
-          <p>使用 <code>agent-browser</code> 获取页面 DOM 快照，分析元素结构和可用的定位策略。相比 Playwright MCP 节省 82&#8211;93% 的 token 消耗。</p>
+          <h3><span data-lang="zh">探索目标页面</span><span data-lang="en">Explore Target Page</span></h3>
+          <p><span data-lang="zh">使用 <code>agent-browser</code> 获取页面 DOM 快照，分析元素结构和可用的定位策略。相比 Playwright MCP 节省 82&#8211;93% 的 token 消耗。</span><span data-lang="en">Use <code>agent-browser</code> to capture a DOM snapshot, analyzing element structure and available locator strategies. Saves 82&ndash;93% of token consumption compared to Playwright MCP.</span></p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">2</div>
         <div class="wf-step-content">
-          <h3>生成 Page Object</h3>
-          <p>调用 <code>gen-page-test</code> Skill，自动生成 PageObject 类，包含定位符常量（标注 P0&#8211;P5）、操作方法和 <code>is_page_loaded()</code>。</p>
+          <h3><span data-lang="zh">生成 Page Object</span><span data-lang="en">Generate Page Object</span></h3>
+          <p><span data-lang="zh">调用 <code>gen-page-test</code> Skill，自动生成 PageObject 类，包含定位符常量（标注 P0&#8211;P5）、操作方法和 <code>is_page_loaded()</code>。</span><span data-lang="en">Invoke the <code>gen-page-test</code> Skill to auto-generate a PageObject class with locator constants (annotated P0&ndash;P5), action methods, and <code>is_page_loaded()</code>.</span></p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">3</div>
         <div class="wf-step-content">
-          <h3>编写测试用例</h3>
-          <p>基于 <code>add-regression-point</code> 和 <code>case-round-trip</code> Skills 生成回归测试，确保用例往返闭合、状态一致。</p>
+          <h3><span data-lang="zh">编写测试用例</span><span data-lang="en">Write Test Cases</span></h3>
+          <p><span data-lang="zh">基于 <code>add-regression-point</code> 和 <code>case-round-trip</code> Skills 生成回归测试，确保用例往返闭合、状态一致。</span><span data-lang="en">Generate regression tests using <code>add-regression-point</code> and <code>case-round-trip</code> Skills, ensuring round-trip closure and state consistency.</span></p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">4</div>
         <div class="wf-step-content">
-          <h3>运行 &amp; 调试</h3>
-          <p>通过 <code>test-runner</code> 执行测试，失败时 <code>quick-debug</code> 自动按三步法排查：确认页面 &rarr; 检查 tab &rarr; 查定位符。</p>
+          <h3><span data-lang="zh">运行 &amp; 调试</span><span data-lang="en">Run &amp; Debug</span></h3>
+          <p><span data-lang="zh">通过 <code>test-runner</code> 执行测试，失败时 <code>quick-debug</code> 自动按三步法排查：确认页面 &rarr; 检查 tab &rarr; 查定位符。</span><span data-lang="en">Execute tests via <code>test-runner</code>; on failure <code>quick-debug</code> automatically applies the 3-step investigation: confirm page &rarr; check tab &rarr; inspect locator.</span></p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">5</div>
         <div class="wf-step-content">
-          <h3>代码审查</h3>
-          <p><code>code-reviewer</code> 代理按 P0/P1/P2 分级审查，结合 AST 知识图谱分析变更影响半径和测试覆盖率。</p>
+          <h3><span data-lang="zh">代码审查</span><span data-lang="en">Code Review</span></h3>
+          <p><span data-lang="zh"><code>code-reviewer</code> 代理按 P0/P1/P2 分级审查，结合 AST 知识图谱分析变更影响半径和测试覆盖率。</span><span data-lang="en">The <code>code-reviewer</code> agent performs tiered P0/P1/P2 review, combined with AST knowledge graph analysis of change impact radius and test coverage.</span></p>
         </div>
       </div>
       <div class="wf-step">
         <div class="wf-step-num">6</div>
         <div class="wf-step-content">
-          <h3>沉淀进化</h3>
-          <p>踩坑后自动将经验写入 Skills / Rules / Docs &mdash; Agent 的「肌肉记忆」持续进化，同类问题不再复现。</p>
+          <h3><span data-lang="zh">沉淀进化</span><span data-lang="en">Evolve &amp; Persist</span></h3>
+          <p><span data-lang="zh">踩坑后自动将经验写入 Skills / Rules / Docs &mdash; Agent 的「肌肉记忆」持续进化，同类问题不再复现。</span><span data-lang="en">Lessons learned are automatically written into Skills / Rules / Docs &mdash; the Agent's "muscle memory" continuously evolves so the same issue never recurs.</span></p>
         </div>
       </div>
     </div>
@@ -1426,11 +1625,12 @@
 <section class="efficiency-section reveal" id="efficiency">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">开发效率</div>
-      <h2 class="section-title">60 天的工作量，15 天交付</h2>
+      <div class="section-label"><span data-lang="zh">开发效率</span><span data-lang="en">Dev Efficiency</span></div>
+      <h2 class="section-title"><span data-lang="zh">60 天的工作量，15 天交付</span><span data-lang="en">60 Days of Work, Delivered in 15 Days</span></h2>
       <p class="section-desc">
-        实测数据：构建完整的 UI 自动化 Agent Harness（含 13 个 Skills、14 个 Rule 文件、4 个文档、1 个 Sub-Agent），
-        VelocitAI + AI Agent 协作仅需 15 个工作日，传统人工编码预估需 60 个工作日。
+        <span data-lang="zh">实测数据：构建完整的 UI 自动化 Agent Harness（含 13 个 Skills、14 个 Rule 文件、4 个文档、1 个 Sub-Agent），
+        VelocitAI + AI Agent 协作仅需 15 个工作日，传统人工编码预估需 60 个工作日。</span><span data-lang="en">Real-world data: building a complete UI Automation Agent Harness (13 Skills, 14 Rule files, 4 docs, 1 Sub-Agent),
+        VelocitAI + AI Agent collaboration takes only 15 working days, vs. an estimated 60 working days with traditional manual coding.</span>
       </p>
     </div>
     <div class="efficiency-grid">
@@ -1438,67 +1638,67 @@
         <div class="eff-bar-group">
           <div class="eff-bar">
             <div class="eff-bar-label">
-              <span>传统人工编码</span>
-              <span class="days slow">60 天</span>
+              <span><span data-lang="zh">传统人工编码</span><span data-lang="en">Traditional Manual Coding</span></span>
+              <span class="days slow"><span data-lang="zh">60 天</span><span data-lang="en">60 days</span></span>
             </div>
             <div class="eff-bar-track">
-              <div class="eff-bar-fill manual">12 周</div>
+              <div class="eff-bar-fill manual"><span data-lang="zh">12 周</span><span data-lang="en">12 weeks</span></div>
             </div>
           </div>
           <div class="eff-bar">
             <div class="eff-bar-label">
               <span>VelocitAI + AI Agent</span>
-              <span class="days fast">15 天</span>
+              <span class="days fast"><span data-lang="zh">15 天</span><span data-lang="en">15 days</span></span>
             </div>
             <div class="eff-bar-track">
-              <div class="eff-bar-fill ai">3 周</div>
+              <div class="eff-bar-fill ai"><span data-lang="zh">3 周</span><span data-lang="en">3 weeks</span></div>
             </div>
           </div>
         </div>
         <div class="eff-callouts">
           <div class="eff-callout">
             <div class="big accent">4x</div>
-            <div class="label">开发效率提升</div>
+            <div class="label"><span data-lang="zh">开发效率提升</span><span data-lang="en">Dev Efficiency Boost</span></div>
           </div>
           <div class="eff-callout">
             <div class="big green">75%</div>
-            <div class="label">工时节省</div>
+            <div class="label"><span data-lang="zh">工时节省</span><span data-lang="en">Time Saved</span></div>
           </div>
         </div>
       </div>
       <div class="eff-right">
-        <h3>提效来自哪里？</h3>
+        <h3><span data-lang="zh">提效来自哪里？</span><span data-lang="en">Where Does the Efficiency Come From?</span></h3>
         <div class="eff-breakdown">
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--accent-bg);color:var(--accent);">&#9889;</div>
             <div class="eff-item-text">
-              <h4>Skill 驱动的代码生成</h4>
-              <p>gen-page-test 一键生成 PageObject + 测试骨架，Agent 自动填充定位符和断言逻辑</p>
-              <span class="time-save">节省 ~70% 页面编码时间</span>
+              <h4><span data-lang="zh">Skill 驱动的代码生成</span><span data-lang="en">Skill-Driven Code Generation</span></h4>
+              <p><span data-lang="zh">gen-page-test 一键生成 PageObject + 测试骨架，Agent 自动填充定位符和断言逻辑</span><span data-lang="en">gen-page-test generates PageObject + test scaffolding in one shot; Agent auto-fills locators and assertion logic</span></p>
+              <span class="time-save"><span data-lang="zh">节省 ~70% 页面编码时间</span><span data-lang="en">Saves ~70% of page coding time</span></span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--red-bg);color:var(--red);">&#128295;</div>
             <div class="eff-item-text">
-              <h4>规则前置 &middot; 错误归零</h4>
-              <p>14 个 Rule 文件提前拦截脆弱定位符、无效断言、cookie 污染等常见错误，避免返工</p>
-              <span class="time-save">减少 ~80% 调试返工</span>
+              <h4><span data-lang="zh">规则前置 &middot; 错误归零</span><span data-lang="en">Rules-First &middot; Zero Errors</span></h4>
+              <p><span data-lang="zh">14 个 Rule 文件提前拦截脆弱定位符、无效断言、cookie 污染等常见错误，避免返工</span><span data-lang="en">14 Rule files proactively catch fragile locators, invalid assertions, cookie pollution, and other common errors — no rework</span></p>
+              <span class="time-save"><span data-lang="zh">减少 ~80% 调试返工</span><span data-lang="en">Reduces ~80% of debug rework</span></span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--green-bg);color:var(--green);">&#128161;</div>
             <div class="eff-item-text">
-              <h4>自我进化 &middot; 知识复利</h4>
-              <p>踩过的坑自动沉淀为 Skill/Rule，后续同类任务直接命中最佳实践，越用越快</p>
-              <span class="time-save">后期任务加速 ~50%</span>
+              <h4><span data-lang="zh">自我进化 &middot; 知识复利</span><span data-lang="en">Self-Evolution &middot; Compounding Knowledge</span></h4>
+              <p><span data-lang="zh">踩过的坑自动沉淀为 Skill/Rule，后续同类任务直接命中最佳实践，越用越快</span><span data-lang="en">Lessons learned auto-persist as Skills/Rules; future similar tasks hit best practices directly — gets faster over time</span></p>
+              <span class="time-save"><span data-lang="zh">后期任务加速 ~50%</span><span data-lang="en">Later tasks accelerate by ~50%</span></span>
             </div>
           </div>
           <div class="eff-item">
             <div class="eff-item-icon" style="background:var(--purple-bg);color:var(--purple);">&#128202;</div>
             <div class="eff-item-text">
-              <h4>code-reviewer 自动审查</h4>
-              <p>P0/P1/P2 分级审查 + AST 图谱影响分析，替代人工 Code Review 环节</p>
-              <span class="time-save">审查效率提升 ~3x</span>
+              <h4><span data-lang="zh">code-reviewer 自动审查</span><span data-lang="en">code-reviewer Automated Review</span></h4>
+              <p><span data-lang="zh">P0/P1/P2 分级审查 + AST 图谱影响分析，替代人工 Code Review 环节</span><span data-lang="en">P0/P1/P2 tiered review + AST graph impact analysis, replacing manual code review steps</span></p>
+              <span class="time-save"><span data-lang="zh">审查效率提升 ~3x</span><span data-lang="en">Review efficiency up ~3x</span></span>
             </div>
           </div>
         </div>
@@ -1511,18 +1711,18 @@
 <section class="savings-section reveal" id="savings">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">效率</div>
-      <h2 class="section-title">agent-browser 集成 &middot; Token 消耗直降 88%</h2>
+      <div class="section-label"><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></div>
+      <h2 class="section-title"><span data-lang="zh">agent-browser 集成 &middot; Token 消耗直降 88%</span><span data-lang="en">agent-browser Integration &middot; Token Consumption Down 88%</span></h2>
       <p class="section-desc">
-        传统 Playwright MCP 每次页面交互消耗大量 token。VelocitAI 集成 agent-browser，用 Rust CLI 替代 MCP 快照。
+        <span data-lang="zh">传统 Playwright MCP 每次页面交互消耗大量 token。VelocitAI 集成 agent-browser，用 Rust CLI 替代 MCP 快照。</span><span data-lang="en">Traditional Playwright MCP consumes a large number of tokens per page interaction. VelocitAI integrates agent-browser, replacing MCP snapshots with a Rust CLI.</span>
       </p>
     </div>
     <div class="savings-grid">
       <div class="savings-chart">
         <div class="savings-bar">
           <div class="savings-bar-label">
-            <span>Playwright MCP 快照</span>
-            <span>~3,500 tokens/次</span>
+            <span><span data-lang="zh">Playwright MCP 快照</span><span data-lang="en">Playwright MCP Snapshot</span></span>
+            <span><span data-lang="zh">~3,500 tokens/次</span><span data-lang="en">~3,500 tokens/call</span></span>
           </div>
           <div class="savings-bar-track">
             <div class="savings-bar-fill traditional">3,500 tokens</div>
@@ -1530,8 +1730,8 @@
         </div>
         <div class="savings-bar">
           <div class="savings-bar-label">
-            <span>agent-browser 快照</span>
-            <span>~200-400 tokens/次</span>
+            <span><span data-lang="zh">agent-browser 快照</span><span data-lang="en">agent-browser Snapshot</span></span>
+            <span><span data-lang="zh">~200-400 tokens/次</span><span data-lang="en">~200-400 tokens/call</span></span>
           </div>
           <div class="savings-bar-track">
             <div class="savings-bar-fill velocitai">~300</div>
@@ -1541,12 +1741,14 @@
       <div class="savings-callout">
         <div class="big-number">82-93%</div>
         <div class="desc">
-          单次 DOM 探索的 Token 节省率。<br>
-          10 个页面的回归测试生成流程，总计可节省 <strong>~30,000 tokens</strong>。
+          <span data-lang="zh">单次 DOM 探索的 Token 节省率。<br>
+          10 个页面的回归测试生成流程，总计可节省 <strong>~30,000 tokens</strong>。</span><span data-lang="en">Token savings rate per DOM exploration.<br>
+          For a 10-page regression test generation workflow, total savings reach <strong>~30,000 tokens</strong>.</span>
         </div>
         <div class="detail">
-          agent-browser 基于 CDP 协议直接获取无障碍树，绕过 MCP 序列化开销。
-          点击失败时自动降级到 JS eval，新 tab 自动 list &rarr; switch &rarr; snapshot。
+          <span data-lang="zh">agent-browser 基于 CDP 协议直接获取无障碍树，绕过 MCP 序列化开销。
+          点击失败时自动降级到 JS eval，新 tab 自动 list &rarr; switch &rarr; snapshot。</span><span data-lang="en">agent-browser fetches the accessibility tree directly via CDP, bypassing MCP serialization overhead.
+          On click failure it auto-falls back to JS eval; new tabs are automatically list &rarr; switch &rarr; snapshot.</span>
         </div>
       </div>
     </div>
@@ -1557,29 +1759,29 @@
 <section class="evo-section reveal" id="evolution">
   <div class="section-inner">
     <div class="section-header" style="text-align:center;">
-      <div class="section-label" style="justify-content:center;">自我进化</div>
-      <h2 class="section-title" style="margin:0 auto 0.8rem;">自我进化机制 &middot; Agent 的肌肉记忆</h2>
+      <div class="section-label" style="justify-content:center;"><span data-lang="zh">自我进化</span><span data-lang="en">Self-Evolution</span></div>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">自我进化机制 &middot; Agent 的肌肉记忆</span><span data-lang="en">Self-Evolution Mechanism &middot; The Agent's Muscle Memory</span></h2>
       <p class="section-desc" style="margin:0 auto;">
-        P0 最高优先级。Agent 在踩坑、被纠正、或发现重复问题时，自动将经验沉淀到项目知识库。越用越聪明。
+        <span data-lang="zh">P0 最高优先级。Agent 在踩坑、被纠正、或发现重复问题时，自动将经验沉淀到项目知识库。越用越聪明。</span><span data-lang="en">P0 highest priority. When the Agent makes a mistake, gets corrected, or encounters a recurring issue, it automatically persists the lesson to the project knowledge base. Gets smarter with use.</span>
       </p>
     </div>
     <div class="evo-grid">
       <div class="evo-card">
         <div class="evo-icon">&#128161;</div>
-        <h3>经验（How-to）</h3>
-        <p>操作方法论和最佳实践。<br>指导 Agent 如何完成任务。</p>
+        <h3><span data-lang="zh">经验（How-to）</span><span data-lang="en">Experience (How-to)</span></h3>
+        <p><span data-lang="zh">操作方法论和最佳实践。<br>指导 Agent 如何完成任务。</span><span data-lang="en">Operational methodology and best practices.<br>Guides the Agent on how to complete tasks.</span></p>
         <div class="target">skills/</div>
       </div>
       <div class="evo-card">
         <div class="evo-icon">&#128679;</div>
-        <h3>规则（Must / Must-not）</h3>
-        <p>强制约束和边界条件。<br>每条必含 &#10060; 反例 + &#9989; 正例。</p>
+        <h3><span data-lang="zh">规则（Must / Must-not）</span><span data-lang="en">Rules (Must / Must-not)</span></h3>
+        <p><span data-lang="zh">强制约束和边界条件。<br>每条必含 &#10060; 反例 + &#9989; 正例。</span><span data-lang="en">Mandatory constraints and boundary conditions.<br>Each rule must include a &#10060; bad example + &#9989; good example.</span></p>
         <div class="target">rules/</div>
       </div>
       <div class="evo-card">
         <div class="evo-icon">&#128203;</div>
-        <h3>项目事实</h3>
-        <p>类名、URL、PageObject 清单。<br>可查询的项目知识库。</p>
+        <h3><span data-lang="zh">项目事实</span><span data-lang="en">Project Facts</span></h3>
+        <p><span data-lang="zh">类名、URL、PageObject 清单。<br>可查询的项目知识库。</span><span data-lang="en">Class names, URLs, PageObject catalog.<br>A queryable project knowledge base.</span></p>
         <div class="target">docs/</div>
       </div>
     </div>
@@ -1590,10 +1792,10 @@
 <section class="qs-section reveal" id="install">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">安装</div>
-      <h2 class="section-title">多平台一键安装</h2>
+      <div class="section-label"><span data-lang="zh">安装</span><span data-lang="en">Install</span></div>
+      <h2 class="section-title"><span data-lang="zh">多平台一键安装</span><span data-lang="en">One-Click Installation for Multiple Platforms</span></h2>
       <p class="section-desc">
-        Claude Code 原生插件安装，或手动集成到任意 AI Agent 项目。
+        <span data-lang="zh">Claude Code 原生插件安装，或手动集成到任意 AI Agent 项目。</span><span data-lang="en">Native Claude Code plugin installation, or manual integration into any AI Agent project.</span>
       </p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem;">
@@ -1604,10 +1806,10 @@
           <span class="code-dot green"></span>
           <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Claude Code</span>
         </div>
-        <pre><span class="comment"># 一行命令安装插件</span>
+        <pre><span data-lang="zh" class="comment"># 一行命令安装插件</span><span data-lang="en" class="comment"># Install plugin in one command</span>
 <span class="prompt">$</span> claude install-plugin velocitai
 
-<span class="comment"># 或手动安装</span>
+<span data-lang="zh" class="comment"># 或手动安装</span><span data-lang="en" class="comment"># Or install manually</span>
 <span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
 <span class="prompt">$</span> cp -r velocitai/{skills,rules,hooks,docs,.claude,CLAUDE.md} \
     your-project/</pre>
@@ -1617,17 +1819,17 @@
           <span class="code-dot red"></span>
           <span class="code-dot yellow"></span>
           <span class="code-dot green"></span>
-          <span class="code-block-title" style="color:rgba(255,255,255,0.35)">Copilot / Gemini / 其他平台</span>
+          <span class="code-block-title" style="color:rgba(255,255,255,0.35)"><span data-lang="zh">Copilot / Gemini / 其他平台</span><span data-lang="en">Copilot / Gemini / Other Platforms</span></span>
         </div>
-        <pre><span class="comment"># 克隆并集成</span>
+        <pre><span data-lang="zh" class="comment"># 克隆并集成</span><span data-lang="en" class="comment"># Clone and integrate</span>
 <span class="prompt">$</span> git clone https://github.com/DanielSuo117/velocitai.git
 <span class="prompt">$</span> cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md} \
     your-project/
 
-<span class="comment"># Copilot CLI — 同时复制 AGENTS.md</span>
+<span data-lang="zh" class="comment"># Copilot CLI — 同时复制 AGENTS.md</span><span data-lang="en" class="comment"># Copilot CLI — also copy AGENTS.md</span>
 <span class="prompt">$</span> cp velocitai/AGENTS.md your-project/
 
-<span class="comment"># Gemini CLI — 同时复制 GEMINI.md</span>
+<span data-lang="zh" class="comment"># Gemini CLI — 同时复制 GEMINI.md</span><span data-lang="en" class="comment"># Gemini CLI — also copy GEMINI.md</span>
 <span class="prompt">$</span> cp velocitai/GEMINI.md your-project/</pre>
       </div>
     </div>
@@ -1636,18 +1838,18 @@
         <span class="code-dot red"></span>
         <span class="code-dot yellow"></span>
         <span class="code-dot green"></span>
-        <span class="code-block-title" style="color:rgba(255,255,255,0.35)">安装 &amp; 运行</span>
+        <span class="code-block-title" style="color:rgba(255,255,255,0.35)"><span data-lang="zh">安装 &amp; 运行</span><span data-lang="en">Setup &amp; Run</span></span>
       </div>
-      <pre><span class="comment"># 安装依赖和浏览器</span>
+      <pre><span data-lang="zh" class="comment"># 安装依赖和浏览器</span><span data-lang="en" class="comment"># Install dependencies and browser</span>
 <span class="prompt">$</span> cd your-project
 <span class="prompt">$</span> python -m venv .venv && source .venv/bin/activate
 <span class="prompt">$</span> pip install -r requirements.txt
 <span class="prompt">$</span> playwright install chromium
 
-<span class="comment"># 运行测试（--env 必须指定，未指定时 Agent 会询问）</span>
+<span data-lang="zh" class="comment"># 运行测试（--env 必须指定，未指定时 Agent 会询问）</span><span data-lang="en" class="comment"># Run tests (--env required; Agent will ask if omitted)</span>
 <span class="prompt">$</span> pytest tests/ --env=pre
 
-<span class="comment"># 查看报告</span>
+<span data-lang="zh" class="comment"># 查看报告</span><span data-lang="en" class="comment"># View report</span>
 <span class="prompt">$</span> allure serve reports/allure-results</pre>
     </div>
   </div>
@@ -1656,41 +1858,41 @@
 <!-- 技术栈 -->
 <section class="stack-section reveal" id="stack">
   <div class="section-inner" style="text-align:center;">
-    <div class="section-label" style="justify-content:center;">技术栈</div>
-    <h2 class="section-title" style="margin:0 auto 0.6rem;">技术栈</h2>
-    <p class="section-desc" style="margin:0 auto;">基于成熟工具链，不造轮子，只做治理。</p>
+    <div class="section-label" style="justify-content:center;"><span data-lang="zh">技术栈</span><span data-lang="en">Tech Stack</span></div>
+    <h2 class="section-title" style="margin:0 auto 0.6rem;"><span data-lang="zh">技术栈</span><span data-lang="en">Tech Stack</span></h2>
+    <p class="section-desc" style="margin:0 auto;"><span data-lang="zh">基于成熟工具链，不造轮子，只做治理。</span><span data-lang="en">Built on a mature toolchain — no reinventing the wheel, just governance.</span></p>
     <div class="stack-grid">
       <div class="stack-item">
         <div class="stack-icon">&#128013;</div>
         <h4>Python 3.10+</h4>
-        <p>核心语言</p>
+        <p><span data-lang="zh">核心语言</span><span data-lang="en">Core Language</span></p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#127917;</div>
         <h4>Playwright</h4>
-        <p>浏览器自动化</p>
+        <p><span data-lang="zh">浏览器自动化</span><span data-lang="en">Browser Automation</span></p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#129514;</div>
         <h4>pytest</h4>
-        <p>测试框架</p>
+        <p><span data-lang="zh">测试框架</span><span data-lang="en">Test Framework</span></p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#128202;</div>
         <h4>Allure</h4>
-        <p>测试报告</p>
+        <p><span data-lang="zh">测试报告</span><span data-lang="en">Test Reports</span></p>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#127760;</div>
         <h4>agent-browser</h4>
-        <p>DOM 探索（Rust CLI）</p>
-        <span class="optional">可选</span>
+        <p><span data-lang="zh">DOM 探索（Rust CLI）</span><span data-lang="en">DOM Exploration (Rust CLI)</span></p>
+        <span class="optional"><span data-lang="zh">可选</span><span data-lang="en">Optional</span></span>
       </div>
       <div class="stack-item">
         <div class="stack-icon">&#128279;</div>
         <h4>code-review-graph</h4>
-        <p>AST 图谱 MCP</p>
-        <span class="optional">可选</span>
+        <p><span data-lang="zh">AST 图谱 MCP</span><span data-lang="en">AST Graph MCP</span></p>
+        <span class="optional"><span data-lang="zh">可选</span><span data-lang="en">Optional</span></span>
       </div>
     </div>
   </div>
@@ -1699,36 +1901,36 @@
 <!-- 兼容平台 -->
 <section class="compat-section reveal" id="compatible">
   <div class="section-inner" style="text-align:center;">
-    <div class="section-label" style="justify-content:center;">兼容性</div>
-    <h2 class="section-title" style="margin:0 auto 0.6rem;">兼容主流 AI Agent 平台</h2>
+    <div class="section-label" style="justify-content:center;"><span data-lang="zh">兼容性</span><span data-lang="en">Compatibility</span></div>
+    <h2 class="section-title" style="margin:0 auto 0.6rem;"><span data-lang="zh">兼容主流 AI Agent 平台</span><span data-lang="en">Compatible with Major AI Agent Platforms</span></h2>
     <p class="section-desc" style="margin:0 auto;">
-      Harness 设计为平台无关。每个平台有专属入口文件，Skills/Rules 的结构化范式可迁移到任何 AI Agent。
+      <span data-lang="zh">Harness 设计为平台无关。每个平台有专属入口文件，Skills/Rules 的结构化范式可迁移到任何 AI Agent。</span><span data-lang="en">The Harness is designed to be platform-agnostic. Each platform has a dedicated entry file, and the structured Skills/Rules paradigm can be migrated to any AI Agent.</span>
     </p>
     <div class="compat-grid">
       <div class="compat-item">
         <div class="icon">&#9672;</div>
         <h4>Claude Code</h4>
-        <p>原生插件 &middot; CLAUDE.md</p>
+        <p><span data-lang="zh">原生插件 &middot; CLAUDE.md</span><span data-lang="en">Native Plugin &middot; CLAUDE.md</span></p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9673;</div>
         <h4>Copilot CLI</h4>
-        <p>技能适配 &middot; AGENTS.md</p>
+        <p><span data-lang="zh">技能适配 &middot; AGENTS.md</span><span data-lang="en">Skill Adapter &middot; AGENTS.md</span></p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9674;</div>
         <h4>Gemini CLI</h4>
-        <p>技能适配 &middot; GEMINI.md</p>
+        <p><span data-lang="zh">技能适配 &middot; GEMINI.md</span><span data-lang="en">Skill Adapter &middot; GEMINI.md</span></p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9670;</div>
         <h4>Cursor</h4>
-        <p>规则兼容 &middot; CLAUDE.md</p>
+        <p><span data-lang="zh">规则兼容 &middot; CLAUDE.md</span><span data-lang="en">Rule Compatible &middot; CLAUDE.md</span></p>
       </div>
       <div class="compat-item">
         <div class="icon">&#9671;</div>
         <h4>Windsurf</h4>
-        <p>规则兼容 &middot; CLAUDE.md</p>
+        <p><span data-lang="zh">规则兼容 &middot; CLAUDE.md</span><span data-lang="en">Rule Compatible &middot; CLAUDE.md</span></p>
       </div>
     </div>
   </div>
@@ -1738,8 +1940,8 @@
 <section class="structure-section reveal" id="structure">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-label">结构</div>
-      <h2 class="section-title">项目结构</h2>
+      <div class="section-label"><span data-lang="zh">结构</span><span data-lang="en">Structure</span></div>
+      <h2 class="section-title"><span data-lang="zh">项目结构</span><span data-lang="en">Project Structure</span></h2>
     </div>
     <div style="margin-top:1rem;">
       <div class="code-block" style="max-width:720px;">
@@ -1751,32 +1953,32 @@
         </div>
         <pre>
 <span class="str">velocitai/</span>
-&#9500;&#9472;&#9472; <span class="var">CLAUDE.md</span>              <span class="cmt"># Agent 入口（Claude Code）</span>
-&#9500;&#9472;&#9472; <span class="var">AGENTS.md</span>             <span class="cmt"># Agent 入口（Copilot CLI）</span>
-&#9500;&#9472;&#9472; <span class="var">GEMINI.md</span>             <span class="cmt"># Agent 入口（Gemini CLI）</span>
-&#9500;&#9472;&#9472; <span class="var">package.json</span>          <span class="cmt"># npm 发布配置</span>
-&#9500;&#9472;&#9472; <span class="str">.claude-plugin/</span>       <span class="cmt"># Claude Code 插件配置</span>
+&#9500;&#9472;&#9472; <span class="var">CLAUDE.md</span>              <span data-lang="zh" class="cmt"># Agent 入口（Claude Code）</span><span data-lang="en" class="cmt"># Agent entry (Claude Code)</span>
+&#9500;&#9472;&#9472; <span class="var">AGENTS.md</span>             <span data-lang="zh" class="cmt"># Agent 入口（Copilot CLI）</span><span data-lang="en" class="cmt"># Agent entry (Copilot CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">GEMINI.md</span>             <span data-lang="zh" class="cmt"># Agent 入口（Gemini CLI）</span><span data-lang="en" class="cmt"># Agent entry (Gemini CLI)</span>
+&#9500;&#9472;&#9472; <span class="var">package.json</span>          <span data-lang="zh" class="cmt"># npm 发布配置</span><span data-lang="en" class="cmt"># npm publish config</span>
+&#9500;&#9472;&#9472; <span class="str">.claude-plugin/</span>       <span data-lang="zh" class="cmt"># Claude Code 插件配置</span><span data-lang="en" class="cmt"># Claude Code plugin config</span>
 &#9474;   &#9500;&#9472;&#9472; plugin.json
 &#9474;   &#9492;&#9472;&#9472; marketplace.json
-&#9500;&#9472;&#9472; <span class="str">.claude/</span>              <span class="cmt"># Claude 专属配置</span>
-&#9474;   &#9500;&#9472;&#9472; <span class="var">settings.json</span>      <span class="cmt"># 权限 + hooks</span>
-&#9474;   &#9492;&#9472;&#9472; <span class="str">agents/</span>            <span class="cmt"># 子 Agent 定义</span>
+&#9500;&#9472;&#9472; <span class="str">.claude/</span>              <span data-lang="zh" class="cmt"># Claude 专属配置</span><span data-lang="en" class="cmt"># Claude-specific config</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="var">settings.json</span>      <span data-lang="zh" class="cmt"># 权限 + hooks</span><span data-lang="en" class="cmt"># permissions + hooks</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="str">agents/</span>            <span data-lang="zh" class="cmt"># 子 Agent 定义</span><span data-lang="en" class="cmt"># Sub-Agent definitions</span>
 &#9474;       &#9492;&#9472;&#9472; code-reviewer.md
-&#9500;&#9472;&#9472; <span class="str">skills/</span>               <span class="cmt"># 操作技能（How-to）</span>
-&#9474;   &#9500;&#9472;&#9472; SKILL.md              <span class="cmt"># 路由（编排子技能）</span>
+&#9500;&#9472;&#9472; <span class="str">skills/</span>               <span data-lang="zh" class="cmt"># 操作技能（How-to）</span><span data-lang="en" class="cmt"># Operational skills (How-to)</span>
+&#9474;   &#9500;&#9472;&#9472; SKILL.md              <span data-lang="zh" class="cmt"># 路由（编排子技能）</span><span data-lang="en" class="cmt"># Router (orchestrates sub-skills)</span>
 &#9474;   &#9500;&#9472;&#9472; gen-page-test/
 &#9474;   &#9500;&#9472;&#9472; locator-replacer/
 &#9474;   &#9500;&#9472;&#9472; test-runner/
 &#9474;   &#9500;&#9472;&#9472; quick-debug/
-&#9474;   &#9492;&#9472;&#9472; <span class="cmt">... （共 13 个技能）</span>
-&#9500;&#9472;&#9472; <span class="str">rules/</span>                <span class="cmt"># 强制规则（Must/Must-not）</span>
-&#9474;   &#9500;&#9472;&#9472; agent-behavior/    <span class="cmt"># 3 个文件</span>
-&#9474;   &#9500;&#9472;&#9472; coding-conventions/<span class="cmt"># 1 个文件</span>
-&#9474;   &#9500;&#9472;&#9472; playwright/        <span class="cmt"># 8 个文件</span>
-&#9474;   &#9492;&#9472;&#9472; report-strategy/   <span class="cmt"># 1 个文件</span>
-&#9500;&#9472;&#9472; <span class="str">hooks/</span>                <span class="cmt"># 会话与工具钩子</span>
+&#9474;   &#9492;&#9472;&#9472; <span data-lang="zh" class="cmt">... （共 13 个技能）</span><span data-lang="en" class="cmt">... (13 skills total)</span>
+&#9500;&#9472;&#9472; <span class="str">rules/</span>                <span data-lang="zh" class="cmt"># 强制规则（Must/Must-not）</span><span data-lang="en" class="cmt"># Mandatory rules (Must/Must-not)</span>
+&#9474;   &#9500;&#9472;&#9472; agent-behavior/    <span data-lang="zh" class="cmt"># 3 个文件</span><span data-lang="en" class="cmt"># 3 files</span>
+&#9474;   &#9500;&#9472;&#9472; coding-conventions/<span data-lang="zh" class="cmt"># 1 个文件</span><span data-lang="en" class="cmt"># 1 file</span>
+&#9474;   &#9500;&#9472;&#9472; playwright/        <span data-lang="zh" class="cmt"># 8 个文件</span><span data-lang="en" class="cmt"># 8 files</span>
+&#9474;   &#9492;&#9472;&#9472; report-strategy/   <span data-lang="zh" class="cmt"># 1 个文件</span><span data-lang="en" class="cmt"># 1 file</span>
+&#9500;&#9472;&#9472; <span class="str">hooks/</span>                <span data-lang="zh" class="cmt"># 会话与工具钩子</span><span data-lang="en" class="cmt"># Session and tool hooks</span>
 &#9474;   &#9492;&#9472;&#9472; hooks.json
-&#9492;&#9472;&#9472; <span class="str">docs/</span>                 <span class="cmt"># 项目知识库</span>
+&#9492;&#9472;&#9472; <span class="str">docs/</span>                 <span data-lang="zh" class="cmt"># 项目知识库</span><span data-lang="en" class="cmt"># Project knowledge base</span>
     &#9500;&#9472;&#9472; architecture.md
     &#9500;&#9472;&#9472; pages-catalog.md
     &#9500;&#9472;&#9472; regression-points.md
@@ -1788,18 +1990,20 @@
 
 <!-- 行动号召 -->
 <section class="cta-section">
+  <div class="cta-particles" id="ctaParticles"></div>
   <div class="section-inner">
-    <h2>让你的 Agent 从「能写测试」<br>进化到「写好测试」</h2>
+    <h2><span data-lang="zh">让你的 Agent 从「能写测试」<br>进化到「写好测试」</span><span data-lang="en">Evolve Your Agent from "Can Write Tests"<br>to "Writes Good Tests"</span></h2>
     <p>
-      一行命令安装 Claude Code 插件，或手动集成到 Copilot / Gemini / Cursor / Windsurf。
-      13 个 Skills + 14 个 Rule 文件 + 自我进化机制。实测 4 倍编码提效。
+      <span data-lang="zh">一行命令安装 Claude Code 插件，或手动集成到 Copilot / Gemini / Cursor / Windsurf。
+      13 个 Skills + 14 个 Rule 文件 + 自我进化机制。实测 4 倍编码提效。</span><span data-lang="en">Install the Claude Code plugin in one command, or manually integrate into Copilot / Gemini / Cursor / Windsurf.
+      13 Skills + 14 Rule files + self-evolution mechanism. Real-world 4x coding efficiency gain.</span>
     </p>
     <div class="cta-buttons">
       <a href="https://github.com/DanielSuo117/velocitai" class="btn btn-primary" target="_blank">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        在 GitHub 上 Star
+        <span data-lang="zh">在 GitHub 上 Star</span><span data-lang="en">Star on GitHub</span>
       </a>
-      <a href="#install" class="btn btn-outline">安装 &rarr;</a>
+      <a href="#install" class="btn btn-outline"><span data-lang="zh">安装 &rarr;</span><span data-lang="en">Install &rarr;</span></a>
     </div>
   </div>
 </section>
@@ -1808,30 +2012,88 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-links">
-      <a href="#architecture">架构</a>
-      <a href="#skills">技能</a>
-      <a href="#rules">规则</a>
-      <a href="#workflow">工作流</a>
-      <a href="#efficiency">效率</a>
-      <a href="#install">安装</a>
+      <a href="#architecture"><span data-lang="zh">架构</span><span data-lang="en">Architecture</span></a>
+      <a href="#skills"><span data-lang="zh">技能</span><span data-lang="en">Skills</span></a>
+      <a href="#rules"><span data-lang="zh">规则</span><span data-lang="en">Rules</span></a>
+      <a href="#workflow"><span data-lang="zh">工作流</span><span data-lang="en">Workflow</span></a>
+      <a href="#efficiency"><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></a>
+      <a href="#install"><span data-lang="zh">安装</span><span data-lang="en">Install</span></a>
       <a href="https://github.com/DanielSuo117/velocitai" target="_blank">GitHub</a>
     </div>
     <p class="copyright">
-      VelocitAI &mdash; AI 驱动的 UI 自动化 Agent Harness &nbsp;&middot;&nbsp;
-      MIT 许可证 &nbsp;&middot;&nbsp;
-      由 <a href="https://github.com/DanielSuo117" target="_blank">Daniel Suo</a> 构建
+      VelocitAI &mdash; <span data-lang="zh">AI 驱动的 UI 自动化 Agent Harness</span><span data-lang="en">AI-Driven UI Automation Agent Harness</span> &nbsp;&middot;&nbsp;
+      <span data-lang="zh">MIT 许可证</span><span data-lang="en">MIT License</span> &nbsp;&middot;&nbsp;
+      <span data-lang="zh">由 <a href="https://github.com/DanielSuo117" target="_blank">Daniel Suo</a> 构建</span><span data-lang="en">Built by <a href="https://github.com/DanielSuo117" target="_blank">Daniel Suo</a></span>
     </p>
   </div>
 </footer>
 
 <script>
-  // Nav scroll effect
+  // ─── I18N LANGUAGE SWITCH ───
+  let typewriterRafId = null;
+  function switchLang(lang) {
+    document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+    localStorage.setItem('velocitai-lang', lang);
+    document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+    document.getElementById('langEn').classList.toggle('active', lang === 'en');
+    const titles = { zh: 'VelocitAI — AI 驱动的 UI 自动化 Agent Harness', en: 'VelocitAI — AI-Driven UI Automation Agent Harness' };
+    document.title = titles[lang];
+    const descMeta = document.querySelector('meta[name="description"]');
+    if (descMeta) descMeta.content = lang === 'zh'
+      ? 'VelocitAI 是一套通用 UI 自动化 Agent Harness，为 AI Agent 提供完整的 Skills、Rules 和自我进化机制，驱动企业级 UI 回归测试。'
+      : 'VelocitAI is a universal UI automation Agent Harness providing AI Agents with complete Skills, Rules, and self-evolution mechanisms to drive enterprise-grade UI regression testing.';
+    restartTypewriter(lang);
+  }
+  function restartTypewriter(lang) {
+    const target = document.getElementById('typewriterTarget');
+    if (!target) return;
+    if (typewriterRafId) { cancelAnimationFrame(typewriterRafId); typewriterRafId = null; }
+    const texts = { zh: 'UI 自动化测试引擎', en: 'UI Automation Test Engine' };
+    const text = texts[lang] || texts.zh;
+    const charInterval = 75;
+    let cursor = target.querySelector('.typewriter-cursor');
+    if (!cursor) {
+      cursor = document.createElement('span');
+      cursor.className = 'typewriter-cursor';
+      cursor.setAttribute('aria-hidden', 'true');
+    }
+    const textNode = document.createTextNode('');
+    target.textContent = '';
+    target.appendChild(textNode);
+    target.appendChild(cursor);
+    let i = 0;
+    let lastTime = 0;
+    function step(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      if (timestamp - lastTime >= charInterval) {
+        i++;
+        textNode.data = text.slice(0, i);
+        lastTime = timestamp;
+      }
+      if (i < text.length) {
+        typewriterRafId = requestAnimationFrame(step);
+      } else {
+        typewriterRafId = null;
+      }
+    }
+    typewriterRafId = requestAnimationFrame(step);
+  }
+  (function() {
+    const saved = localStorage.getItem('velocitai-lang');
+    if (saved === 'en') {
+      switchLang('en');
+    } else {
+      setTimeout(() => restartTypewriter('zh'), 600);
+    }
+  })();
+
+  // ─── NAV SCROLL ───
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 10);
   });
 
-  // Mobile menu
+  // ─── MOBILE MENU ───
   function toggleMenu() {
     document.getElementById('navLinks').classList.toggle('open');
   }
@@ -1841,7 +2103,7 @@
     });
   });
 
-  // Reveal on scroll
+  // ─── REVEAL ON SCROLL ───
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1849,10 +2111,9 @@
       }
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  // Token savings bar animation
+  // ─── TOKEN SAVINGS BAR ANIMATION ───
   const savingsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1862,11 +2123,10 @@
       }
     });
   }, { threshold: 0.3 });
-
   const savingsSection = document.querySelector('.savings-section');
   if (savingsSection) savingsObserver.observe(savingsSection);
 
-  // Efficiency bar animation
+  // ─── EFFICIENCY BAR ANIMATION ───
   const effObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1879,7 +2139,7 @@
   const effSection = document.querySelector('.efficiency-section');
   if (effSection) effObserver.observe(effSection);
 
-  // Smooth nav active state
+  // ─── SMOOTH NAV ACTIVE STATE ───
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a:not(.nav-github)');
   window.addEventListener('scroll', () => {
@@ -1889,10 +2149,161 @@
       if (scrollY >= top) current = section.getAttribute('id');
     });
     navLinks.forEach(link => {
-      link.style.color = link.getAttribute('href') === '#' + current
-        ? 'var(--accent)' : '';
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        link.style.color = href === '#' + current ? 'var(--accent)' : '';
+      }
     });
   });
+
+  // ─── 2. HERO METRICS COUNT-UP ───
+  (function () {
+    const nums = document.querySelectorAll('.hero-metric .num[data-target]');
+    if (!nums.length) return;
+
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function animateNum(el) {
+      const target = parseInt(el.dataset.target, 10);
+      const suffix = el.dataset.suffix || '';
+      const duration = 2000;
+      const start = performance.now();
+
+      function step(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.round(easeOut(progress) * target);
+        el.textContent = value + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Animate when hero is visible (it's always visible on load, small delay)
+    setTimeout(() => {
+      nums.forEach(el => animateNum(el));
+    }, 400);
+  })();
+
+  // ─── 3. COPY BUTTON FOR CODE BLOCKS ───
+  (function () {
+    const clipIcon = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="9" height="11" rx="1.5"/><path d="M3 4H2a1 1 0 00-1 1v9a1 1 0 001 1h8a1 1 0 001-1v-1"/></svg>`;
+
+    document.querySelectorAll('.code-block, .qs-terminal').forEach(block => {
+      block.style.position = 'relative';
+      const pre = block.querySelector('pre');
+      if (!pre) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.innerHTML = clipIcon + '<span>Copy</span>';
+      btn.setAttribute('aria-label', 'Copy code');
+
+      btn.addEventListener('click', () => {
+        const code = pre.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.classList.add('copied');
+          btn.querySelector('span').textContent = 'Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.querySelector('span').textContent = 'Copy';
+          }, 2000);
+        }).catch(() => {
+          // fallback for older browsers
+          const ta = document.createElement('textarea');
+          ta.value = pre.innerText;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          btn.classList.add('copied');
+          btn.querySelector('span').textContent = 'Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.querySelector('span').textContent = 'Copy';
+          }, 2000);
+        });
+      });
+
+      block.appendChild(btn);
+    });
+  })();
+
+  // ─── 5. WORKFLOW STEPS STAGGERED ENTRY ───
+  (function () {
+    const steps = document.querySelectorAll('.wf-step');
+    if (!steps.length) return;
+
+    const wfObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const container = entry.target;
+          const items = container.querySelectorAll('.wf-step');
+          items.forEach((step, idx) => {
+            setTimeout(() => {
+              step.classList.add('wf-visible');
+            }, idx * 150);
+          });
+          wfObserver.unobserve(container);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const wfContainer = document.querySelector('.workflow-steps');
+    if (wfContainer) wfObserver.observe(wfContainer);
+  })();
+
+  // ─── 6. CTA PARTICLES ───
+  (function () {
+    const container = document.getElementById('ctaParticles');
+    if (!container) return;
+
+    const COUNT = 18;
+    for (let i = 0; i < COUNT; i++) {
+      const p = document.createElement('div');
+      p.className = 'cta-particle';
+      const size = Math.random() * 5 + 2; // 2–7px
+      const left = Math.random() * 100;
+      const delay = Math.random() * 12;
+      const duration = Math.random() * 10 + 10; // 10–20s
+      const opacity = (Math.random() * 0.35 + 0.1).toFixed(2); // 0.1–0.45
+      p.style.cssText = [
+        `width:${size}px`,
+        `height:${size}px`,
+        `left:${left}%`,
+        `bottom:${Math.random() * 30}%`,
+        `--p-op:${opacity}`,
+        `animation-duration:${duration}s`,
+        `animation-delay:-${delay}s`,
+      ].join(';');
+      container.appendChild(p);
+    }
+  })();
+
+  // ─── 10. STAGGERED CARD REVEAL ───
+  (function () {
+    const grids = document.querySelectorAll('.card-grid, .rules-grid');
+    grids.forEach(grid => {
+      const cards = grid.querySelectorAll('.card, .rule-card');
+      cards.forEach(card => card.classList.add('card-stagger'));
+
+      const gridObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const items = entry.target.querySelectorAll('.card-stagger');
+            items.forEach((card, idx) => {
+              setTimeout(() => card.classList.add('cs-visible'), idx * 80);
+            });
+            gridObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+      gridObserver.observe(grid);
+    });
+  })();
 </script>
 
 </body>
