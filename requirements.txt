@@ -1,0 +1,5 @@
+playwright>=1.40.0
+pytest>=7.4.0
+pytest-playwright>=0.4.3
+allure-pytest>=2.13.0
+allure-python-commons>=2.13.0
