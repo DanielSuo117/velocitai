@@ -1,0 +1,12 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>弹窗</title></head>
+<body>
+  <main>
+    <!-- 页面主区的诱饵：与弹窗里的按钮 class 相同、文案相同。
+         组件的 root 作用域一旦失效，就会点中这一个。 -->
+    <button class="btn-ok" data-name="page-ok">确定</button>
+  </main>
+  <div class="modal">
+    <button class="btn-ok" data-name="modal-ok">确定</button>
+  </div>
+  <script src="_log.js"></script>
+</body></html>

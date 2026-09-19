@@ -97,5 +97,39 @@
 
 ---
 
+## P0.8 · 定位作用域必须收口在一处
+
+**触发**：给基类加新的定位方法、或让子类（组件、iframe 包装）改变定位范围时。
+
+`BaseComponent` 曾只覆盖 `_locate()`，而 `click` / `fill` 这些操作走的是 `_act()` ——
+覆盖被整条绕过，组件的 `ROOT` 形同虚设，弹窗里的 `.btn-ok` 跑到整页去找。
+同名元素在页面主区也有一个时就点错了，且**自愈关闭也照样错**。
+
+作用域一旦有两个出口，加方法的人迟早漏掉一个。
+
+❌ 子类覆盖 `_locate()` 来改变定位范围，而基类另有 `_act()` 直接 `page.locator(selector)`
+
+✅ 基类提供唯一的 `scope_root()`，`_act()` / `_locate()` 都经 `_scoped()` 取用；子类只覆盖 `scope_root()`
+
+---
+
+## P0.9 · 定位失败判定宁可漏判，不可误判
+
+**触发**：扩充 `is_location_failure` 的关键词、或发现某类失败「本该自愈却没愈」时。
+
+漏判的代价是用例照常失败 —— 等于没有自愈，安全。误判的代价是在不该动的场景上
+启动自愈，可能把真失败变成假通过。两者不对等，判定必须偏保守。
+
+实测踩过的两个坑：`page.goto` 的导航超时同样是 `TimeoutError`，「凡超时即定位失败」
+会在一个根本没加载出来的页面上启动自愈；一个写着 `no element matches the criteria`
+的业务 `ValueError` 也会被纯文本匹配误判。
+
+❌ `if type(exc).__name__ == "TimeoutError": return True`，或只靠 `"no element matches" in str(exc)`
+
+✅ 页面级操作（`page.goto` / `page.wait_for_url` / `page.wait_for_load_state`）先硬否决；
+普通措辞只在异常确由 Playwright 抛出时才认；拿不准返回 `False`
+
+---
+
 相关：[selector-self-heal skill](../../skills/selector-self-heal/) ·
 [locator-strategy](./locator-strategy.md) · [落库闸门](../agent-behavior/evolution-gate.md)

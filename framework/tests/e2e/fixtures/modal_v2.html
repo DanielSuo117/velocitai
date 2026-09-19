@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>弹窗 v2</title></head>
+<body>
+  <main>
+    <!-- 改版后主区仍有一个同名按钮，且它带着 data-testid：
+         如果自愈越出 root 去整页找，会挑中这一个 —— 顶替到无关元素。 -->
+    <button data-testid="ok" data-name="page-ok">确定</button>
+  </main>
+  <div class="modal">
+    <!-- 弹窗里 .btn-ok 这个 class 没了，换成 data-testid -->
+    <button data-testid="dialog-ok" data-name="modal-ok">确定</button>
+  </div>
+  <script src="_log.js"></script>
+</body></html>

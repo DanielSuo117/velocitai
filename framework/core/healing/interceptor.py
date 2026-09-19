@@ -19,15 +19,36 @@ from core.logger import get_logger
 
 log = get_logger("velocitai.healing")
 
-# Playwright 定位失败时抛出的异常，其文本特征。用于把「元素没找到」
-# 与「断言不通过」区分开 —— 只有前者允许自愈介入。
-_LOCATION_HINTS = (
+# Playwright 在「等某个元素」时才会写进报错文本的措辞。业务代码几乎不可能
+# 凑巧写出这些句子，因此不论异常类型一律认。
+_LOCATOR_MARKERS = (
     "strict mode violation",
     "waiting for locator",
+    "waiting for selector",
+)
+
+# 同样指向定位失败，但措辞太普通，业务异常可能恰好包含（实测：一个写着
+# "no element matches the criteria" 的 ValueError 会被误判为定位失败）。
+# 因此只在异常确实由 Playwright 抛出时才认。
+_WEAK_MARKERS = (
     "element is not attached",
     "no element matches",
     "failed to find element",
 )
+
+# 页面级操作的超时：导航、等 URL、等加载状态、等事件。它们不是定位失败 ——
+# 接口挂了、跳转没发生，自愈介入只会替真实缺陷打掩护，而且抓到的快照是
+# 一个还没到位的页面，极易顶替到无关元素。这条是硬否决，优先于一切标志。
+_PAGE_LEVEL_OPS = (
+    "page.goto", "page.reload", "page.go_back", "page.go_forward",
+    "page.wait_for_url", "page.wait_for_load_state",
+    "page.wait_for_event", "page.wait_for_function",
+    "frame.goto", "browsercontext.", "browser.", "response.", "request.",
+)
+
+
+def _from_playwright(exc: BaseException) -> bool:
+    return type(exc).__module__.split(".")[0] == "playwright"
 
 
 def is_location_failure(exc: BaseException) -> bool:
@@ -35,14 +56,22 @@ def is_location_failure(exc: BaseException) -> bool:
 
     只靠捕获 Exception 无法区分「按钮找不到」和「断言不通过」，
     而自愈只允许介入前者。
+
+    判定刻意偏保守：拿不准就返回 False。漏判的代价是用例照常失败（等于
+    没有自愈，安全）；误判的代价是在一个不该动的场景上启动自愈，可能把
+    真失败变成假通过 —— 那是整套机制唯一不能失守的地方。
+
+    这也是为什么不再「凡 TimeoutError 即定位失败」：实测 page.goto 的导航
+    超时正是 TimeoutError，会被一路误判进自愈。
     """
     if isinstance(exc, ElementLocationError):
         return True
-    name = type(exc).__name__
-    if name in ("TimeoutError", "PlaywrightTimeoutError"):
-        return True
     text = str(exc).lower()
-    return any(h in text for h in _LOCATION_HINTS)
+    if any(op in text for op in _PAGE_LEVEL_OPS):
+        return False
+    if any(m in text for m in _LOCATOR_MARKERS):
+        return True
+    return _from_playwright(exc) and any(m in text for m in _WEAK_MARKERS)
 
 
 class LocatorInterceptor:
@@ -59,10 +88,12 @@ class LocatorInterceptor:
     MAX_ATTEMPTS = 25
 
     def __init__(self, page, owner, *, artifact: str = "", fingerprints: str = "",
-                 use_llm: bool = False, patch: bool = False):
+                 use_llm: bool = False, patch: bool = False, scope: str = ""):
         self.page = page
         self.owner = owner                  # PageObject 的类，用于取源码与命名
         self.artifact = artifact
+        # 组件的根节点选择器；整页对象为空。定位、指纹、自愈全部收窄到它之内。
+        self.scope = scope
         self.use_llm = use_llm
         self.patch = patch
         self._store = runtime.FingerprintStore(fingerprints) if fingerprints else None
@@ -109,13 +140,18 @@ class LocatorInterceptor:
     def _remember(self, selector: str, effective: str | None = None) -> None:
         """定位成功时记下命中元素的形态，作为将来自愈的依据。
 
-        每个选择器只记一次，避免给每次点击都加一趟 evaluate。
+        按 (原始选择器, 实际生效选择器) 去重，而不是只按原始选择器：自愈之后
+        生效的是新选择器，它命中的元素形态必须重新采一次。只按原始选择器记，
+        自愈后的指纹会永远停留在失效前的那一份。
+
+        去重仍然存在，是为了避免给每次点击都加一趟 evaluate。
         """
-        if selector in self._seen or self._store is None:
+        eff = effective or selector
+        if self._store is None or (selector, eff) in self._seen:
             return
-        self._seen.add(selector)
+        self._seen.add((selector, eff))
         self._store.put(self._fp_key(selector),
-                        runtime.capture_fingerprint(self.page, effective or selector))
+                        runtime.capture_fingerprint(self.page, eff, self.scope))
 
     def _intent(self, selector: str):
         try:
@@ -139,7 +175,8 @@ class LocatorInterceptor:
         intent = self._intent(selector)
         log.info("定位失败，尝试自愈：%s.%s = %s",
                  intent.page_object or "?", intent.constant, selector)
-        new = runtime.attempt(self.page, intent, self.artifact, use_llm=self.use_llm)
+        new = runtime.attempt(self.page, intent, self.artifact,
+                              use_llm=self.use_llm, scope=self.scope)
         if not new:
             log.info("未找到可靠替代，按原样失败：%s", selector)
             self._failed.add(selector)

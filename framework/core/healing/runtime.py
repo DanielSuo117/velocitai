@@ -61,10 +61,14 @@ _ROLE_JS = """
 
 # 只采集可能承载交互或语义的元素，避免把整棵 DOM 拖回 Python 侧。
 SNAPSHOT_JS = """
-() => {""" + _ROLE_JS + """
+(root) => {""" + _ROLE_JS + """
   const SEL = 'a,button,input,select,textarea,label,[role],[data-testid],[data-test],[data-qa],[data-cy],h1,h2,h3,li,td,th,span[id]';
+  // root 非空时只采它内部的元素：组件的自愈不得越出自己的根节点去别处找，
+  // 越界修复正是「顶替到无关元素」的典型路径。
+  const base = root ? document.querySelector(root) : document;
+  if (!base) return [];
   const out = [];
-  for (const e of document.querySelectorAll(SEL)) {
+  for (const e of base.querySelectorAll(SEL)) {
     const r = e.getBoundingClientRect();
     if (r.width === 0 && r.height === 0) continue;   // 不可见元素不参与自愈
     const attrs = {};
@@ -92,10 +96,11 @@ HEALED: list = []
 # 不能只躺在文件里等人发现。
 PATCHED: list = []
 
+# 接收元素本身而不是选择器字符串：自愈后的选择器可能是 Playwright 的
+# role= / text= 语法，document.querySelector 根本解析不了；组件的作用域
+# 前缀 `root >> sel` 同样不是合法 CSS。统一经由 locator 求值才通用。
 FINGERPRINT_JS = """
-(sel) => {""" + _ROLE_JS + """
-  const e = document.querySelector(sel);
-  if (!e) return null;
+(e) => {""" + _ROLE_JS + """
   return { tag: e.tagName.toLowerCase(), role: implicitRole(e), name: accName(e) };
 }
 """
@@ -138,26 +143,38 @@ class FingerprintStore:
             pass
 
 
-def capture_fingerprint(page, selector: str) -> dict | None:
+def scoped(selector: str, scope: str = "") -> str:
+    """把相对选择器落到实际定位范围。scope 为空即整页。
+
+    组件的选择器在源码里写成相对形态（`.btn-ok`），真正定位时必须带上根
+    节点（`.modal >> .btn-ok`）—— 否则同一个 class 在页面别处出现时会串台。
+    """
+    return f"{scope} >> {selector}" if scope else selector
+
+
+def capture_fingerprint(page, selector: str, scope: str = "") -> dict | None:
     """定位成功时记下它命中的元素形态。任何异常都不得影响正常用例。"""
     try:
-        return page.evaluate(FINGERPRINT_JS, selector)
+        return page.locator(scoped(selector, scope)).first.evaluate(FINGERPRINT_JS)
     except Exception:
         return None
 
 
-def snapshot(page) -> list:
+def snapshot(page, scope: str = "") -> list:
     try:
-        els = page.evaluate(SNAPSHOT_JS)
+        els = page.evaluate(SNAPSHOT_JS, scope or None)
         return els if isinstance(els, list) else []
     except Exception:
         return []
 
 
-def _resolves_uniquely(page, selector: str) -> bool:
-    """候选必须在真实页面上唯一命中且可见 —— 快照判定之外的最后一道闸。"""
+def _resolves_uniquely(page, selector: str, scope: str = "") -> bool:
+    """候选必须在真实页面上唯一命中且可见 —— 快照判定之外的最后一道闸。
+
+    唯一性也在 scope 之内判定：组件内唯一即可，不要求全页唯一。
+    """
     try:
-        loc = page.locator(selector)
+        loc = page.locator(scoped(selector, scope))
         if loc.count() != 1:
             return False
         return bool(loc.first.is_visible())
@@ -174,40 +191,44 @@ ELEMENT_FP_JS = """
 """
 
 
-def _element_of(page, selector: str):
+def _element_of(page, selector: str, scope: str = ""):
     """取出候选实际命中的那个元素的形态，用于校验它是否真是原来那个。
 
     不能用 document.querySelector：候选可能是 Playwright 的 role= / text= 语法，
     CSS 引擎不认。必须经由 locator 求值。
     """
     try:
-        return page.locator(selector).first.evaluate(ELEMENT_FP_JS)
+        return page.locator(scoped(selector, scope)).first.evaluate(ELEMENT_FP_JS)
     except Exception:
         return None
 
 
 def attempt(page, intent: Intent, artifact_path: str = "", test_id: str = "",
-            use_llm: bool = False) -> str | None:
+            use_llm: bool = False, scope: str = "") -> str | None:
     """尝试为一个失效的定位符找出替代选择器。
 
     顺序是「规则优先，模型兜底」：有 testid 摆在那儿时调模型既慢又贵，
     结论也不会更好；模型只在规则交白卷时出场。
 
+    scope 非空时全程收窄到该根节点之内（组件场景）：快照只采 root 内部的元素，
+    唯一性也在 root 内判定。返回的选择器保持**相对形态**，作用域由调用方重新
+    拼上 —— 这样自愈结果写回源码时仍是组件里原本的那种写法。
+
     返回可用的新选择器，或 None（找不到就按原样失败 —— 绝不放宽标准硬凑一个）。
     无论结果如何都会留下提案记录，供复核与写回。
     """
-    elements = snapshot(page)
+    elements = snapshot(page, scope)
     candidates = rank(intent, elements)
     chosen = None
     tried = []
     for cand in candidates:
         tried.append(cand.selector)
-        if _resolves_uniquely(page, cand.selector):
+        if _resolves_uniquely(page, cand.selector, scope):
             chosen = cand
             break
 
     if chosen is None and use_llm:
-        chosen = _llm_candidate(page, intent, elements, tried)
+        chosen = _llm_candidate(page, intent, elements, tried, scope)
         if chosen:
             candidates = candidates + [chosen]
 
@@ -228,7 +249,7 @@ def attempt(page, intent: Intent, artifact_path: str = "", test_id: str = "",
     return chosen.selector if chosen else None
 
 
-def _llm_candidate(page, intent: Intent, elements: list, tried: list):
+def _llm_candidate(page, intent: Intent, elements: list, tried: list, scope: str = ""):
     """让模型看页面结构推断，再用与规则候选完全相同的闸逐条校验。
 
     模型可以提出规则拼不出的候选，但**不能豁免任何一道闸**：
@@ -241,9 +262,9 @@ def _llm_candidate(page, intent: Intent, elements: list, tried: list):
         if not heal_llm.available():
             return None
         for sel in heal_llm.infer(intent, elements, tried):
-            if not _resolves_uniquely(page, sel):          # 闸②③：唯一 + 可见
+            if not _resolves_uniquely(page, sel, scope):   # 闸②③：唯一 + 可见
                 continue
-            el = _element_of(page, sel)
+            el = _element_of(page, sel, scope)
             if not el or not matches_intent(intent, el):   # 闸①：意图指纹
                 continue
             return Candidate(sel, "llm", 80,

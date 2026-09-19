@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>延迟渲染</title></head>
+<body>
+  <main id="root">
+    <!-- 早就渲染好的诱饵：tag/role/可及名称与登录按钮完全一致。
+         预探测语义下会顶替到它 —— 用例照绿，点的却是别的按钮。 -->
+    <button data-testid="other" data-name="decoy">登录</button>
+  </main>
+  <script src="_log.js"></script>
+  <script>
+    // SPA 常态：目标元素 1.5 秒后才挂载。Playwright 会等到它。
+    setTimeout(() => {
+      const b = document.createElement('button');
+      b.id = 'login-btn';
+      b.dataset.name = 'login-late';
+      b.textContent = '登录';
+      document.getElementById('root').appendChild(b);
+    }, 1500);
+  </script>
+</body></html>

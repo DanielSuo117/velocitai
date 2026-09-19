@@ -72,6 +72,42 @@ class TestLocationFailureClassification(unittest.TestCase):
         itc = LocatorInterceptor(FakePage(), OwnerPage)
         self.assertIsNone(itc.handle_failure(AssertionError("nope"), "#x"))
 
+    # ── 以下四条守的是实测出来的误判 ────────────────────────────────
+    def test_navigation_timeout_is_not_location_failure(self):
+        """导航超时也是 TimeoutError，但它不是定位失败。
+
+        实测：`page.goto: Timeout 30000ms exceeded` 曾被判为定位失败，于是在
+        一个根本没加载出来的页面上启动自愈 —— 既掩盖了真实故障（接口挂了），
+        抓到的又是半截页面，极易顶替到无关元素。
+        """
+        TE = type("TimeoutError", (Exception,), {})
+        self.assertFalse(is_location_failure(
+            TE("page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"/x\"")))
+
+    def test_wait_for_url_timeout_is_not_location_failure(self):
+        TE = type("TimeoutError", (Exception,), {})
+        self.assertFalse(is_location_failure(TE("page.wait_for_url: Timeout 15000ms exceeded")))
+
+    def test_business_exception_containing_keyword_is_not_location_failure(self):
+        """业务异常里恰好含定位措辞，不算定位失败。
+
+        实测：一个写着 "no element matches the criteria" 的 ValueError 会被
+        误判 —— 措辞太普通，不能只看文本。
+        """
+        self.assertFalse(is_location_failure(
+            ValueError("no element matches the criteria in the response payload")))
+
+    def test_playwright_error_with_weak_marker_is_location_failure(self):
+        """同样的措辞，由 Playwright 抛出时才认。"""
+        err = type("Error", (Exception,), {"__module__": "playwright._impl._errors"})
+        self.assertTrue(is_location_failure(err("no element matches selector '#x'")))
+
+    def test_bare_timeout_without_locator_marker_is_not_location_failure(self):
+        """光有「超时」二字不足以判定。拿不准就不愈 —— 漏判只是照常失败，
+        误判可能把真失败变成假通过。"""
+        TE = type("TimeoutError", (Exception,), {})
+        self.assertFalse(is_location_failure(TE("Timeout 30000ms exceeded.")))
+
 
 class TestExceptionHierarchy(unittest.TestCase):
     def test_all_inherit_framework_base(self):
@@ -141,6 +177,53 @@ class TestWriteBackDisabledByDefault(unittest.TestCase):
         itc = LocatorInterceptor(FakePage(), OwnerPage)
         self.assertFalse(itc.patch)
         self.assertFalse(itc.use_llm)
+
+
+class TestFingerprintRefresh(unittest.TestCase):
+    """指纹是自愈的判定依据。它停在失效前的那一份，判定就会越来越不准。"""
+
+    class _Loc:
+        def __init__(self, sel):
+            self.sel, self.first = sel, self
+
+        def evaluate(self, js):
+            return {"tag": "button", "role": "button", "name": self.sel}
+
+    class _Page:
+        url = "http://t/"
+
+        def locator(self, sel):
+            return TestFingerprintRefresh._Loc(sel)
+
+        def evaluate(self, js, arg=None):
+            return []
+
+    def _interceptor(self, path):
+        itc = LocatorInterceptor(self._Page(), OwnerPage, fingerprints=path)
+        return itc
+
+    def test_fingerprint_refreshes_after_healing(self):
+        """自愈后按新选择器重采指纹。
+
+        实测：去重只按原始选择器记，于是 note_success(原, 新) 被当成「已经
+        记过了」直接跳过 —— 指纹永远停留在失效前的那一份。
+        """
+        with tempfile.TemporaryDirectory() as d:
+            itc = self._interceptor(os.path.join(d, "fp.json"))
+            key = "OwnerPage.#login-btn"
+            itc.note_success("#login-btn")                       # 失效前
+            self.assertEqual(itc._store.get(key)["name"], "#login-btn")
+            itc.note_success("#login-btn", '[data-testid="login"]')   # 自愈后
+            self.assertEqual(itc._store.get(key)["name"], '[data-testid="login"]',
+                             "自愈后指纹没有刷新，判定依据停留在失效前的元素")
+
+    def test_same_selector_captured_only_once(self):
+        """去重仍在：同一选择器重复成功不会每次都加一趟 evaluate。"""
+        with tempfile.TemporaryDirectory() as d:
+            itc = self._interceptor(os.path.join(d, "fp.json"))
+            itc.note_success("#login-btn")
+            itc.note_success("#login-btn")
+            self.assertEqual(len(itc._seen), 1)
 
 
 if __name__ == "__main__":

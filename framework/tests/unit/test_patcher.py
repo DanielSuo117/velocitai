@@ -71,6 +71,24 @@ class TestPatchFile(unittest.TestCase):
             with open(p + ".heal-bak", encoding="utf-8") as f:
                 self.assertIn('SUBMIT_BTN = "#submit-order"', f.read())
 
+    def test_backup_keeps_the_pristine_original(self):
+        """连续写回时备份不得被覆盖。
+
+        实测：#v1 → #v2 → #v3 之后 .heal-bak 里躺着的是 #v2，最初那份永久丢了。
+        .heal-bak 的语义是「自愈动这个文件之前的样子」，只该在第一次写回时建。
+        """
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, "order_page.py")
+            with open(p, "w", encoding="utf-8") as f:
+                f.write(SRC)
+            self.assertTrue(patch_file(p, "SUBMIT_BTN", "#submit-order", "#v2"))
+            self.assertTrue(patch_file(p, "SUBMIT_BTN", "#v2", "#v3"))
+            with open(p, encoding="utf-8") as f:
+                self.assertIn('SUBMIT_BTN = "#v3"', f.read())
+            with open(p + ".heal-bak", encoding="utf-8") as f:
+                self.assertIn('SUBMIT_BTN = "#submit-order"', f.read(),
+                              "备份被第二次写回覆盖，原始定位符已不可还原")
+
     def test_missing_file_never_raises(self):
         self.assertFalse(patch_file("/nope/x/y.py", "A", "#a", "#b"))
 

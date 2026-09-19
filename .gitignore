@@ -22,3 +22,32 @@ framework/config/settings.py
 
 # 自愈写回源码前留下的备份（--self-heal=auto），属本地产物
 *.heal-bak
+
+# ── 本机独有的配置，不该带给别人 ──────────────────────────────────
+# Claude Code 的本地权限决定。此前只靠用户的全局 ignore 挡着 ——
+# 换一台机器或别人克隆本仓库时，它会直接被提交进去。
+.claude/settings.local.json
+
+# JetBrains
+.idea/
+
+# ── 任何形式的环境变量文件，一律不入库 ────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── 工具生成、可随时重建的产物 ────────────────────────────────────
+# 这几个目录的工具会往自己里面丢一个 .gitignore 来自我屏蔽，但那是工具的
+# 实现细节，换版本就可能没有。在仓库这一层显式声明，不依赖它。
+.pytest_cache/
+.code-review-graph/
+.superpowers/
+
+# Playwright 的 trace / 录像 / 报告默认落点（reports/ 之外的那些）
+test-results/
+playwright-report/
+*.log
+
+# ── iCloud Drive 在文件被驱逐时留下的占位符 ───────────────────────
+# 本仓库位于 iCloud Drive 目录下，这类占位符会伪装成真实文件。
+*.icloud

@@ -8,6 +8,7 @@
 """
 from __future__ import annotations
 
+import os
 import re
 import shutil
 
@@ -51,14 +52,19 @@ def patch_source(text: str, constant: str, old: str, new: str) -> tuple[str, boo
 
 def patch_file(path: str, constant: str, old: str, new: str,
                backup: bool = True) -> bool:
-    """改写文件里的常量。改前留 .heal-bak 备份，任何异常都返回 False 不抛。"""
+    """改写文件里的常量。改前留 .heal-bak 备份，任何异常都返回 False 不抛。
+
+    备份只在第一次写回时创建：.heal-bak 的语义是「自愈动这个文件之前的样子」。
+    每次都覆盖的话，同一个文件被连续愈两次后原始版本就永久丢了（实测
+    #v1 → #v2 → #v3 之后备份里躺着的是 #v2），想还原只能靠 git。
+    """
     try:
         with open(path, encoding="utf-8") as f:
             text = f.read()
         patched, changed = patch_source(text, constant, old, new)
         if not changed:
             return False
-        if backup:
+        if backup and not os.path.exists(path + ".heal-bak"):
             shutil.copy2(path, path + ".heal-bak")
         with open(path, "w", encoding="utf-8") as f:
             f.write(patched)

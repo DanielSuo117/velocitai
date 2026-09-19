@@ -6,14 +6,15 @@
   注释不是可有可无的装饰：它是选择器失效时自愈用来还原意图的依据。
 - 子类必须实现 is_page_loaded()，作为页面加载完成的判定锚点。
 
-所有定位都经由 _locate() 收口到拦截器，因此自愈对业务代码完全透明 ——
-页面对象不需要知道自愈存在。
+所有定位都经由 _act()/_locate() 收口到拦截器，因此自愈对业务代码完全透明 ——
+页面对象不需要知道自愈存在。定位作用域同样只有一个出口：scope_root()。
 """
 from __future__ import annotations
 
 from playwright.sync_api import Locator, Page
 
 from core.healing.interceptor import LocatorInterceptor
+from core.healing.runtime import scoped
 
 
 class BasePage:
@@ -39,8 +40,21 @@ class BasePage:
                 fingerprints=self.heal_fingerprints,
                 use_llm=self.self_heal_use_llm,
                 patch=self.self_heal_patch,
+                scope=self.scope_root(),
             )
         return self._interceptor
+
+    def scope_root(self) -> str:
+        """本对象的定位作用域根节点。整页对象为空串，组件覆盖为其 root。
+
+        **所有** locator 构造都经由 _scoped() 带上它。子类若只覆盖 _locate()
+        而不覆盖本方法，作用域会在 _act() 路径上悄悄丢失 —— 那正是本方法
+        存在的原因（组件的 root 曾因此完全失效，操作跑到整页去找元素）。
+        """
+        return ""
+
+    def _scoped(self, selector: str) -> str:
+        return scoped(selector, self.scope_root())
 
     def _locate(self, selector: str) -> Locator:
         """取一个 Locator。已愈过的选择器会返回修复后的版本。
@@ -50,8 +64,8 @@ class BasePage:
         下面封装好的方法，或用 _act()。
         """
         if not self.self_heal_enabled:
-            return self.page.locator(selector)
-        return self.page.locator(self.interceptor.current(selector))
+            return self.page.locator(self._scoped(selector))
+        return self.page.locator(self._scoped(self.interceptor.current(selector)))
 
     def _act(self, selector: str, op):
         """执行一次定位操作；**仅在操作真正因定位失败而报错后**才自愈并重试一次。
@@ -66,16 +80,16 @@ class BasePage:
         才算真的失效，判定依据比预探测强得多。
         """
         if not self.self_heal_enabled:
-            return op(self.page.locator(selector))
+            return op(self.page.locator(self._scoped(selector)))
         itc = self.interceptor
         effective = itc.current(selector)
         try:
-            result = op(self.page.locator(effective))
+            result = op(self.page.locator(self._scoped(effective)))
         except Exception as exc:
             new = itc.handle_failure(exc, selector)
             if not new:
                 raise                      # 愈不了就按原样失败，绝不吞异常
-            result = op(self.page.locator(new))
+            result = op(self.page.locator(self._scoped(new)))
             itc.note_success(selector, new)
             return result
         itc.note_success(selector, effective)

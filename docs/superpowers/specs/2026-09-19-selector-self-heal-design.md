@@ -71,7 +71,7 @@ UI 回归里最常见的失败不是功能坏了，而是**定位符过期**：�
 | `framework/core/healing/interceptor.py` | 拦截器：定位失败的统一入口，判定失败类型并调度自愈 | 否 |
 | `framework/core/healing/llm.py` | 模型推理后端，规则交白卷时出场 | 否 |
 | `framework/core/healing/patcher.py` | 把修复写回 PageObject 源码 | 否 |
-| `framework/core/base/base_page.py` | 把所有定位汇聚到 `_locate()`，委派给拦截器 | 是 |
+| `framework/core/base/base_page.py` | 把所有定位汇聚到 `_act()`/`_locate()`，委派给拦截器；`scope_root()` 收口作用域 | 是 |
 | `framework/conftest.py` | `--self-heal` 开关、终端汇总、strict 退出码 | 否 |
 
 两个核心模块都不 `import playwright`，因此可以用假 page 对象脱离浏览器单测。

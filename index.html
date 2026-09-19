@@ -217,7 +217,7 @@
   }
 
   .hero-metrics {
-    display: grid; grid-template-columns: repeat(4, 1fr);
+    display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 1px; margin-top: 4rem;
     background: rgba(255,255,255,0.06);
     border-radius: var(--radius-lg);
@@ -760,6 +760,7 @@
   }
 
   /* ─── GATE ─── */
+  .mech-section { background: #F5F3EF; }
   .gate-section { background: var(--bg); }
   .selfheal-section { background: #F5F3EF; }
   .gate-loop {
@@ -799,6 +800,7 @@
   .gate-dim h4 { font-size: 0.93rem; font-weight: 700; margin: 0.2rem 0 0.4rem; }
   .gate-dim p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.65; }
   .gate-sev { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+  .gate-sev.sev-4 { grid-template-columns: repeat(2, 1fr); }
   .gate-sev-item { border-radius: var(--radius-md); padding: 1rem 1.2rem; border: 1px solid var(--border); background: var(--bg-card); }
   .gate-sev-item .gsv-tag {
     font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem;
@@ -1000,6 +1002,7 @@
     .evo-grid { grid-template-columns: 1fr; }
     .gate-dims { grid-template-columns: 1fr; }
     .gate-sev { grid-template-columns: 1fr; }
+    .gate-sev.sev-4 { grid-template-columns: 1fr; }
     .gate-heal-steps { grid-template-columns: repeat(2, 1fr); }
     .gate-arrow { display: none; }
 
@@ -1283,6 +1286,14 @@
       <div class="hero-metric">
         <div class="num" data-target="75" data-suffix="%">0%</div>
         <div class="label"><span data-lang="zh">节省时间</span><span data-lang="en">Time Saved</span></div>
+      </div>
+      <div class="hero-metric">
+        <div class="num" data-target="17" data-suffix="">0</div>
+        <div class="label"><span data-lang="zh">落库违规码</span><span data-lang="en">Gate Codes</span></div>
+      </div>
+      <div class="hero-metric">
+        <div class="num" data-target="3" data-suffix="">0</div>
+        <div class="label"><span data-lang="zh">自愈防护闸</span><span data-lang="en">Healing Gates</span></div>
       </div>
     </div>
   </div>
@@ -1861,6 +1872,41 @@
 </section>
 
 <!-- 落库闸门 -->
+<!-- 两套机制速览 -->
+<section class="mech-section reveal" id="mechanisms">
+  <div class="section-inner">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;"><span data-lang="zh">两套机制</span><span data-lang="en">Two Mechanisms</span></div>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">两套机制 &middot; 速览</span><span data-lang="en">Two Mechanisms &middot; At a Glance</span></h2>
+      <p class="section-desc" style="margin:0 auto;">
+        <span data-lang="zh">一套防知识库变脏，一套防测试误报。解决的问题不同，遵循的却是同一条底线。</span><span data-lang="en">One keeps the knowledge base from rotting; the other keeps the suite from crying wolf. Different problems &mdash; the same hard line underneath.</span>
+      </p>
+    </div>
+
+    <div class="gate-dims">
+      <div class="gate-dim">
+        <div class="gd-code">HARNESS &middot; <span data-lang="zh">落库闸门</span><span data-lang="en">Sediment Gate</span></div>
+        <h4><span data-lang="zh">让自我进化不反噬</span><span data-lang="en">Keep Self-Evolution From Backfiring</span></h4>
+        <p>
+          <span data-lang="zh"><strong>问题</strong>&nbsp;写进 skills / rules / docs 的经验，会被之后每个会话当权威加载 &mdash; 一条错的会自我强化。<br><strong>做法</strong>&nbsp;写入、提交、巡检三个时机校验，4 个维度 17 个违规码。<br><strong>处置</strong>&nbsp;BLOCK 拒绝并回传修法 &middot; ASK 交人确认 &middot; WARN 放行提示。<br><strong>底线</strong>&nbsp;闸门自身出故障一律放行，绝不因为自己坏了而挡住你。</span><span data-lang="en"><strong>Problem</strong>&nbsp;Lessons written into skills / rules / docs load as authority in every later session &mdash; one bad entry reinforces itself.<br><strong>How</strong>&nbsp;Validates at write, at commit and in a full audit; 4 dimensions, 17 violation codes.<br><strong>Verdicts</strong>&nbsp;BLOCK rejects and hands back a fix &middot; ASK defers to you &middot; WARN passes with a note.<br><strong>Hard line</strong>&nbsp;Any internal failure means the write goes through &mdash; the gate never blocks you because it broke.</span>
+        </p>
+      </div>
+      <div class="gate-dim">
+        <div class="gd-code">RUNTIME &middot; <span data-lang="zh">选择器自愈</span><span data-lang="en">Self-Healing</span></div>
+        <h4><span data-lang="zh">让 UI 改版不再制造误报</span><span data-lang="en">Stop UI Churn From Faking Failures</span></h4>
+        <p>
+          <span data-lang="zh"><strong>问题</strong>&nbsp;定位符被前端构建改没了，用例报红 &mdash; 功能其实没坏，只是定位符过期。<br><strong>做法</strong>&nbsp;操作<strong>真正失败后</strong>才介入；先按规则重建（testid &rarr; id &rarr; role+名称），规则交白卷才让模型看页面推断。<br><strong>处置</strong>&nbsp;候选必须同时过三道闸 &mdash; 意图指纹一致、唯一命中、元素可见。<br><strong>底线</strong>&nbsp;找不到可靠替代就按原样失败，绝不凑一个。</span><span data-lang="en"><strong>Problem</strong>&nbsp;A build strips the locator and the test goes red &mdash; the feature is fine, the selector is just stale.<br><strong>How</strong>&nbsp;Steps in <strong>only after a real failure</strong>; rebuilds by rule first (testid &rarr; id &rarr; role+name), and calls the model only when the rules come back empty.<br><strong>Verdicts</strong>&nbsp;A candidate must clear all three gates &mdash; matching intent fingerprint, exactly one match, visible.<br><strong>Hard line</strong>&nbsp;No reliable replacement means the test fails as it would have. Nothing gets forced.</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="gate-failopen">
+      <p><span data-lang="zh"><strong>共同底线：宁可什么都不做，也不制造假象。</strong>闸门宁可放过一条待改进的沉淀，也不因自身故障挡住你的工作；自愈宁可让用例照常失败，也不顶替到另一个元素让它假通过。两者的失败方向，都朝着安全的那一侧。</span><span data-lang="en"><strong>Shared hard line: do nothing rather than fake something.</strong> The gate would rather let an imperfect entry through than block your work over its own bug; healing would rather let the test fail than stand in for some other element and call it green. Both fail toward the safe side.</span></p>
+    </div>
+
+  </div>
+</section>
+
 <section class="gate-section reveal" id="gate">
   <div class="section-inner">
     <div class="section-header" style="text-align:center;">
@@ -1969,15 +2015,15 @@
     <div class="gate-sub"><span data-lang="zh">三道闸各防什么</span><span data-lang="en">What Each Gate Prevents</span></div>
     <div class="gate-sev">
       <div class="gate-sev-item gsv-block">
-        <div class="gsv-tag">意图指纹一致</div>
+        <div class="gsv-tag"><span data-lang="zh">意图指纹一致</span><span data-lang="en">Intent Fingerprint</span></div>
         <p><span data-lang="zh">防顶替到<strong>无关元素</strong> &mdash; 例如把「取消」当成「提交」。</span><span data-lang="en">Prevents standing in for an <strong>unrelated element</strong> &mdash; e.g. mistaking Cancel for Submit.</span></p>
       </div>
       <div class="gate-sev-item gsv-ask">
-        <div class="gsv-tag">全页唯一命中</div>
+        <div class="gsv-tag"><span data-lang="zh">全页唯一命中</span><span data-lang="en">Unique Match</span></div>
         <p><span data-lang="zh">防在<strong>同类元素里挑错一个</strong> &mdash; 例如页面上有两个「删除」按钮。</span><span data-lang="en">Prevents <strong>picking the wrong one</strong> among siblings &mdash; e.g. two Delete buttons on the page.</span></p>
       </div>
       <div class="gate-sev-item gsv-warn">
-        <div class="gsv-tag">元素可见</div>
+        <div class="gsv-tag"><span data-lang="zh">元素可见</span><span data-lang="en">Visible</span></div>
         <p><span data-lang="zh">防命中<strong>隐藏的残留节点</strong> &mdash; DOM 里还在，但用户根本看不到。</span><span data-lang="en">Prevents matching a <strong>hidden leftover node</strong> &mdash; still in the DOM, invisible to the user.</span></p>
       </div>
     </div>
@@ -1991,12 +2037,12 @@
     </p>
     <div class="gate-dims">
       <div class="gate-dim">
-        <div class="gd-code">静态 · STATIC</div>
+        <div class="gd-code"><span data-lang="zh">静态</span><span data-lang="en">Static</span> · STATIC</div>
         <h4><span data-lang="zh">常量名 + 注释说明</span><span data-lang="en">Constant Name + Its Comment</span></h4>
         <p><span data-lang="zh">定位符写作 PageObject 类顶部常量，注释即语义 &mdash; <code>SUBMIT_BTN = "#submit-order"&nbsp;&nbsp;# P0: 提交订单</code>。这份说明本来就为人而写，顺手成了机器可读的意图。</span><span data-lang="en">Locators live as class constants whose comment carries the meaning &mdash; <code>SUBMIT_BTN = "#submit-order"&nbsp;&nbsp;# P0: submit order</code>. Written for humans, it doubles as machine-readable intent.</span></p>
       </div>
       <div class="gate-dim">
-        <div class="gd-code">动态 · REMEMBERED</div>
+        <div class="gd-code"><span data-lang="zh">动态</span><span data-lang="en">Learned</span> · REMEMBERED</div>
         <h4><span data-lang="zh">历史指纹</span><span data-lang="en">Historical Fingerprint</span></h4>
         <p><span data-lang="zh">定位符每次成功命中时，顺手记下它选中元素的标签、ARIA 角色与可及名称。<strong>这就是「基于旧有的逻辑」</strong> &mdash; 失效时据此重建，而不是凭空推测。</span><span data-lang="en">Every successful match records the element's tag, ARIA role and accessible name. <strong>This is the &ldquo;prior logic&rdquo;</strong> &mdash; healing rebuilds from it rather than guessing from scratch.</span></p>
       </div>
@@ -2008,13 +2054,30 @@
     <div class="gate-sub"><span data-lang="zh">四步重建</span><span data-lang="en">Four Steps</span></div>
     <div class="gate-heal-steps">
       <div class="ghs"><div class="ghs-n">01</div><p><span data-lang="zh"><strong>记忆</strong><br>定位成功时记下命中元素的形态 &mdash; 标签、ARIA role、可及名称。这份指纹就是日后自愈所依据的「旧有逻辑」。</span><span data-lang="en"><strong>Remember</strong><br>On every successful match, record the element's shape &mdash; tag, ARIA role, accessible name. That fingerprint is the prior logic healing later relies on.</span></p></div>
-      <div class="ghs"><div class="ghs-n">02</div><p><span data-lang="zh"><strong>推断</strong><br>失效时抓当前 DOM 快照，结合指纹与常量注释还原它本来想选中什么。</span><span data-lang="en"><strong>Infer</strong><br>On failure, snapshot the live DOM and combine fingerprint with the constant's own comment to recover intent.</span></p></div>
+      <div class="ghs"><div class="ghs-n">02</div><p><span data-lang="zh"><strong>推断</strong><br><strong>只在操作真正失败之后</strong>才介入 &mdash; 绝不提前探测，否则 SPA 还没渲染完就会被误判成定位失效。确认确属定位失败，才抓当前 DOM 快照，结合指纹与常量注释还原它本来想选中什么。</span><span data-lang="en"><strong>Infer</strong><br>Steps in <strong>only after an operation genuinely fails</strong> &mdash; never probing ahead, which would misread a still-rendering SPA as a dead locator. Once it's confirmed a location failure, it snapshots the live DOM and combines fingerprint with the constant's own comment to recover intent.</span></p></div>
       <div class="ghs"><div class="ghs-n">03</div><p><span data-lang="zh"><strong>验证</strong><br>按稳定性排序候选（testid &rarr; id &rarr; role+名称），逐个在真实页面上实跑，必须唯一命中。</span><span data-lang="en"><strong>Verify</strong><br>Rank candidates by durability (testid &rarr; id &rarr; role+name) and actually run each against the live page &mdash; must match exactly once.</span></p></div>
       <div class="ghs"><div class="ghs-n">04</div><p><span data-lang="zh"><strong>写回</strong><br>运行期只写提案，<strong>绝不改源码</strong>；写回由 skill 复核后进行，并同样要过落库闸门。</span><span data-lang="en"><strong>Write back</strong><br>The run only emits a proposal &mdash; it <strong>never rewrites source</strong>. Write-back happens under review, and must clear the sediment gate too.</span></p></div>
     </div>
 
-    <div class="gate-sub"><span data-lang="zh">三种模式</span><span data-lang="en">Three Modes</span></div>
-    <div class="gate-sev">
+    <div class="gate-sub"><span data-lang="zh">规则优先，模型兜底</span><span data-lang="en">Rules First, Model as Fallback</span></div>
+    <div class="gate-dims">
+      <div class="gate-dim">
+        <div class="gd-code">01 &middot; RULES</div>
+        <h4><span data-lang="zh">规则先上</span><span data-lang="en">Rules Go First</span></h4>
+        <p><span data-lang="zh">按稳定性排序拼候选：testid &rarr; id &rarr; role+可及名称 &rarr; 文本 &rarr; 稳定类名；构建生成的哈希类名直接跳过 &mdash; 拿它当锚点等于把下一次失效写进代码。<strong>有稳定锚点摆在那儿时，模型根本不会被调用</strong> &mdash; 既慢又贵，结论也不会更好。</span><span data-lang="en">Candidates are built in order of durability: testid &rarr; id &rarr; role+accessible name &rarr; text &rarr; stable class. Build-generated hash classes are skipped outright &mdash; anchoring to one just schedules the next breakage. <strong>When a stable anchor is right there, the model is never called</strong> &mdash; slower, costlier, and no better.</span></p>
+      </div>
+      <div class="gate-dim">
+        <div class="gd-code">02 &middot; MODEL</div>
+        <h4><span data-lang="zh">规则交白卷才轮到模型</span><span data-lang="en">The Model Only When Rules Come Back Empty</span></h4>
+        <p><span data-lang="zh">模型拿到的不是「猜一个选择器」，而是失效的定位符、常量名、代码注释里的意图、上次命中元素的形态，以及规则已经试过但不可用的候选。它能做规则做不到的事 &mdash; <strong>用结构上下文消歧</strong>，例如页面上两个按钮文案完全相同时，给出 <code>main &gt;&gt; role=button[name="登录"]</code>。规则不会拼这种复合选择器。</span><span data-lang="en">The model isn't asked to guess a selector. It receives the dead locator, the constant's name, the intent from its code comment, the shape of the element that last matched, and every candidate the rules already ruled out. It does what rules cannot &mdash; <strong>disambiguate by structural context</strong>, e.g. returning <code>main &gt;&gt; role=button[name="Login"]</code> when two buttons carry identical labels. Rules never compose selectors like that.</span></p>
+      </div>
+    </div>
+    <div class="gate-failopen" style="border-style:solid;border-color:var(--red);background:var(--red-bg);">
+      <p><span data-lang="zh"><strong>模型只有提名权，没有判决权。</strong>它给出的候选必须过<strong>与规则候选完全相同</strong>的三道闸 &mdash; 唯一命中、可见、意图指纹一致。少放行一条，「让模型判断」就成了绕过防假通过保证的后门。没有 API key 时静默退回纯规则模式，不会让任何用例因此失败。</span><span data-lang="en"><strong>The model nominates; it never decides.</strong> Every candidate it returns must clear <strong>exactly the same three gates</strong> as a rule-built one &mdash; unique match, visible, matching intent fingerprint. Waive even one and &ldquo;let the model decide&rdquo; becomes a backdoor around the no-false-pass guarantee. With no API key it silently falls back to rules only, and no test fails because of it.</span></p>
+    </div>
+
+    <div class="gate-sub"><span data-lang="zh">四档模式</span><span data-lang="en">Four Modes</span></div>
+    <div class="gate-sev sev-4">
       <div class="gate-sev-item gsv-warn">
         <div class="gsv-tag">off</div>
         <p><span data-lang="zh">默认。行为与未引入自愈时逐字一致，零额外开销。</span><span data-lang="en">The default. Behaves exactly as before self-healing existed, with zero overhead.</span></p>
@@ -2026,6 +2089,10 @@
       <div class="gate-sev-item gsv-block">
         <div class="gsv-tag">strict</div>
         <p><span data-lang="zh">同 on，但只要发生过自愈就以非零码结束 &mdash; 让 CI 看见定位符漂移。</span><span data-lang="en">Same as on, but exits non-zero if anything was healed &mdash; so CI sees the drift.</span></p>
+      </div>
+      <div class="gate-sev-item gsv-ask">
+        <div class="gsv-tag">auto</div>
+        <p><span data-lang="zh">同 on，并在规则交白卷时让模型推断，同时把修复写回 PageObject 源码。需要 API key，且会改动工作区文件 &mdash; 因此必须显式选择。</span><span data-lang="en">Same as on, plus the model infers when rules come back empty, and the fix is written back into the PageObject source. Needs an API key and touches files in your working tree &mdash; hence opt-in only.</span></p>
       </div>
     </div>
 
