@@ -13,9 +13,53 @@ import os
 
 from pages.self_heal import HealProposal, Intent, rank, record
 
+# 隐式 ARIA role 推导。
+# 页面 JS 里没有 element.computedRole（实测确认不存在于 Element.prototype），
+# 只用 getAttribute('role') 的话，原生 <button>/<a> 几乎全部得不到 role ——
+# 于是「role + 可及名称」策略与指纹的 role 维度都会静默失效。
+# 这里只覆盖定位符实际会指向的交互元素，宁缺毋滥。
+_ROLE_JS = """
+  const implicitRole = (e) => {
+    const explicit = e.getAttribute('role');
+    if (explicit) return explicit;
+    const t = e.tagName.toLowerCase();
+    if (t === 'button') return 'button';
+    if (t === 'a') return e.hasAttribute('href') ? 'link' : null;
+    if (t === 'select') return e.multiple ? 'listbox' : 'combobox';
+    if (t === 'textarea') return 'textbox';
+    if (/^h[1-6]$/.test(t)) return 'heading';
+    if (t === 'li') return 'listitem';
+    if (t === 'td') return 'cell';
+    if (t === 'th') return 'columnheader';
+    if (t === 'input') {
+      const ty = (e.getAttribute('type') || 'text').toLowerCase();
+      if (ty === 'checkbox') return 'checkbox';
+      if (ty === 'radio') return 'radio';
+      if (ty === 'submit' || ty === 'button' || ty === 'reset') return 'button';
+      if (ty === 'search') return 'searchbox';
+      if (ty === 'hidden') return null;
+      return 'textbox';
+    }
+    return null;
+  };
+  // 可及名称：显式标注优先，其次关联 label，最后回退到自身文本。
+  // 按钮和链接的可及名称本就来自其文本内容，不回退等于把它们的名称丢掉。
+  const accName = (e) => {
+    const explicit = (e.getAttribute('aria-label') || e.getAttribute('title') || '').trim();
+    if (explicit) return explicit;
+    const lbl = (e.labels && e.labels[0] && e.labels[0].innerText || '').trim();
+    if (lbl) return lbl;
+    const t = e.tagName.toLowerCase();
+    if (t === 'button' || t === 'a' || t === 'label' || /^h[1-6]$/.test(t)) {
+      return (e.innerText || '').trim().slice(0, 60) || null;
+    }
+    return null;
+  };
+"""
+
 # 只采集可能承载交互或语义的元素，避免把整棵 DOM 拖回 Python 侧。
 SNAPSHOT_JS = """
-() => {
+() => {""" + _ROLE_JS + """
   const SEL = 'a,button,input,select,textarea,label,[role],[data-testid],[data-test],[data-qa],[data-cy],h1,h2,h3,li,td,th,span[id]';
   const out = [];
   for (const e of document.querySelectorAll(SEL)) {
@@ -26,9 +70,8 @@ SNAPSHOT_JS = """
     out.push({
       tag: e.tagName.toLowerCase(),
       attrs: attrs,
-      role: e.getAttribute('role') || e.computedRole || null,
-      name: (e.getAttribute('aria-label') || e.getAttribute('title')
-             || (e.labels && e.labels[0] && e.labels[0].innerText) || '').trim() || null,
+      role: implicitRole(e),
+      name: accName(e),
       text: (e.innerText || e.value || '').trim().slice(0, 120),
       classes: Array.from(e.classList || []),
     });
@@ -44,15 +87,10 @@ SNAPSHOT_JS = """
 HEALED: list = []
 
 FINGERPRINT_JS = """
-(sel) => {
+(sel) => {""" + _ROLE_JS + """
   const e = document.querySelector(sel);
   if (!e) return null;
-  return {
-    tag: e.tagName.toLowerCase(),
-    role: e.getAttribute('role') || null,
-    name: (e.getAttribute('aria-label') || e.getAttribute('title') || '').trim()
-          || (e.innerText || '').trim().slice(0, 60) || null,
-  };
+  return { tag: e.tagName.toLowerCase(), role: implicitRole(e), name: accName(e) };
 }
 """
 

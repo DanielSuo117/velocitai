@@ -144,7 +144,11 @@ python3 -m unittest discover -s tests/unit -t .
 
 - 指纹在首次成功命中后才建立；全新定位符第一次就失效时，只能依赖注释说明，判定收紧到近乎无法自愈。这是有意的：没有证据就不猜。
 - 快照上限 400 个元素，超大页面可能漏掉目标。
-- `role` 取自显式 `role` 属性，不做完整的隐式 ARIA 角色推导。
+- 隐式 ARIA 角色只覆盖定位符实际会指向的交互元素（button / a[href] / input 各 type / select / textarea / h1-6 / li / td / th），不是完整的 ARIA 推导表。
+  实现期实测修正：页面 JS 中不存在 `element.computedRole`，若只取显式 `role` 属性，
+  原生 `<button>` 几乎全部拿不到 role，「role + 可及名称」策略与指纹的 role 维度会**静默失效**；
+  且该策略原本拼的是 CSS 属性选择器 `tag[role="button"]`，在真实页面命中 0 个元素且未编码 name，
+  现改用 Playwright 的 `role=` 选择器引擎（按隐式角色计算）。
 - 候选策略里的文本匹配对国际化页面敏感（切换语言会使文本候选失效）。
 
 ## 12. 与落库闸门的关系

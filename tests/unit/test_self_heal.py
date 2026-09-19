@@ -71,6 +71,20 @@ class TestRanking(unittest.TestCase):
         self.assertTrue(cls)
         self.assertEqual(cls[0].selector, "button.btn")
 
+    def test_role_name_uses_playwright_role_engine(self):
+        # 不能拼 CSS 属性选择器：tag[role="button"] 只匹配显式标注了 role 的元素，
+        # 原生 <button> 几乎从不标注，实测真实页面命中 0 个；且那种写法丢掉了 name。
+        e = el(role="button", name="登录", text="登录")
+        rn = [c for c in rank(self.intent, [e]) if c.strategy == "role-name"]
+        self.assertEqual(rn[0].selector, 'role=button[name="登录"]')
+
+    def test_role_name_escapes_quotes_in_name(self):
+        e = el(role="button", name='说"是"', text="x")
+        intent = Intent(constant="C", selector="#c", tag="button",
+                        role="button", name='说"是"')
+        rn = [c for c in rank(intent, [e]) if c.strategy == "role-name"]
+        self.assertEqual(rn[0].selector, 'role=button[name="说\\"是\\""]')
+
     def test_ordered_by_confidence_desc(self):
         e = el(testid="t", eid="login-btn", role="button", name="登录", text="登录")
         conf = [c.confidence for c in rank(self.intent, [e])]

@@ -124,7 +124,11 @@ def _candidates_for(el: dict) -> list[Candidate]:
 
     role, name = el.get("role"), el.get("name")
     if role and name:
-        out.append(Candidate(f'{tag}[role="{_css_escape(role)}"]', "role-name", 85,
+        # 必须用 Playwright 的 role 选择器引擎，不能拼 CSS 属性选择器：
+        # tag[role="button"] 只匹配显式写了 role 属性的元素，而原生 <button>
+        # 几乎从不显式标注 —— 实测真实页面命中 0 个，且那种写法还把 name 丢了，
+        # 即便命中也会匹配到所有同类元素。role= 引擎按隐式 ARIA 角色计算。
+        out.append(Candidate(f'role={role}[name="{_css_escape(name)}"]', "role-name", 85,
                              f"ARIA role={role} + 可及名称「{name}」，跟随语义而非样式"))
 
     text = (el.get("text") or "").strip()
