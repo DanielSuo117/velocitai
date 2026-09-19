@@ -101,6 +101,7 @@ class TestSize(unittest.TestCase):
     def test_block_over_500(self):
         vs = structure.check(P("rules/x/y.md"), "❌\n✅\n" + "行\n" * 520, self.root)
         self.assertIn("STR006", codes(vs))
+        self.assertNotIn("STR005", codes(vs))
 
     def test_superpowers_exempt(self):
         vs = structure.check(P("docs/superpowers/plans/p.md"), "行\n" * 800, self.root)

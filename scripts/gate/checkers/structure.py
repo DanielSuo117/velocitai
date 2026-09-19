@@ -13,7 +13,7 @@ ROUTER_SKILL = "skills/SKILL.md"
 INDEX_SUFFIXES = ("-index.md", "-overview.md")
 
 _FM_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---", re.S)
-_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")  # 同时覆盖 Markdown 链接和图片语法
 
 
 def _frontmatter(text):
@@ -59,7 +59,7 @@ def _check_skill_frontmatter(rel, rel_s, text):
         return [Violation(
             "STR001", Severity.BLOCK, rel_s, 1,
             "SKILL.md 缺少 YAML frontmatter",
-            "在文件开头加 ---\\nname: <目录名>\\ndescription: <触发词>\\n---",
+            "在文件开头加：\n---\nname: <目录名>\ndescription: <触发词>\n---",
         )]
     name = _fm_field(fm, "name")
     if name is None or _fm_field(fm, "description") is None:
