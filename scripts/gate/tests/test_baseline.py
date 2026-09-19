@@ -41,9 +41,19 @@ class TestBaseline(unittest.TestCase):
         self.assertEqual(asks, [], "audit 模式不应产生 ASK")
 
     def test_audit_actually_scanned_files(self):
-        # 防止 glob 写错导致"零违规"其实是"零扫描"
-        self.assertTrue((REPO / "skills" / "quick-debug" / "SKILL.md").exists())
-        self.assertGreaterEqual(len(list(REPO.glob("rules/**/*.md"))), 14)
+        # 防止 glob 写错导致「零违规」其实是「零扫描」。
+        # 断言必须落在 audit 自身的产物上 —— 检查磁盘文件存在、或在测试里另跑一次
+        # glob，都只能证明文件系统没问题，证明不了 run_audit 走到过那些文件。
+        evi003 = [
+            v for v in self.violations
+            if v.code == "EVI003" and v.path.endswith("skill-authoring.md")
+        ]
+        self.assertGreaterEqual(
+            len(evi003), 3,
+            "audit 未产出 skill-authoring.md 的 EVI003 —— 说明它很可能根本没扫到 rules/，"
+            "此时其他断言的「零 BLOCK」是假绿。实际产出：\n"
+            + "\n".join(v.render() for v in self.violations),
+        )
 
 
 if __name__ == "__main__":
