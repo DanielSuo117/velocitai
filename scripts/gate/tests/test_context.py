@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 
@@ -134,6 +135,58 @@ class TestViolation(unittest.TestCase):
     def test_render_without_line(self):
         v = Violation("STR003", Severity.BLOCK, "rules/x.md", None, "缺反例", "补反例")
         self.assertIn("rules/x.md —", v.render())
+
+
+class TestGitIgnoredFailOpenDirection(unittest.TestCase):
+    """git 答不出来时，git_ignored 必须返回 True。
+
+    这是整套闸门里唯一一处 fail-open 方向会被搞反的函数。两个调用方
+    （structure 的 STR004、registry 的 REG002）都把 False 读作「没被忽略 →
+    这是死链 → BLOCK」。于是「git 查询失败」返回 False 等于「关掉
+    CLAUDE.local.md 豁免并凭空造一条 BLOCK」，而 commit 模式的 BLOCK 会 deny
+    `git commit` —— 一次 5 秒超时就能把人锁在无法提交的状态，正是 §3 / §9.4
+    明令禁止的 fail-closed。
+
+    退出码语义：0 = 确实被忽略；1 = 确实未被忽略；≥2 = git 自己出错（未知）。
+    只有 1 才允许返回 False。
+    """
+
+    def setUp(self):
+        context.git_ignored.cache_clear()
+        self.addCleanup(context.git_ignored.cache_clear)
+
+    def _with_run(self, fn):
+        return mock.patch.object(context.subprocess, "run", fn)
+
+    def _rc(self, code):
+        return lambda *a, **k: subprocess.CompletedProcess([], code, b"", b"")
+
+    def test_timeout_returns_true(self):
+        def boom(*a, **k):
+            raise subprocess.TimeoutExpired(cmd="git", timeout=5)
+
+        with self._with_run(boom):
+            self.assertTrue(context.git_ignored("a/b.md", "/nonexistent-root"))
+
+    def test_git_missing_returns_true(self):
+        def boom(*a, **k):
+            raise FileNotFoundError("git")
+
+        with self._with_run(boom):
+            self.assertTrue(context.git_ignored("a/b.md", "/nonexistent-root"))
+
+    def test_fatal_exit_code_returns_true(self):
+        # 128 = not a git repository / index.lock 残留 / 仓库损坏
+        with self._with_run(self._rc(128)):
+            self.assertTrue(context.git_ignored("a/b.md", "/nonexistent-root"))
+
+    def test_exit_code_zero_means_ignored(self):
+        with self._with_run(self._rc(0)):
+            self.assertTrue(context.git_ignored("a/b.md", "/nonexistent-root"))
+
+    def test_exit_code_one_is_the_only_false(self):
+        with self._with_run(self._rc(1)):
+            self.assertFalse(context.git_ignored("a/b.md", "/nonexistent-root"))
 
 
 if __name__ == "__main__":

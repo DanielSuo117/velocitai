@@ -54,7 +54,11 @@ def run_write(payload):
     old, new = ti.get("old_string"), ti.get("new_string")
     if old is None or new is None or old not in cur:
         return []  # fail-open：匹配不上就不猜
-    return _content_checks(rel, cur.replace(old, new, 1), root, is_new=False)
+    # replace_all 必须如实模拟：一次 replace_all 把某个 rules 文件里的 ❌ 全删掉，
+    # 若只替换第一处，重建出来的全文仍留着其余 ❌，STR003 不触发 —— 主执行路径上
+    # 的静默假阴性。
+    expected = cur.replace(old, new) if ti.get("replace_all") else cur.replace(old, new, 1)
+    return _content_checks(rel, expected, root, is_new=False)
 
 
 def _staged(root):
@@ -68,6 +72,29 @@ def _staged(root):
     if r.returncode != 0:
         return []
     return [l.strip() for l in r.stdout.splitlines() if l.strip()]
+
+
+def _staged_text(root, name):
+    """读暂存区（index）里的内容，而不是工作区。
+
+    要提交进去的是 index 中的 blob。读工作区会两头都错：暂存了坏版本、随后在工作区
+    改好 → 坏 blob 被放行；暂存了好版本、工作区正写到一半 → 凭空 BLOCK。
+    任何失败（文件已从 index 删除 / 非 UTF-8 / git 不可用）都返回 None 跳过该文件，
+    绝不抛出 —— fail-open。
+    """
+    try:
+        r = subprocess.run(
+            ["git", "-C", str(root), "show", f":{name}"],
+            capture_output=True, timeout=10,
+        )
+    except Exception:
+        return None
+    if r.returncode != 0:
+        return None
+    try:
+        return r.stdout.decode("utf-8")
+    except Exception:
+        return None
 
 
 def run_commit(root):
@@ -86,11 +113,11 @@ def run_commit(root):
             continue
         if kind not in (context.SKILL, context.RULE, context.DOC):
             continue
-        p = root / n
-        if not p.exists():
+        text = _staged_text(root, n)
+        if text is None:
             continue
         try:
-            out.extend(_content_checks(rel, p.read_text(encoding="utf-8"), root))
+            out.extend(_content_checks(rel, text, root))
         except Exception:
             continue
 

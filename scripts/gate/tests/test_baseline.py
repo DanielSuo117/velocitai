@@ -13,6 +13,7 @@
 import pathlib
 import sys
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 
@@ -54,6 +55,54 @@ class TestBaseline(unittest.TestCase):
             "此时其他断言的「零 BLOCK」是假绿。实际产出：\n"
             + "\n".join(v.render() for v in self.violations),
         )
+
+
+class TestAuditCoverage(unittest.TestCase):
+    """audit 必须真的走到三个 glob 根，每根各有锚点。
+
+    「零 BLOCK」有两种成因：都合规，或者 glob 写错、一个文件都没扫到。后者会把
+    上面所有断言变成假绿。这里对 **audit 自己喂给 checker 的路径集合**取证 ——
+    在测试里另跑一遍 glob 只能证明文件系统没问题，证明不了 run_audit 走到过。
+
+    锚点选的是 CLAUDE.md 路由表点名的结构性文件，不是文件总数：总数对任何无关的
+    内容增删都会变红，而结构性文件的消失本来就该让人来改这个测试。
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        seen = []
+        real = runner._content_checks
+
+        def spy(rel, text, root, is_new=False):
+            seen.append(str(rel))
+            return real(rel, text, root, is_new=is_new)
+
+        with mock.patch.object(runner, "_content_checks", spy):
+            runner.run_audit(REPO)
+        cls.scanned = set(seen)
+
+    def test_skills_glob_reached_router_and_nested(self):
+        # skills/SKILL.md 验证根层，skills/<name>/SKILL.md 验证 ** 递归那一层
+        self.assertIn("skills/SKILL.md", self.scanned, self._hint())
+        self.assertIn("skills/quick-debug/SKILL.md", self.scanned, self._hint())
+
+    def test_rules_glob_reached_root_and_nested(self):
+        self.assertIn("rules/rules-index.md", self.scanned, self._hint())
+        self.assertIn("rules/agent-behavior/evolution-gate.md", self.scanned, self._hint())
+
+    def test_docs_glob_reached(self):
+        self.assertIn("docs/architecture.md", self.scanned, self._hint())
+        self.assertIn("docs/setup.md", self.scanned, self._hint())
+
+    def test_superpowers_never_scanned(self):
+        # docs/*.md 是非递归的，且 classify 另有豁免 —— 两道防线都不该让 spec/plan 进来
+        leaked = [p for p in self.scanned if p.startswith("docs/superpowers/")]
+        self.assertEqual(leaked, [], f"docs/superpowers/ 不应被扫描：{leaked}")
+
+    @classmethod
+    def _hint(cls):
+        return ("audit 没扫到该文件 —— 对应的 glob 很可能坏了，此时「零 BLOCK」是假绿。"
+                f"实际扫到 {len(cls.scanned)} 个文件：" + ", ".join(sorted(cls.scanned)))
 
 
 if __name__ == "__main__":

@@ -12,8 +12,12 @@ MAX_LINES_BLOCK = 500
 ROUTER_SKILL = "skills/SKILL.md"
 INDEX_SUFFIXES = ("-index.md", "-overview.md")
 
-_FM_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---", re.S)
+# 容忍开头的 UTF-8 BOM 与空行：编辑器很容易留下这两者，而它们不影响 YAML
+# frontmatter 的语义。之前严格从第 0 个字符起匹配 ---，一个 BOM 就会让文件被判
+# 成「缺 frontmatter」（STR001），修法提示还让人再加一遍本来就有的 frontmatter。
+_FM_RE = re.compile(r"\A\ufeff?(?:[ \t]*\r?\n)*---[ \t]*\r?\n(.*?)\r?\n---", re.S)
 _LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")  # 同时覆盖 Markdown 链接和图片语法
+_FM_COMMENT_RE = re.compile(r"\s+#.*$")
 
 
 def _frontmatter(text):
@@ -22,10 +26,24 @@ def _frontmatter(text):
 
 
 def _fm_field(fm, key):
+    """取 frontmatter 字段的**值**，剥掉 YAML 引号与行尾注释。
+
+    不剥的话 `name: "demo"` 取出的是带引号的 '"demo"'，STR002 会报出
+    「name='"demo"' 与目录名 'demo' 不一致，修法：把 name 改为 demo」——
+    一条要求把值改成它已经是的样子的、无法满足的指令，足以让自纠正的 agent
+    陷入改了又报的死循环。闸门吐垃圾，正是本项目要防的那类事故。
+    """
     prefix = key + ":"
     for line in fm.splitlines():
-        if line.startswith(prefix):
-            return line[len(prefix):].strip()
+        if not line.startswith(prefix):
+            continue
+        val = line[len(prefix):].strip()
+        quote = val[:1]
+        if quote in ('"', "'"):
+            end = val.find(quote, 1)
+            if end != -1:
+                return val[1:end]        # 引号内原样保留，闭合引号之后是注释
+        return _FM_COMMENT_RE.sub("", val).strip()   # 无引号：` #` 起为行内注释
     return None
 
 

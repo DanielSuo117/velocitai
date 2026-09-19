@@ -96,5 +96,84 @@ class TestHashClass(unittest.TestCase):
                 self.assertIn("GEN003", codes(genericity.check(SKILL, line + "\n")))
 
 
+class TestAbsPathPrefixesMatchSpec(unittest.TestCase):
+    r"""GEN002 的前缀表必须严格等于 spec §6.2：/Users/ 、/Applications/ 、C:\ 。
+
+    正则不锚定行首，多一个 /home/ 就会把普通的 URL 路径段判成本地绝对路径 ——
+    Playwright 项目里 goto("/home/...") 是最常见的写法之一。
+    """
+
+    def test_url_path_segment_home_not_flagged(self):
+        vs = genericity.check(SKILL, 'self.page.goto("/home/dashboard")\n')
+        self.assertEqual(codes(vs), [])
+
+    def test_external_home_url_not_flagged(self):
+        vs = genericity.check(SKILL, "见 https://example.com/home/list\n")
+        self.assertEqual(codes(vs), [])
+
+    def test_relative_home_link_not_flagged(self):
+        vs = genericity.check(SKILL, "路由 /home/settings 对应设置页\n")
+        self.assertEqual(codes(vs), [])
+
+    # ---- 真阳性方向：spec 列出的三种前缀必须照样拦下 ----
+    def test_users_path_still_blocks(self):
+        self.assertIn("GEN002", codes(genericity.check(SKILL, "见 /Users/alice/proj/x.py\n")))
+
+    def test_applications_path_still_blocks(self):
+        self.assertIn(
+            "GEN002",
+            codes(genericity.check(SKILL, "见 /Applications/Chrome.app/x\n")))
+
+    def test_windows_path_still_blocks(self):
+        self.assertIn("GEN002", codes(genericity.check(SKILL, "见 C:\\Users\\alice\\x.py\n")))
+
+
+class TestTeachingLineExemptionCoversAllCodes(unittest.TestCase):
+    """反例教学豁免必须统一作用于 GEN001–GEN004，不能只给 GEN003。
+
+    本项目自己的规范要求每条规则配 ❌ 反例 —— 包括 P0.5「skill 正文不得写入项目
+    专有标识」这一条本身。若只豁免 GEN003，闸门会把它自己要求人写的那个 ❌ 反例
+    判成违规：闸门禁止教它存在的意义所在的那件事。
+    """
+
+    def test_counter_example_url_exempt(self):
+        vs = genericity.check(SKILL, '❌ 反例：page.goto("https://portal.example-x.net/login")\n')
+        self.assertEqual(codes(vs), [])
+
+    def test_bad_comment_url_exempt(self):
+        vs = genericity.check(SKILL, "# BAD: https://portal.example-x.net/login\n")
+        self.assertEqual(codes(vs), [])
+
+    def test_counter_example_abs_path_exempt(self):
+        vs = genericity.check(SKILL, "❌ 不要写 /Users/alice/proj\n")
+        self.assertEqual(codes(vs), [])
+
+    def test_forbidden_marker_line_exempt(self):
+        vs = genericity.check(SKILL, "禁止在 skill 里写 /Users/alice/proj\n")
+        self.assertEqual(codes(vs), [])
+
+    def test_table_row_exempt(self):
+        vs = genericity.check(SKILL, "| ❌ 写死 | `https://portal.example-x.net` |\n")
+        self.assertEqual(codes(vs), [])
+
+    def test_checklist_item_exempt(self):
+        vs = genericity.check(SKILL, "- [ ] 正文没有 /Users/ 开头的绝对路径\n")
+        self.assertEqual(codes(vs), [])
+
+    # ---- 真阳性方向：不带教学标记的行必须照样拦下 ----
+    def test_plain_url_still_blocks(self):
+        vs = genericity.check(SKILL, 'page.goto("https://portal.example-x.net/login")\n')
+        self.assertIn("GEN001", codes(vs))
+
+    def test_plain_abs_path_still_blocks(self):
+        vs = genericity.check(SKILL, 'BASE = "/Users/alice/proj"\n')
+        self.assertIn("GEN002", codes(vs))
+
+    def test_good_marked_line_is_not_a_teaching_line(self):
+        # ✅ 正例里写死真 URL 依然是写死真 URL —— 豁免只认反例标记
+        vs = genericity.check(SKILL, '✅ 正例：page.goto("https://portal.example-x.net")\n')
+        self.assertIn("GEN001", codes(vs))
+
+
 if __name__ == "__main__":
     unittest.main()

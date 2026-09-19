@@ -63,6 +63,30 @@ class TestRunWrite(unittest.TestCase):
         p = self._payload("Edit", "rules/r.md", old_string="❌ 反例\n", new_string="")
         self.assertIn("STR003", codes(runner.run_write(p)))
 
+    def test_edit_replace_all_strips_every_counter_example(self):
+        # replace_all 的编辑把文件里每一处 ❌ 都删掉 —— 只模拟第一处的话，重建出来
+        # 的全文里仍留着第二处 ❌，STR003 不触发，坏内容在主执行路径上被静默放行。
+        target = self.root / "rules" / "r.md"
+        target.write_text("❌ 反例一\n✅ 正例\n❌ 反例二\n", encoding="utf-8")
+        p = self._payload("Edit", "rules/r.md",
+                          old_string="❌", new_string="", replace_all=True)
+        self.assertIn("STR003", codes(runner.run_write(p)))
+
+    def test_edit_without_replace_all_only_replaces_first(self):
+        # 反方向：同样的编辑没带 replace_all，只替换第一处，文件里仍留有 ❌ →
+        # 不得误报 STR003
+        target = self.root / "rules" / "r.md"
+        target.write_text("❌ 反例一\n✅ 正例\n❌ 反例二\n", encoding="utf-8")
+        p = self._payload("Edit", "rules/r.md", old_string="❌", new_string="")
+        self.assertNotIn("STR003", codes(runner.run_write(p)))
+
+    def test_edit_replace_all_false_is_not_truthy(self):
+        target = self.root / "rules" / "r.md"
+        target.write_text("❌ 反例一\n✅ 正例\n❌ 反例二\n", encoding="utf-8")
+        p = self._payload("Edit", "rules/r.md",
+                          old_string="❌", new_string="", replace_all=False)
+        self.assertNotIn("STR003", codes(runner.run_write(p)))
+
     def test_edit_with_unmatched_old_string_fails_open(self):
         target = self.root / "rules" / "r.md"
         target.write_text("✅ 只有正例\n", encoding="utf-8")
@@ -133,6 +157,34 @@ class TestRunCommit(unittest.TestCase):
         target.unlink()  # 暂存区里仍记录该文件，但工作区文件已被删掉
         vs = runner.run_commit(self.root)  # 不应抛异常
         self.assertEqual(codes(vs), [])
+
+    def test_bad_blob_staged_then_fixed_in_worktree_is_still_caught(self):
+        """要提交进去的是 index 里的 blob，不是工作区里的文件。
+
+        暂存坏版本 → 工作区改好 → commit，读工作区就会放行，坏 blob 照样落库。
+        """
+        target = self.root / "rules" / "r.md"
+        target.write_text("✅ 只有正例\n", encoding="utf-8")
+        self._stage("rules/r.md")
+        target.write_text("❌ 反例\n✅ 正例\n", encoding="utf-8")  # 只改了工作区，没重新 add
+        self.assertIn("STR003", codes(runner.run_commit(self.root)))
+
+    def test_good_blob_staged_with_broken_worktree_is_not_blocked(self):
+        # 反方向：暂存的是好版本，工作区正写到一半 —— 不得凭空 BLOCK
+        target = self.root / "rules" / "r.md"
+        target.write_text("❌ 反例\n✅ 正例\n", encoding="utf-8")
+        self._stage("rules/r.md")
+        target.write_text("✅ 写到一半\n", encoding="utf-8")
+        self.assertNotIn("STR003", codes(runner.run_commit(self.root)))
+
+    def test_staged_deletion_is_skipped(self):
+        # 文件从 index 里删掉后 `git show :<path>` 会失败 —— 必须跳过而非抛异常
+        target = self.root / "rules" / "r.md"
+        target.write_text("✅ 只有正例\n", encoding="utf-8")
+        self._stage("rules/r.md")
+        subprocess.run(["git", "-C", str(self.root), "rm", "-q", "--cached", "rules/r.md"],
+                       check=True, capture_output=True)
+        self.assertEqual(codes(runner.run_commit(self.root)), [])
 
 
 class TestRunAudit(unittest.TestCase):

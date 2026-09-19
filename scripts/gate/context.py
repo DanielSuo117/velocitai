@@ -60,12 +60,24 @@ def classify(rel) -> str:
 
 @functools.lru_cache(maxsize=None)
 def git_ignored(path_str: str, root_str: str) -> bool:
-    """目标路径是否被 .gitignore 忽略。git 不可用时返回 False（fail-open）。"""
+    """目标路径是否被 .gitignore 忽略。「查不出来」一律返回 True（fail-open）。
+
+    两处调用方（structure 的 STR004、registry 的 REG002）都把 False 读成「没被
+    忽略 → 这是死链 → BLOCK」。所以本函数的 fail-open 方向是 **True** 而非
+    False：git 超时、index.lock 残留、退出码 128 这类「问不出答案」的情形若返回
+    False，闸门就会凭空造出一条 BLOCK 去 deny `git commit` —— 违背 §3 / §9.4
+    「宁可漏判也绝不阻塞」的铁律。
+
+    退出码语义（git check-ignore）：
+      0  → 确实被忽略        → True
+      1  → 确实未被忽略      → False（唯一返回 False 的分支）
+      ≥2 → git 自身出错      → 未知 → True
+    """
     try:
         r = subprocess.run(
             ["git", "-C", root_str, "check-ignore", "-q", path_str],
             capture_output=True, timeout=5,
         )
-        return r.returncode == 0
     except Exception:
-        return False
+        return True
+    return r.returncode != 1

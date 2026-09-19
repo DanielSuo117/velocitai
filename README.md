@@ -33,22 +33,30 @@ claude install-plugin velocitai
 ```bash
 # 克隆并复制到你的项目
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,AGENTS.md} your-project/
+cp -r velocitai/{skills,rules,hooks,scripts,docs,CLAUDE.md,AGENTS.md} your-project/
 ```
 
 #### Gemini CLI
 
 ```bash
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,GEMINI.md} your-project/
+cp -r velocitai/{skills,rules,hooks,scripts,docs,CLAUDE.md,GEMINI.md} your-project/
 ```
 
 #### 手动安装
 
 ```bash
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,docs,CLAUDE.md,AGENTS.md,GEMINI.md} your-project/
+cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,scripts,docs,CLAUDE.md,AGENTS.md,GEMINI.md} your-project/
 ```
+
+> **`scripts/` 不可省略**：`hooks/hooks.json` 调的落库校验闸门就在 `scripts/gate_cli.py`。
+> 漏拷这一层，hook 会因找不到脚本而静默失效 —— 规则层仍在，但没有强制力。
+>
+> **Windows 用户**：闸门以 `python3` 调用，而 Windows 上解释器常只叫 `python`。
+> 若如此，把 `hooks/hooks.json` 里的 `python3` 改成 `python`。不改也不会卡住你 ——
+> 解释器找不到时 hook 执行失败，Claude Code 视为无决策直接放行（fail-open），
+> 但闸门在那台机器上是静默失效的。
 
 ---
 
@@ -74,13 +82,13 @@ cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,docs,CLAUDE.md,AGENTS
 | `architecture` | 架构决策、继承设计、角色拆分 |
 | `code-review-graph` | AST 知识图谱驱动的代码审查 |
 
-#### 14 个规则文件（Must / Must-not）
+#### 15 个规则文件（Must / Must-not）
 
 规则强制硬性约束。每条规则包含 ❌ 反模式 + ✅ 最佳实践。
 
 | 规则域 | 文件数 | 关键规则 |
 |--------|--------|---------|
-| **Agent 行为** | 3 | 运行测试前确认 `--env`；不自动提交；文档/代码冲突时询问 |
+| **Agent 行为** | 4 | 运行测试前确认 `--env`；不自动提交；文档/代码冲突时询问 |
 | **编码规范** | 1 | PascalCase 类名、snake_case 方法名、定位符声明为类常量 |
 | **Playwright** | 8 | 六级定位符优先级、禁止 `time.sleep()`、context 隔离 |
 | **报告策略** | 1 | 仅失败时生成 HTML 报告、自动轮转、域名统计 |
@@ -137,12 +145,16 @@ velocitai/
 │   ├── quick-debug/
 │   └── ... （共 13 个）
 ├── rules/                    # 强制规则（Must/Must-not）
-│   ├── agent-behavior/       # 3 个文件
+│   ├── rules-index.md        # 规则索引
+│   ├── agent-behavior/       # 4 个文件
 │   ├── coding-conventions/   # 1 个文件
 │   ├── playwright/           # 8 个文件
 │   └── report-strategy/      # 1 个文件
 ├── hooks/                    # 会话与工具 hooks
 │   └── hooks.json
+├── scripts/                  # 落库校验闸门（零依赖 python3）
+│   ├── gate_cli.py           # 唯一入口，被 hooks.json 调用
+│   └── gate/                 # 校验器 + stdlib unittest 测试
 └── docs/                     # 项目知识库
     ├── architecture.md
     ├── pages-catalog.md
@@ -180,7 +192,7 @@ velocitai/
 ```bash
 # 1. 克隆并集成
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{skills,rules,hooks,docs,.claude,CLAUDE.md} your-project/
+cp -r velocitai/{skills,rules,hooks,scripts,docs,.claude,CLAUDE.md} your-project/
 
 # 2. 安装依赖
 cd your-project
@@ -232,22 +244,32 @@ claude install-plugin velocitai
 ```bash
 # Clone and copy to your project
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,AGENTS.md} your-project/
+cp -r velocitai/{skills,rules,hooks,scripts,docs,CLAUDE.md,AGENTS.md} your-project/
 ```
 
 #### Gemini CLI
 
 ```bash
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{skills,rules,hooks,docs,CLAUDE.md,GEMINI.md} your-project/
+cp -r velocitai/{skills,rules,hooks,scripts,docs,CLAUDE.md,GEMINI.md} your-project/
 ```
 
 #### Manual Setup
 
 ```bash
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,docs,CLAUDE.md,AGENTS.md,GEMINI.md} your-project/
+cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,scripts,docs,CLAUDE.md,AGENTS.md,GEMINI.md} your-project/
 ```
+
+> **Do not drop `scripts/`**: the sediment validation gate wired up by
+> `hooks/hooks.json` lives in `scripts/gate_cli.py`. Without it the hook silently
+> does nothing — the rule layer survives, its enforcement does not.
+>
+> **Windows**: the gate is invoked as `python3`, which on Windows is often only
+> available as `python`. If so, change `python3` to `python` in
+> `hooks/hooks.json`. Leaving it alone will not block you — a missing interpreter
+> makes the hook fail, which Claude Code treats as "no decision" and allows
+> (fail-open) — but the gate is silently inert on that machine.
 
 ---
 
@@ -273,13 +295,13 @@ Skills teach your agent _how_ to do things — step-by-step operational guides.
 | `architecture` | Architecture decisions, inheritance design, role splitting |
 | `code-review-graph` | AST knowledge graph driven code review |
 
-#### 14 Rule Files (Must / Must-not)
+#### 15 Rule Files (Must / Must-not)
 
 Rules enforce hard constraints. Every rule includes ❌ anti-pattern + ✅ best practice.
 
 | Domain | Files | Key Rules |
 |--------|-------|-----------|
-| **Agent Behavior** | 3 | Confirm `--env` before tests; no auto-commit; ask on doc/code conflict |
+| **Agent Behavior** | 4 | Confirm `--env` before tests; no auto-commit; ask on doc/code conflict |
 | **Coding Conventions** | 1 | PascalCase classes, snake_case methods, locator class constants |
 | **Playwright** | 8 | 6-level locator priority, no `time.sleep()`, context isolation |
 | **Report Strategy** | 1 | HTML report only on failure, auto-rotation, domain stats |
@@ -336,12 +358,16 @@ velocitai/
 │   ├── quick-debug/
 │   └── ... (13 total)
 ├── rules/                    # Enforced rules (Must/Must-not)
-│   ├── agent-behavior/       # 3 files
+│   ├── rules-index.md        # Rule index
+│   ├── agent-behavior/       # 4 files
 │   ├── coding-conventions/   # 1 file
 │   ├── playwright/           # 8 files
 │   └── report-strategy/      # 1 file
 ├── hooks/                    # Session & tool hooks
 │   └── hooks.json
+├── scripts/                  # Sediment validation gate (zero-dependency python3)
+│   ├── gate_cli.py           # Single entry point, invoked by hooks.json
+│   └── gate/                 # Checkers + stdlib unittest suite
 └── docs/                     # Project knowledge base
     ├── architecture.md
     ├── pages-catalog.md
@@ -379,7 +405,7 @@ velocitai/
 ```bash
 # 1. Clone and integrate
 git clone https://github.com/DanielSuo117/velocitai.git
-cp -r velocitai/{skills,rules,hooks,docs,.claude,CLAUDE.md} your-project/
+cp -r velocitai/{skills,rules,hooks,scripts,docs,.claude,CLAUDE.md} your-project/
 
 # 2. Install dependencies
 cd your-project
