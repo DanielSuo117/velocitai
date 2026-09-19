@@ -17,3 +17,6 @@ config/settings.py
 # （applyTo: "**" 会载入每个 Copilot 会话，属未经审查的 agent 上下文）
 .github/copilot-instructions.md
 .github/instructions/
+
+# 自愈写回源码前留下的备份（--self-heal=auto），属本地产物
+*.heal-bak
