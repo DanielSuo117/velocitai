@@ -1966,6 +1966,45 @@
       <p><span data-lang="zh"><strong>安全底线：自愈只修复「定位」，绝不把真失败变成假通过。</strong>真正的危险不是修不好，而是候选顶替到另一个恰好存在的元素 &mdash; 用例照样绿，功能其实已经坏了。误报只是吵，假通过是骗。因此候选必须<strong>同时</strong>满足：意图指纹一致、全页唯一命中、元素可见。任一不满足即放弃自愈，按原样失败。</span><span data-lang="en"><strong>The hard line: self-healing may fix location only &mdash; it must never turn a real failure into a false pass.</strong> The danger isn't failing to heal; it's a candidate standing in for some other element that happens to exist &mdash; the test goes green while the feature is broken. A false alarm is noise; a false pass is a lie. So a candidate must satisfy <strong>all three</strong>: matching intent fingerprint, exactly one match on the page, and visible. Fail any one and healing is abandoned.</span></p>
     </div>
 
+    <div class="gate-sub"><span data-lang="zh">三道闸各防什么</span><span data-lang="en">What Each Gate Prevents</span></div>
+    <div class="gate-sev">
+      <div class="gate-sev-item gsv-block">
+        <div class="gsv-tag">意图指纹一致</div>
+        <p><span data-lang="zh">防顶替到<strong>无关元素</strong> &mdash; 例如把「取消」当成「提交」。</span><span data-lang="en">Prevents standing in for an <strong>unrelated element</strong> &mdash; e.g. mistaking Cancel for Submit.</span></p>
+      </div>
+      <div class="gate-sev-item gsv-ask">
+        <div class="gsv-tag">全页唯一命中</div>
+        <p><span data-lang="zh">防在<strong>同类元素里挑错一个</strong> &mdash; 例如页面上有两个「删除」按钮。</span><span data-lang="en">Prevents <strong>picking the wrong one</strong> among siblings &mdash; e.g. two Delete buttons on the page.</span></p>
+      </div>
+      <div class="gate-sev-item gsv-warn">
+        <div class="gsv-tag">元素可见</div>
+        <p><span data-lang="zh">防命中<strong>隐藏的残留节点</strong> &mdash; DOM 里还在，但用户根本看不到。</span><span data-lang="en">Prevents matching a <strong>hidden leftover node</strong> &mdash; still in the DOM, invisible to the user.</span></p>
+      </div>
+    </div>
+    <div class="gate-failopen" style="border-style:solid;border-color:var(--red);background:var(--red-bg);">
+      <p><span data-lang="zh"><strong>三道闸缺一即放弃自愈，按原样失败。</strong>这不是保守，而是因为失败模式不对称：修不好只是回到原状，顶替错了却是用例变绿而功能已坏。</span><span data-lang="en"><strong>Miss any one gate and healing is abandoned &mdash; the test fails as it would have.</strong> Not conservatism: the failure modes are asymmetric. Failing to heal just restores the status quo; healing to the wrong element turns the suite green while the feature is broken.</span></p>
+    </div>
+
+    <div class="gate-sub"><span data-lang="zh">意图从哪来</span><span data-lang="en">Where Intent Comes From</span></div>
+    <p class="section-desc" style="margin:0 0 1rem;font-size:0.88rem;">
+      <span data-lang="zh">核心思路不是猜「哪个元素长得像」，而是问「这个定位符<strong>当初想选中什么</strong>」。答案有两个来源，互补。</span><span data-lang="en">The core idea isn't guessing which element <em>looks similar</em> &mdash; it's asking what this locator <strong>meant to target in the first place</strong>. Two complementary sources answer that.</span>
+    </p>
+    <div class="gate-dims">
+      <div class="gate-dim">
+        <div class="gd-code">静态 · STATIC</div>
+        <h4><span data-lang="zh">常量名 + 注释说明</span><span data-lang="en">Constant Name + Its Comment</span></h4>
+        <p><span data-lang="zh">定位符写作 PageObject 类顶部常量，注释即语义 &mdash; <code>SUBMIT_BTN = "#submit-order"&nbsp;&nbsp;# P0: 提交订单</code>。这份说明本来就为人而写，顺手成了机器可读的意图。</span><span data-lang="en">Locators live as class constants whose comment carries the meaning &mdash; <code>SUBMIT_BTN = "#submit-order"&nbsp;&nbsp;# P0: submit order</code>. Written for humans, it doubles as machine-readable intent.</span></p>
+      </div>
+      <div class="gate-dim">
+        <div class="gd-code">动态 · REMEMBERED</div>
+        <h4><span data-lang="zh">历史指纹</span><span data-lang="en">Historical Fingerprint</span></h4>
+        <p><span data-lang="zh">定位符每次成功命中时，顺手记下它选中元素的标签、ARIA 角色与可及名称。<strong>这就是「基于旧有的逻辑」</strong> &mdash; 失效时据此重建，而不是凭空推测。</span><span data-lang="en">Every successful match records the element's tag, ARIA role and accessible name. <strong>This is the &ldquo;prior logic&rdquo;</strong> &mdash; healing rebuilds from it rather than guessing from scratch.</span></p>
+      </div>
+    </div>
+    <div class="gate-failopen">
+      <p><span data-lang="zh"><strong>没有指纹时，判定自动收紧。</strong>此时只剩注释一句话，证据不足以认定「页面上这个新元素就是原来那个」&mdash; 于是置信下限从 70 抬到 85，且注释必须与元素文本吻合，否则一个候选都不产出。<strong>没有证据就不猜。</strong></span><span data-lang="en"><strong>Without a fingerprint, the bar rises automatically.</strong> Only the comment remains &mdash; not enough to conclude this new element is the old one. The confidence floor goes from 70 to 85 and the comment must match the element's text, or no candidate is produced at all. <strong>No evidence, no guessing.</strong></span></p>
+    </div>
+
     <div class="gate-sub"><span data-lang="zh">四步重建</span><span data-lang="en">Four Steps</span></div>
     <div class="gate-heal-steps">
       <div class="ghs"><div class="ghs-n">01</div><p><span data-lang="zh"><strong>记忆</strong><br>定位成功时记下命中元素的形态 &mdash; 标签、ARIA role、可及名称。这份指纹就是日后自愈所依据的「旧有逻辑」。</span><span data-lang="en"><strong>Remember</strong><br>On every successful match, record the element's shape &mdash; tag, ARIA role, accessible name. That fingerprint is the prior logic healing later relies on.</span></p></div>
