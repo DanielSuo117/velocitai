@@ -70,9 +70,9 @@
 
 Run:
 ```bash
-grep -rn "\.\./\.\./\.\./docs/" skills/ | wc -l
+grep -rno "\.\./\.\./\.\./docs/" skills/ | wc -l
 ```
-Expected: `8`
+Expected: `8`（注意必须带 `-o`：不带 `-o` 数的是匹配行数而非出现次数，`case-round-trip/SKILL.md:83` 单行含两处链接，会得到 7）
 
 - [ ] **Step 2: 批量替换路径层级**
 
