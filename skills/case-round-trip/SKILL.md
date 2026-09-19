@@ -80,4 +80,4 @@ def is_page_loaded(self) -> bool:
 
 ## 项目落地参考
 
-项目中脱离门户布局的 PageObject（需实现 `click_back_to_<landing>`）见 [docs/pages-catalog.md](../../../docs/pages-catalog.md) 与 [docs/regression-points.md](../../../docs/regression-points.md)（带"⚠️ 跳转目标脱离门户布局"标注的页面）。
+项目中脱离门户布局的 PageObject（需实现 `click_back_to_<landing>`）见 [docs/pages-catalog.md](../../docs/pages-catalog.md) 与 [docs/regression-points.md](../../docs/regression-points.md)（带"⚠️ 跳转目标脱离门户布局"标注的页面）。

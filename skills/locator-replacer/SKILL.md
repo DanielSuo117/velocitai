@@ -174,7 +174,7 @@ pytest tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_<story_name
 
 ### Step 5: 同步更新文档
 
-更新 [docs/regression-points.md](../../../docs/regression-points.md) 中对应 PageObject 的"关键定位符"段。
+更新 [docs/regression-points.md](../../docs/regression-points.md) 中对应 PageObject 的"关键定位符"段。
 
 ---
 

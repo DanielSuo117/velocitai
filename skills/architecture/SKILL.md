@@ -151,11 +151,11 @@ class TestSomeFlow(BaseTest):
 2. PageObject：以 `Role<Role><Page>Page` 命名、`role_<page>` 文件名前缀，继承 `BasePage`
 3. 基类（若采用 class 级共享）：新建 `tests/<role>/<role>_base_test.py::<Role>BaseTest` 继承 `BaseTest`，实现登录 + 切换 + 起点断言
 4. 用例：`tests/<role>/test_<role>_flow.py::Test<Role>Flow` 继承新基类
-5. 文档：在 [docs/architecture.md](../../../docs/architecture.md) 表中追加一行
+5. 文档：在 [docs/architecture.md](../../docs/architecture.md) 表中追加一行
 6. 目录：`pages/__init__.py` 追加新页面导出
 
 ---
 
 ## 决策落地参考
 
-本项目当前的落地情况（具体类名、fixture、起点页面）→ [docs/architecture.md](../../../docs/architecture.md)。
+本项目当前的落地情况（具体类名、fixture、起点页面）→ [docs/architecture.md](../../docs/architecture.md)。

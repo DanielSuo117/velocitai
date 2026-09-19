@@ -26,7 +26,7 @@ description: 一键生成 PageObject + 配套测试。触发：新增页面、�
 - 特定角色：`<Role>` + 英文翻译 → PascalCase + `Page` 后缀（如 `<Role><Feature>Page`）
 - 角色文件名前缀：`<role>_`（如 `<role>_<feature>_page.py`）
 
-项目中已有的具体类名清单见 [docs/pages-catalog.md](../../../docs/pages-catalog.md)。
+项目中已有的具体类名清单见 [docs/pages-catalog.md](../../docs/pages-catalog.md)。
 
 ---
 

@@ -70,11 +70,11 @@ description: 为已有 PageObject 增量添加回归测试点。触发：新增�
 ### Step 4：同步更新 `docs/`
 
 - 在对应角色的 pages-catalog 子文件中追加新方法行：
-  - 对应角色 → [pages-catalog.md](../../../docs/pages-catalog.md)
+  - 对应角色 → [pages-catalog.md](../../docs/pages-catalog.md)
   - （同上）
   - 
 - 在对应角色的 regression-points 子文件中追加回归点行 + 关键定位符常量：
-  - 对应角色 → [regression-points.md](../../../docs/regression-points.md)
+  - 对应角色 → [regression-points.md](../../docs/regression-points.md)
   - 
 
 ---
