@@ -103,13 +103,11 @@ def run_audit(root):
     if root is None:
         return []
     out = []
-    seen = set()
+    # 三个 glob 模式分别根植于互不重叠的顶级目录（skills/rules/docs），
+    # 同一文件不可能同时匹配两个模式，故此处无需去重守卫。
     for pattern in ("skills/**/*.md", "rules/**/*.md", "docs/*.md"):
         for p in sorted(root.glob(pattern)):
             rel = pathlib.PurePosixPath(p.relative_to(root).as_posix())
-            if str(rel) in seen:
-                continue
-            seen.add(str(rel))
             if context.classify(rel) not in (context.SKILL, context.RULE, context.DOC):
                 continue
             try:

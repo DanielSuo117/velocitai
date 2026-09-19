@@ -30,6 +30,14 @@ def _root():
 def _emit(violations) -> int:
     if not violations:
         return 0
+
+    # WARN 必须始终能被看到：无论最高档位是什么，只要出现过 WARN 就先落到
+    # stderr —— 否则一旦同批里混进 ASK/BLOCK，WARN 就会被下面按最高档位过滤
+    # 的 JSON 悄悄吞掉，既不在 stdout 也不在 stderr。
+    warns = [v for v in violations if v.severity == Severity.WARN]
+    if warns:
+        print("落库校验提示：\n" + "\n".join(v.render() for v in warns), file=sys.stderr)
+
     top = max(v.severity for v in violations)
 
     if top == Severity.BLOCK:
@@ -50,7 +58,6 @@ def _emit(violations) -> int:
         }}, ensure_ascii=False))
         return 0
 
-    print("落库校验提示：\n" + "\n".join(v.render() for v in violations), file=sys.stderr)
     return 0
 
 
@@ -64,10 +71,6 @@ def main() -> int:
         return _emit(runner.run_write(payload))
 
     if args.mode == "commit":
-        try:
-            json.load(sys.stdin)
-        except Exception:
-            pass
         return _emit(runner.run_commit(_root()))
 
     return _emit(runner.run_audit(_root()))

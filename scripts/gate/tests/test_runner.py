@@ -1,5 +1,7 @@
 import json
 import pathlib
+import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -69,6 +71,90 @@ class TestRunWrite(unittest.TestCase):
 
     def test_malformed_payload_fails_open(self):
         self.assertEqual(codes(runner.run_write({})), [])
+
+
+@unittest.skipUnless(shutil.which("git"), "本机未安装 git，跳过 run_commit 测试")
+class TestRunCommit(unittest.TestCase):
+    """run_commit 依据真实的 git 暂存区（index）决定校验范围，此处不做 mock，
+    直接跑真实 git —— 这正是 REG001 是否在正确时机触发的关键。"""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self._tmp.name)
+        subprocess.run(["git", "init", "-q"], cwd=self.root, check=True, capture_output=True)
+        (self.root / "skills").mkdir()
+        (self.root / "rules").mkdir()
+        (self.root / "CLAUDE.md").write_text("# 路由表\n", encoding="utf-8")
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _stage(self, *rels):
+        subprocess.run(
+            ["git", "-C", str(self.root), "add", *rels],
+            check=True, capture_output=True,
+        )
+
+    def test_staged_new_skill_triggers_reg001(self):
+        # 新建未注册的 skill 且已 git add → 暂存集合触达 skills/，check_repo 应当运行
+        skill_dir = self.root / "skills" / "demo"
+        skill_dir.mkdir()
+        (skill_dir / "SKILL.md").write_text(
+            "---\nname: demo\ndescription: d\n---\n", encoding="utf-8")
+        self._stage("skills/demo/SKILL.md")
+        vs = runner.run_commit(self.root)
+        self.assertIn("REG001", codes(vs))
+
+    def test_unstaged_skill_does_not_trigger_reg001(self):
+        # 未注册的 skill 存在于工作区，但没有被 git add；只暂存了一个无关的 rules/ 改动
+        skill_dir = self.root / "skills" / "demo"
+        skill_dir.mkdir()
+        (skill_dir / "SKILL.md").write_text(
+            "---\nname: demo\ndescription: d\n---\n", encoding="utf-8")
+        (self.root / "rules" / "r.md").write_text("❌ 反例\n✅ 正例\n", encoding="utf-8")
+        self._stage("rules/r.md")
+        vs = runner.run_commit(self.root)
+        self.assertNotIn("REG001", codes(vs))
+
+    def test_staged_content_violation_reported(self):
+        (self.root / "rules" / "r.md").write_text("✅ 只有正例\n", encoding="utf-8")
+        self._stage("rules/r.md")
+        vs = runner.run_commit(self.root)
+        self.assertIn("STR003", codes(vs))
+
+    def test_empty_staged_set_returns_empty(self):
+        vs = runner.run_commit(self.root)
+        self.assertEqual(codes(vs), [])
+
+    def test_staged_path_missing_on_disk_does_not_raise(self):
+        target = self.root / "rules" / "r.md"
+        target.write_text("❌ 反例\n✅ 正例\n", encoding="utf-8")
+        self._stage("rules/r.md")
+        target.unlink()  # 暂存区里仍记录该文件，但工作区文件已被删掉
+        vs = runner.run_commit(self.root)  # 不应抛异常
+        self.assertEqual(codes(vs), [])
+
+
+class TestRunAudit(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self._tmp.name)
+        (self.root / "rules").mkdir()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_violating_file_reported_clean_file_not(self):
+        (self.root / "rules" / "clean.md").write_text("❌ 反例\n✅ 正例\n", encoding="utf-8")
+        (self.root / "rules" / "bad.md").write_text("✅ 只有正例\n", encoding="utf-8")
+        vs = runner.run_audit(self.root)
+        bad_codes = [v.code for v in vs if v.path == "rules/bad.md"]
+        clean_codes = [v.code for v in vs if v.path == "rules/clean.md"]
+        self.assertIn("STR003", bad_codes)
+        self.assertEqual(clean_codes, [])
+
+    def test_none_root_returns_empty(self):
+        self.assertEqual(runner.run_audit(None), [])
 
 
 if __name__ == "__main__":
