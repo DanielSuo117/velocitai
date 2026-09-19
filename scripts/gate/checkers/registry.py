@@ -1,6 +1,7 @@
 """维度④ 注册闭环 + 镜像弃用守卫 —— REG001–REG003。"""
 from __future__ import annotations
 
+import pathlib
 import re
 
 from ..context import MIRROR_ROOTS, git_ignored
@@ -20,6 +21,24 @@ def check_write(rel):
     return []
 
 
+def _registered_skills(text):
+    """从 CLAUDE.md 的真实 Markdown 链接目标中提取已注册的 skill 名。
+
+    不做全文子串匹配 —— 正文里顺带提到 ./skills/foo/ 不构成注册（否则 REG001
+    会被一句无关说明满足而失效）；同时容忍 ./skills/foo 与 ./skills/foo/ 两种
+    等价写法（否则合法的无尾斜杠写法会被误判为未注册）。
+    """
+    names = set()
+    for m in _LINK_RE.finditer(text):
+        target = m.group(1).split("#")[0].strip().rstrip("/")
+        if target.startswith("./"):
+            target = target[2:]
+        parts = pathlib.PurePosixPath(target).parts
+        if len(parts) >= 2 and parts[0] == "skills":
+            names.add(parts[1])
+    return names
+
+
 def check_repo(root):
     """commit / audit 时机：全局注册闭环。"""
     claude_md = root / "CLAUDE.md"
@@ -30,10 +49,11 @@ def check_repo(root):
     except Exception:
         return []
 
+    registered = _registered_skills(text)
     out = []
     for skill_md in sorted(root.glob("skills/*/SKILL.md")):
         name = skill_md.parent.name
-        if f"./skills/{name}/" not in text:
+        if name not in registered:
             out.append(Violation(
                 "REG001", Severity.BLOCK, f"skills/{name}/SKILL.md", None,
                 f"skill '{name}' 未在 CLAUDE.md 路由表注册",

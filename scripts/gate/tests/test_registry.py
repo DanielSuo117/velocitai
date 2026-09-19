@@ -55,6 +55,21 @@ class TestRepoChecks(unittest.TestCase):
     def test_missing_claude_md_is_noop(self):
         self.assertEqual(codes(registry.check_repo(self.root)), [])
 
+    def test_prose_mention_is_not_registration(self):
+        # 正文顺带提及不构成注册；早期实现用全文子串匹配，被这种句子直接架空
+        self._write_claude("# 说明\n历史上 ./skills/alpha/ 曾经存在，但这不是路由表条目。\n")
+        self.assertIn("REG001", codes(registry.check_repo(self.root)))
+
+    def test_link_without_trailing_slash_counts_as_registered(self):
+        # ./skills/alpha 与 ./skills/alpha/ 是等价写法，都应视为已注册
+        self._write_claude("| 建 | [alpha](./skills/alpha) |\n")
+        self.assertNotIn("REG001", codes(registry.check_repo(self.root)))
+
+    def test_non_skill_links_ignored(self):
+        # rules/ 与 docs/ 链接不得被误当成 skill 注册
+        self._write_claude("[规范](./rules/x/y.md) [文档](./docs/architecture.md)\n")
+        self.assertIn("REG001", codes(registry.check_repo(self.root)))
+
 
 if __name__ == "__main__":
     unittest.main()
