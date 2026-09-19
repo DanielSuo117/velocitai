@@ -19,6 +19,7 @@ paths: []
 | 断言模式 | [assertion-patterns.md](./assertion-patterns.md) | Toast、UI 状态变更、等待目标唯一性 |
 | 第三方组件 | [third-party-components.md](./third-party-components.md) | Arco Design、下拉框关闭 |
 | Performance API 隔离 | [performance-api-isolation.md](./performance-api-isolation.md) | clearResourceTimings、跨用例污染、批量失败 |
+| 选择器自愈边界 | [self-healing-boundaries.md](./self-healing-boundaries.md) | --self-heal、定位符漂移、假通过、置信阈值 |
 
 ## 交叉引用
 

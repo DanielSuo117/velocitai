@@ -19,6 +19,7 @@
 | **新建**页面对象 + 测试 | [gen-page-test](./skills/gen-page-test/) |
 | **增加**已有页面的回归点 | [add-regression-point](./skills/add-regression-point/) |
 | **替换**定位符 / 分析 DOM | [locator-replacer](./skills/locator-replacer/) |
+| **选择器自愈** / 复核写回 | [selector-self-heal](./skills/selector-self-heal/) |
 | **运行**测试 / 分析结果 | [test-runner](./skills/test-runner/) |
 | **排查**测试失败 | [quick-debug](./skills/quick-debug/) |
 | 设计 **is_page_loaded** | [page-load-assertion](./skills/page-load-assertion/) |
@@ -30,6 +31,7 @@
 | **代码审查** / 探索 / 重构 | [code-review-graph](./skills/code-review-graph/) |
 | 组合场景（多 skill 串联） | [SKILL.md](./skills/SKILL.md) |
 | **落库校验** / 沉淀闸门 | [evolution-gate](./rules/agent-behavior/evolution-gate.md) |
+| **自愈边界**规则 | [self-healing-boundaries](./rules/playwright/self-healing-boundaries.md) |
 | **编码规范**（命名/基类/用例） | [coding-conventions](./rules/coding-conventions/coding-conventions.md) |
 | **Playwright 规则**索引 | [playwright-overview](./rules/playwright/playwright-overview.md) |
 | **Performance API 隔离** | [performance-api-isolation](./rules/playwright/performance-api-isolation.md) |

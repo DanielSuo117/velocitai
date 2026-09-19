@@ -10,6 +10,7 @@
 ├─────────────────────────────────────────────┤
 │                  pages/ 页面对象层             │
 │  BasePage ← LoginPage ← LandingPage ← ...    │
+│  self_heal.py（纯逻辑） / heal_runtime.py（运行时）│
 ├─────────────────────────────────────────────┤
 │                  config/ 配置层                │
 │  URL、Token、浏览器参数按环境切换              │

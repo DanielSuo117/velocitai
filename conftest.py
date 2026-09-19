@@ -19,6 +19,16 @@ def pytest_addoption(parser):
         required=True,
         help="Target environment: pre | prod",
     )
+    parser.addoption(
+        "--self-heal",
+        action="store",
+        default="off",
+        choices=["off", "on", "strict"],
+        help=(
+            "选择器自愈：off=关闭（默认）；on=失效时尝试重建定位符，用例继续；"
+            "strict=同 on，但只要发生过自愈就让会话以非零码结束，便于 CI 发现漂移"
+        ),
+    )
 
 
 @pytest.fixture(scope="session")
@@ -81,3 +91,45 @@ def class_page(browser, request):
     yield new_page
     new_page.close()
     context.close()
+
+
+def pytest_configure(config):
+    """按需开启自愈。默认关闭 —— 它会改变「失败」的含义，不能悄悄生效。"""
+    if config.getoption("--self-heal") == "off":
+        return
+    from pages.base_page import BasePage
+
+    BasePage.self_heal_enabled = True
+    try:
+        from config.settings import SELF_HEAL_ARTIFACT, SELF_HEAL_FINGERPRINTS
+
+        BasePage.heal_artifact = SELF_HEAL_ARTIFACT
+        BasePage.heal_fingerprints = SELF_HEAL_FINGERPRINTS
+    except ImportError:
+        pass      # 旧配置文件没有这两项时沿用类默认值
+
+
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    """自愈过的用例不能被当成干净通过，必须在报告里显式点名。"""
+    from pages import heal_runtime
+
+    if not heal_runtime.HEALED:
+        return
+    terminalreporter.section("选择器自愈", sep="=", bold=True)
+    for h in heal_runtime.HEALED:
+        terminalreporter.write_line(
+            f"  {h['page_object']}.{h['constant']}: {h['old']} -> {h['new']} "
+            f"（{h['strategy']}，置信 {h['confidence']}）"
+        )
+    terminalreporter.write_line(
+        f"  共 {len(heal_runtime.HEALED)} 处定位符已在运行期临时修复；"
+        f"源码尚未改动，写回需经 selector-self-heal skill 并通过落库闸门。"
+    )
+
+
+def pytest_sessionfinish(session, exitstatus):
+    """strict 模式下，发生过自愈即以非零码结束，避免定位符漂移被沉默吞掉。"""
+    from pages import heal_runtime
+
+    if heal_runtime.HEALED and session.config.getoption("--self-heal") == "strict":
+        session.exitstatus = 1
