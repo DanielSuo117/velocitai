@@ -41,3 +41,5 @@ VelocitAI 是一套针对 Python + Playwright + pytest POM 项目的 UI 自动�
 - How-to（操作经验）→ `skills/<主题>/SKILL.md`
 - Must/Must-not（约束规则）→ `rules/<规则域>/<规则>.md`
 - 项目事实 → `docs/<文件>.md`
+
+写入前必须先过落库闸门：检索去重 → 每条规则带触发条件与失败现象 → 新建 skill/rule 先向用户提案。完整条款见 `rules/agent-behavior/evolution-gate.md`。

@@ -29,6 +29,7 @@
 | **架构**决策 / 分层 / 新角色 | [architecture](./skills/architecture/) |
 | **代码审查** / 探索 / 重构 | [code-review-graph](./skills/code-review-graph/) |
 | 组合场景（多 skill 串联） | [SKILL.md](./skills/SKILL.md) |
+| **落库校验** / 沉淀闸门 | [evolution-gate](./rules/agent-behavior/evolution-gate.md) |
 | **编码规范**（命名/基类/用例） | [coding-conventions](./rules/coding-conventions/coding-conventions.md) |
 | **Playwright 规则**索引 | [playwright-overview](./rules/playwright/playwright-overview.md) |
 | **Performance API 隔离** | [performance-api-isolation](./rules/playwright/performance-api-isolation.md) |
@@ -50,7 +51,7 @@
 | 规则（Must/Must-not） | `rules/<主题>/` 对应子文件（必含 ❌反例 + ✅正例） |
 | 项目事实（类名/URL/清单） | `docs/` 对应文件 |
 
-执行：Edit 最小增量写入；回复末尾声明 `📝 已沉淀至 <file>：<摘要>`。
+执行：先过[落库闸门](./rules/agent-behavior/evolution-gate.md)（检索去重 → 带触发条件与失败现象 → 新建文件先提案）；再 Edit 最小增量写入；回复末尾声明 `📝 已沉淀至 <file>：<摘要>`。
 
 ---
 

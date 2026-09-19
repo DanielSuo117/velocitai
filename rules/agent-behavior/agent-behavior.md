@@ -84,3 +84,5 @@ P0.4.1–P0.4.4 详细反例/正例见 [browser-tool-usage.md](./browser-tool-us
 ---
 
 P0.5–P0.7（Skill 编写规则）→ 仅在编辑 `skills/**` 时加载 → [skill-authoring.md](./skill-authoring.md)
+
+P0.8–P0.10（落库校验规则）→ 仅在写入 `skills/**` / `rules/**` / `docs/**` 时加载 → [evolution-gate.md](./evolution-gate.md)
