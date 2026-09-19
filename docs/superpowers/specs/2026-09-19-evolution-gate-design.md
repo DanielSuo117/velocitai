@@ -129,6 +129,21 @@ class Violation:
 
 ### 6.2 genericity.py — 通用化检测
 
+> **实现期修正（2026-09-19）**
+> 1. `/home/` 不在本节列出的前缀内，实现时被误加，导致 `page.goto("/home/dashboard")`
+>    这类普通站内路由被判 GEN002 **BLOCK**。已移除，前缀恢复为 `/Users/`、`/Applications/`、`C:\`。
+> 2. 绝对路径正则尾部由 `*` 改为 `+`：裸前缀「`/Users/` 开头的绝对路径」属描述性提及，
+>    不是路径本身，判成违规是误报。
+> 3. 反例教学豁免扩展到 GEN001–GEN004（原仅 GEN003/GEN004）。起因：本项目规范要求
+>    每条规则配 ❌ 反例，含 P0.5「skill 正文不得写入项目专有标识」这一条本身 ——
+>    只豁免 GEN003 时，闸门会拦下它自己要求人写的那个反例。
+> 4. 但两组用的判据**宽窄不同**。`_is_teaching_line`（宽：`#` 标题、`|` 表格行、
+>    清单项、显式标记）仅供 GEN003/GEN004 使用；GEN001/GEN002 改用
+>    `_is_counterexample_line`（窄：仅 ❌ / BAD / 禁止）。
+>    原因：把结构前缀整体豁免，会让 GEN001/GEN002 对**表格行与 Markdown 标题中的
+>    硬编码 URL 与绝对路径彻底失明**，而表格在本项目 skills 正文里极其常见 ——
+>    堵住项目专有标识正是这两条检查存在的唯一理由。
+
 作用域：仅 `skills/**`（对应既有规则 P0.5「Skill 正文不得写入项目专有标识」）
 
 | 码 | 判定 | 级别 |
@@ -241,6 +256,23 @@ hook 的 `tool_input` 中，`Write` 提供 `content`（最终全文），但 `Ed
 
 `gate_cli.py` 顶层须捕获全部异常，记录到 stderr 后 `exit 0`。任何 checker 抛出的异常不得逃逸到退出码。
 
+**fail-open 的「方向」同样是契约的一部分（实现期发现，2026-09-19 修正）。**
+异常被捕获还不够，捕获后返回什么值决定了它到底 fail-open 还是 fail-closed。
+`git_ignored()` 原本在异常时 `return False`，而两个调用点都把 False 读作
+「未被忽略 → 报违规」—— 于是一次 git 超时就会让 `CLAUDE.local.md` 的豁免失效，
+产出伪 REG002 并**拦死 `git commit`**。这是字面意义上的 fail-closed。
+
+现契约：
+
+| `git check-ignore` 结果 | `git_ignored()` | 理由 |
+|---|---|---|
+| 退出码 0（确为忽略） | `True` | 事实 |
+| 退出码 1（确非忽略） | `False` | **唯一**返回 False 的分支 |
+| 退出码 128 / 超时 / 异常 | `True` | 未知即豁免 |
+
+**代价（已接受）**：在非 git 仓库中 `check-ignore` 返回 128，于是 STR004 / REG002
+在仓库外一律失效。这是 fail-open 的正确读法，但确实是一处覆盖损失，记录备查。
+
 ## 10. 规则层与入口改动
 
 | 文件 | 操作 | 内容 |
@@ -300,7 +332,12 @@ python3 -m unittest discover -s scripts/gate/tests -v
 
 **`.gitignore` 与 `.claude-plugin` 的冲突**：`.gitignore` 含 `.claude-plugin` 条目，但该目录下 6 个文件早已入库，ignore 对它们无效；将来往 `.claude-plugin/` 新增文件会被静默忽略。与本轮无关，记录备查。
 
-**WARN 的可见性**：WARN 经 stderr 输出。hook stderr 在非阻断路径下对 agent 的可见程度未经实测验证，实现时首个任务即验证；若不可见，WARN 降级为仅在 `--mode audit` 输出中体现。
+**WARN 的可见性（已结案，2026-09-19）**：实测确认宿主在退出码 0 时从 **stdout**
+构造 hook 提示，stderr 不被呈现 —— 即原方案下 4 个 WARN 码（STR005 / GEN004 /
+EVI003 / EVI004）在写入期实际不可见。现方案：top severity 为 WARN 时，向 stdout
+输出 `{"systemMessage": "落库校验提示：…"}`（宿主文档明确该字段对所有 hook 生效），
+并保留 stderr 副本；与 ASK / BLOCK 混合时 WARN 同样随决策一并输出，不再被吞。
+Windows 解释器名的说明已写入 README。
 
 ## 14. 实测依据
 
