@@ -144,5 +144,5 @@ def test_all_xxx(self):
 3. `pages/__init__.py` 已导出新 PageObject
 4. 类有 `@allure.feature`，方法有 `@allure.story`；断言信息中文
 5. 未跳回其他角色域名
-6. 已在真实环境跑通：`pytest tests/<path>.py --env=<pre|prod> -v -k <case>`
+6. 已在真实环境跑通：`pytest framework/tests/<path>.py --env=<pre|prod> -v -k <case>`
 7. 对应角色的 `docs/pages-catalog.md` / `docs/regression-points.md` 已同步更新

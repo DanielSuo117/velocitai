@@ -30,9 +30,9 @@ pip list | grep -E "playwright|pytest|allure"
 
 ```bash
 # 对应角色
-pytest tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_xxx"
+pytest framework/tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_xxx"
 # 对应角色
-pytest tests/<role>/test_<role>_home.py --env=<pre|prod> -v -k "test_<case_name>"
+pytest framework/tests/<role>/test_<role>_home.py --env=<pre|prod> -v -k "test_<case_name>"
 ```
 
 ### 模式 2: 按角色 / 全量回归
@@ -41,11 +41,11 @@ pytest tests/<role>/test_<role>_home.py --env=<pre|prod> -v -k "test_<case_name>
 
 ```bash
 # <角色A>全量
-pytest tests/<roleA>/ --env=<pre|prod>
+pytest framework/tests/<roleA>/ --env=<pre|prod>
 # <角色B>全量
-pytest tests/<roleB>/ --env=<pre|prod>
+pytest framework/tests/<roleB>/ --env=<pre|prod>
 # 全量
-pytest tests/ --env=<pre|prod>
+pytest framework/tests/ --env=<pre|prod>
 ```
 
 ### 查看 Allure 报告

@@ -155,12 +155,30 @@ velocitai/
 ├── scripts/                  # 落库校验闸门（零依赖 python3）
 │   ├── gate_cli.py           # 唯一入口，被 hooks.json 调用
 │   └── gate/                 # 校验器 + stdlib unittest 测试
-└── docs/                     # 项目知识库
-    ├── architecture.md
-    ├── pages-catalog.md
-    ├── regression-points.md
-    └── setup.md
+├── docs/                     # 项目知识库
+│   ├── architecture.md
+│   ├── pages-catalog.md
+│   ├── regression-points.md
+│   └── setup.md
+└── framework/                # 代码部分 —— Python UI 自动化框架
+    ├── core/                 # 框架核心
+    │   ├── base/             # BasePage · BaseComponent · BaseTest
+    │   ├── healing/          # 选择器自愈（拦截器 · 引擎 · 运行时 · 模型 · 写回）
+    │   ├── exceptions.py
+    │   └── logger.py
+    ├── pages/                # 业务页面对象（继承 BasePage）
+    ├── tests/                # 业务用例（继承 BaseTest）
+    ├── config/               # 环境与浏览器配置
+    └── conftest.py           # fixture 层
 ```
+
+> **代码与 harness 分开存放**：上面 `framework/` 之外的部分都是 harness ——
+> 治理 agent 行为的技能、规则、闸门与文档。harness 留在仓库根，是因为
+> Claude Code 以根级 `.claude-plugin/` 或 `skills/<name>/SKILL.md` 识别插件，
+> 挪进子目录会让插件无法被发现。
+>
+> 安装到你自己的项目时，拷贝的正是 harness 部分；`framework/` 是代码侧的
+> 参考实现，按需取用。
 
 ---
 
@@ -201,7 +219,7 @@ pip install -r requirements.txt
 playwright install chromium
 
 # 3. 运行测试（--env 必须指定）
-pytest tests/ --env=pre
+pytest framework/tests/ --env=pre
 
 # 4. 查看报告
 allure serve reports/allure-results
@@ -368,12 +386,31 @@ velocitai/
 ├── scripts/                  # Sediment validation gate (zero-dependency python3)
 │   ├── gate_cli.py           # Single entry point, invoked by hooks.json
 │   └── gate/                 # Checkers + stdlib unittest suite
-└── docs/                     # Project knowledge base
-    ├── architecture.md
-    ├── pages-catalog.md
-    ├── regression-points.md
-    └── setup.md
+├── docs/                     # Project knowledge base
+│   ├── architecture.md
+│   ├── pages-catalog.md
+│   ├── regression-points.md
+│   └── setup.md
+└── framework/                # Code side — the Python UI automation framework
+    ├── core/                 # Framework core
+    │   ├── base/             # BasePage · BaseComponent · BaseTest
+    │   ├── healing/          # Selector self-healing (interceptor · engine · runtime · llm · patcher)
+    │   ├── exceptions.py
+    │   └── logger.py
+    ├── pages/                # Business page objects (extend BasePage)
+    ├── tests/                # Business test cases (extend BaseTest)
+    ├── config/               # Environment and browser configuration
+    └── conftest.py           # Fixture layer
 ```
+
+> **Code and harness are stored separately.** Everything outside `framework/`
+> is the harness — the skills, rules, gate and docs that govern agent behaviour.
+> The harness stays at the repo root because Claude Code identifies a plugin by
+> a root-level `.claude-plugin/` directory or `skills/<name>/SKILL.md`; moving
+> `skills/` into a subdirectory would make the plugin undiscoverable.
+>
+> When installing into your own project you copy the harness; `framework/` is
+> the reference implementation of the code side, to adopt as needed.
 
 ---
 
@@ -414,7 +451,7 @@ pip install -r requirements.txt
 playwright install chromium
 
 # 3. Run tests (--env is REQUIRED)
-pytest tests/ --env=pre
+pytest framework/tests/ --env=pre
 
 # 4. View report
 allure serve reports/allure-results

@@ -32,14 +32,14 @@ tools: Read, Grep, Glob, Edit, mcp__code-review-graph__*
 - 裸 `except:` 或 `except Exception: pass`
 - 测试缺断言或使用无效断言（如 `assert True`）
 - **页面对象缺 `is_page_loaded()` 方法**
-- **新增页面未同步导出到 `pages/__init__.py`**
-- **主流程测试中手动创建 browser/context 而未使用 `conftest.py` 的 `page` fixture**
+- **新增页面未同步导出到 `framework/pages/__init__.py`**
+- **主流程测试中手动创建 browser/context 而未使用 `framework/conftest.py` 的 `page` fixture**
 
 ### P1 — 建议修改
 - 命名不符规范：类 PascalCase、方法/变量 snake_case、常量 UPPER_SNAKE_CASE
 - 定位符未声明为类常量，或缺级别注释（`# P0: ARIA role` 等）
 - 页面对象中混入断言（除 `is_page_loaded()`）
-- 魔法值（硬编码 URL、超时）应引用 `config/settings.py`
+- 魔法值（硬编码 URL、超时）应引用 `framework/config/settings.py`
 - 导入顺序违反：标准库 → 第三方 → 项目内
 
 ### P2 — 可选
@@ -69,7 +69,7 @@ tools: Read, Grep, Glob, Edit, mcp__code-review-graph__*
 
    注意：本项目是 POM 测试框架，**必须保留** `BasePage → 页面子类` 继承结构和定位符类常量声明，不得拉平。
    审查无上述信号则跳过此步骤。
-7. **验证**：修复完成后由主代理运行 `pytest tests/test_<page>.py -v`（本代理无 Bash 权限），主代理反馈结果后本代理判断是否需要二次修复
+7. **验证**：修复完成后由主代理运行 `pytest framework/tests/test_<page>.py -v`（本代理无 Bash 权限），主代理反馈结果后本代理判断是否需要二次修复
 8. **出报告**：按下方格式输出
 
 ## 回滚策略
@@ -100,7 +100,7 @@ tools: Read, Grep, Glob, Edit, mcp__code-review-graph__*
 - 受影响执行路径: <关键路径列表，或"无关键路径受影响">
 
 ### P0 问题（N 个）
-1. `pages/xxx_page.py:42` — 定位符使用哈希类名 `.sc-abc123`
+1. `framework/pages/xxx_page.py:42` — 定位符使用哈希类名 `.sc-abc123`
    风险: 构建后失效
    修复: 改为 `role=button[name='提交']`
 
@@ -111,7 +111,7 @@ tools: Read, Grep, Glob, Edit, mcp__code-review-graph__*
 ### 执行记录
 - 已修复 P0: X 个
 - 简化建议: X 处（仅建议，未修改）
-- 待主代理验证: `pytest tests/test_xxx.py -v`
+- 待主代理验证: `pytest framework/tests/test_xxx.py -v`
 
 ### 待主代理确认
 - P1/P2 列表是否应用

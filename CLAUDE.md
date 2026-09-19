@@ -63,10 +63,10 @@
 source .venv/bin/activate
 
 # 按模块运行（--env 必须由用户指定）
-pytest tests/<role>/test_<role>_flow.py --env=<pre|prod>
+pytest framework/tests/<role>/test_<role>_flow.py --env=<pre|prod>
 
 # 全量回归
-pytest tests/ --env=<pre|prod>
+pytest framework/tests/ --env=<pre|prod>
 
 # 报告
 allure serve reports/allure-results

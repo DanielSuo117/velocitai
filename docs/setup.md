@@ -16,7 +16,7 @@ playwright install chromium
 
 ## 配置
 
-1. 复制 `config/settings.example.py` 为 `config/settings.py`
+1. 复制 `framework/config/settings.example.py` 为 `framework/config/settings.py`
 2. 填入各环境的 URL 和 Token
 3. 配置 `--env=pre` 或 `--env=prod`
 
@@ -33,10 +33,10 @@ playwright install chromium
 
 ```bash
 # 按角色运行
-pytest tests/<role>/ --env=<pre|prod>
+pytest framework/tests/<role>/ --env=<pre|prod>
 
 # 全量回归
-pytest tests/ --env=<pre|prod>
+pytest framework/tests/ --env=<pre|prod>
 
 # 查看报告
 allure serve reports/allure-results

@@ -1,5 +1,29 @@
 # 项目架构
 
+## 顶层：代码与 harness 分开存放
+
+```
+velocitai/
+├── framework/          代码部分 —— Python UI 自动化框架
+│   ├── core/           框架核心（base · healing · exceptions · logger）
+│   ├── pages/          业务页面对象
+│   ├── tests/          业务用例
+│   ├── config/         环境与浏览器配置
+│   └── conftest.py     fixture 层
+│
+├── skills/             harness —— agent 操作方法论
+├── rules/              harness —— 强制约束
+├── docs/               harness —— 项目事实
+├── hooks/              harness —— 闸门接线
+├── scripts/gate/       harness —— 落库校验实现
+└── .claude-plugin/     harness —— 插件清单
+```
+
+**为什么 harness 留在仓库根而不是收进子目录**：Claude Code 以「根级
+`.claude-plugin/` 目录或 `skills/<name>/SKILL.md`」作为识别插件的标志，
+把 `skills/` 挪进子目录会让插件无法被发现。代码没有这个约束，因此收进
+`framework/`。
+
 ## POM 分层
 
 ```

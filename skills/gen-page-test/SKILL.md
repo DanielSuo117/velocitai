@@ -101,7 +101,7 @@ def test_<snake_name>(self):
 ### Step 5：真实环境验证
 
 ```bash
-pytest tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_<snake_name>"
+pytest framework/tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_<snake_name>"
 ```
 
 **⚠️ 运行前向用户确认 `--env`**（见 [agent-behavior.md](../../rules/agent-behavior/agent-behavior.md) P0.2）。
@@ -120,7 +120,7 @@ pytest tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_<snake_name
 通用检查（命名/导入/is_page_loaded/allure）→ coding-conventions.md "新增测试检查清单"
 
 - [ ] 定位符均来自真实页面 DOM，行尾标注 P0~P5 级别
-- [ ] `pytest tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_<name>"` 通过
+- [ ] `pytest framework/tests/<role>/test_<role>_flow.py --env=<pre|prod> -v -k "test_<name>"` 通过
 - [ ] 对应角色的 `docs/pages-catalog.md` 已追加
 - [ ] 对应角色的 `docs/regression-points.md` 已追加
 - [ ] 若跳转目标脱离门户布局，已套用 [case-round-trip](../case-round-trip/SKILL.md)

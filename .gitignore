@@ -7,7 +7,9 @@ reports/
 CLAUDE.local.md
 
 # 包含真实 token，禁止入库
+# 代码迁入 framework/ 后旧路径已失效，两条都保留以防历史工作区仍有旧位置文件
 config/settings.py
+framework/config/settings.py
 
 .playwright-mcp
 

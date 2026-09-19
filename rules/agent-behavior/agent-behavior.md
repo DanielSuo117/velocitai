@@ -41,7 +41,7 @@
 
 ```
 用户：运行测试用例
-agent：pytest tests/<role>/test_<role>_flow.py --env=prod -v   # 自行默认 prod
+agent：pytest framework/tests/<role>/test_<role>_flow.py --env=prod -v   # 自行默认 prod
 ```
 
 ✅ 正例：
