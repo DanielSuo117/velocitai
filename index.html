@@ -759,6 +759,71 @@
     display: inline-block;
   }
 
+  /* ─── GATE ─── */
+  .gate-section { background: var(--bg); }
+  .selfheal-section { background: #F5F3EF; }
+  .gate-loop {
+    margin: 2.5rem auto 0; max-width: 820px;
+    background: var(--red-bg); border: 1px solid #F3D9D5;
+    border-radius: var(--radius-lg); padding: 1.3rem 1.6rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .gate-loop .gl-icon { font-size: 1.25rem; line-height: 1.5; flex-shrink: 0; }
+  .gate-loop p { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.75; }
+  .gate-loop strong { color: var(--red); font-weight: 700; }
+  .gate-stages { display: flex; align-items: stretch; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; }
+  .gate-stage {
+    flex: 1 1 190px; min-width: 180px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 1.1rem 1.2rem; text-align: center;
+  }
+  .gate-stage .gs-when {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+    color: var(--accent); background: var(--accent-bg);
+    padding: 3px 10px; border-radius: 5px; display: inline-block; margin-bottom: 0.6rem;
+  }
+  .gate-stage h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .gate-stage p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+  .gate-arrow { display: flex; align-items: center; color: var(--text-muted); font-size: 1.05rem; padding: 0 0.7rem; }
+  .gate-sub { margin-top: 2.6rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; color: var(--text-muted); text-transform: uppercase; }
+  .gate-dims { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.1rem; margin-top: 1rem; }
+  .gate-dim {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-md); padding: 1.15rem 1.3rem;
+  }
+  .gate-dim:nth-child(2) { border-left-color: var(--green); }
+  .gate-dim:nth-child(3) { border-left-color: var(--purple); }
+  .gate-dim:nth-child(4) { border-left-color: var(--red); }
+  .gate-dim .gd-code { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.05em; }
+  .gate-dim h4 { font-size: 0.93rem; font-weight: 700; margin: 0.2rem 0 0.4rem; }
+  .gate-dim p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.65; }
+  .gate-sev { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+  .gate-sev-item { border-radius: var(--radius-md); padding: 1rem 1.2rem; border: 1px solid var(--border); background: var(--bg-card); }
+  .gate-sev-item .gsv-tag {
+    font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem;
+    padding: 2px 9px; border-radius: 5px; display: inline-block; margin-bottom: 0.45rem;
+  }
+  .gsv-block .gsv-tag { color: var(--red); background: var(--red-bg); }
+  .gsv-ask .gsv-tag { color: var(--accent); background: var(--accent-bg); }
+  .gsv-warn .gsv-tag { color: var(--green); background: var(--green-bg); }
+  .gate-sev-item p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+  .gate-failopen {
+    margin-top: 1.4rem; background: var(--green-bg);
+    border: 1px dashed var(--green); border-radius: var(--radius-md);
+    padding: 1.05rem 1.3rem; text-align: center;
+  }
+  .gate-failopen p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+  .gate-failopen strong { color: var(--green); font-weight: 700; }
+  .gate-heal-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; margin-top: 1.4rem; }
+  .ghs { background: var(--bg); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.9rem 1rem; }
+  .ghs .ghs-n { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: var(--purple); margin-bottom: 0.3rem; }
+  .ghs p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55; }
+  .gate-stats { display: flex; justify-content: center; gap: 2.8rem; margin-top: 2.2rem; flex-wrap: wrap; }
+  .gate-stat { text-align: center; }
+  .gate-stat .gst-n { font-size: 1.6rem; font-weight: 800; color: var(--accent); font-family: var(--font-mono); line-height: 1.2; }
+  .gate-stat .gst-l { font-size: 0.76rem; color: var(--text-muted); }
+
   /* ─── QUICK START ─── */
   .qs-section { background: var(--bg); }
   .qs-terminal {
@@ -933,6 +998,11 @@
     .comparison-arrow { transform: rotate(90deg); padding: 0.5rem 0; }
     .code-showcase { grid-template-columns: 1fr; }
     .evo-grid { grid-template-columns: 1fr; }
+    .gate-dims { grid-template-columns: 1fr; }
+    .gate-sev { grid-template-columns: 1fr; }
+    .gate-heal-steps { grid-template-columns: repeat(2, 1fr); }
+    .gate-arrow { display: none; }
+
     .card-grid { grid-template-columns: 1fr; }
     .rules-grid { grid-template-columns: 1fr; }
     .savings-grid { grid-template-columns: 1fr; }
@@ -1153,6 +1223,8 @@
       <a href="#skills"><span data-lang="zh">技能</span><span data-lang="en">Skills</span></a>
       <a href="#rules"><span data-lang="zh">规则</span><span data-lang="en">Rules</span></a>
       <a href="#workflow"><span data-lang="zh">工作流</span><span data-lang="en">Workflow</span></a>
+      <a href="#gate"><span data-lang="zh">落库闸门</span><span data-lang="en">Gate</span></a>
+      <a href="#selfheal"><span data-lang="zh">选择器自愈</span><span data-lang="en">Self-Healing</span></a>
       <a href="#efficiency"><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></a>
       <a href="#install"><span data-lang="zh">安装</span><span data-lang="en">Install</span></a>
       <div class="nav-lang">
@@ -1788,6 +1860,142 @@
   </div>
 </section>
 
+<!-- 落库闸门 -->
+<section class="gate-section reveal" id="gate">
+  <div class="section-inner">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;"><span data-lang="zh">落库闸门</span><span data-lang="en">Sediment Gate</span></div>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">落库闸门 &middot; 让沉淀不反噬</span><span data-lang="en">Sediment Gate &middot; Keep Evolution From Backfiring</span></h2>
+      <p class="section-desc" style="margin:0 auto;">
+        <span data-lang="zh">自我进化会把经验写进 skills/、rules/、docs/，而这些内容会被之后每一个会话当作高优先级上下文加载。闸门在写入那一刻校验，阻止垃圾进入知识库。</span><span data-lang="en">Self-evolution writes lessons into skills/, rules/ and docs/ &mdash; and every later session loads those as high-priority context. The gate validates at the moment of writing, keeping garbage out of the knowledge base.</span>
+      </p>
+    </div>
+
+    <div class="gate-loop">
+      <div class="gl-icon">&#9888;&#65039;</div>
+      <p><span data-lang="zh"><strong>垃圾沉淀不是静态污染，而是自我强化的循环。</strong>一条错误经验被写入后，下个会话会把它当作权威上下文照做，产出更多错误，再沉淀回去。放任不管，agent 会越用越差 &mdash; 这正是闸门存在的理由。</span><span data-lang="en"><strong>Bad sediment isn't static pollution &mdash; it's a self-reinforcing loop.</strong> Once a wrong lesson is written, the next session treats it as authoritative context, produces more errors, and persists those too. Left alone, the agent gets worse with use &mdash; which is exactly why the gate exists.</span></p>
+    </div>
+
+    <div class="gate-stages">
+      <div class="gate-stage">
+        <div class="gs-when">write</div>
+        <h4><span data-lang="zh">写入时拦截</span><span data-lang="en">At Write Time</span></h4>
+        <p><span data-lang="zh">PreToolUse 钩子拦下 Write / Edit，问题内容在落盘之前就被拒绝。</span><span data-lang="en">A PreToolUse hook intercepts Write / Edit &mdash; bad content is rejected before it ever hits disk.</span></p>
+      </div>
+      <div class="gate-arrow">&#8594;</div>
+      <div class="gate-stage">
+        <div class="gs-when">commit</div>
+        <h4><span data-lang="zh">提交时复核</span><span data-lang="en">At Commit Time</span></h4>
+        <p><span data-lang="zh">校验暂存区内容，检查注册闭环与路由表死链。</span><span data-lang="en">Validates staged content, checking registration closure and dead links in the route table.</span></p>
+      </div>
+      <div class="gate-arrow">&#8594;</div>
+      <div class="gate-stage">
+        <div class="gs-when">audit</div>
+        <h4><span data-lang="zh">全库巡检</span><span data-lang="en">Full Audit</span></h4>
+        <p><span data-lang="zh">一次性扫描全部 skills / rules / docs，充当零误报回归基线。</span><span data-lang="en">Scans all skills / rules / docs at once, serving as a zero-false-positive regression baseline.</span></p>
+      </div>
+    </div>
+
+    <div class="gate-sub"><span data-lang="zh">四个校验维度</span><span data-lang="en">Four Validation Dimensions</span></div>
+    <div class="gate-dims">
+      <div class="gate-dim">
+        <div class="gd-code">EVI</div>
+        <h4><span data-lang="zh">证据门槛 + 语义去重</span><span data-lang="en">Evidence Threshold + Semantic Dedup</span></h4>
+        <p><span data-lang="zh">新沉淀必须写明触发条件与失败现象，不能只留一句结论；与既有条款标题重叠过高的，判为重复沉淀。</span><span data-lang="en">New sediment must state its trigger and the failure it prevents &mdash; not just a conclusion. Content overlapping too heavily with existing clauses is flagged as duplicate.</span></p>
+      </div>
+      <div class="gate-dim">
+        <div class="gd-code">STR</div>
+        <h4><span data-lang="zh">结构合规</span><span data-lang="en">Structural Compliance</span></h4>
+        <p><span data-lang="zh">frontmatter 的 name 必须与目录名一致；规则必含 &#10060; 反例 + &#9989; 正例；篇幅有上限；链接不得指向不存在的文件。</span><span data-lang="en">Frontmatter name must match the directory; rules must carry a &#10060; counter-example and a &#9989; example; length is capped; links must not point at missing files.</span></p>
+      </div>
+      <div class="gate-dim">
+        <div class="gd-code">GEN</div>
+        <h4><span data-lang="zh">通用化检测</span><span data-lang="en">Genericity Detection</span></h4>
+        <p><span data-lang="zh">禁止把项目专有域名、本地绝对路径、构建工具生成的哈希类名写进 skill 正文 &mdash; 它们换个项目就失效。</span><span data-lang="en">Project-specific hostnames, local absolute paths and build-tool hash class names are barred from skill bodies &mdash; they break on any other project.</span></p>
+      </div>
+      <div class="gate-dim">
+        <div class="gd-code">REG</div>
+        <h4><span data-lang="zh">注册闭环 + 镜像守卫</span><span data-lang="en">Registration Closure + Mirror Guard</span></h4>
+        <p><span data-lang="zh">新建 skill 必须登记进路由表，否则写了也没人找得到；同时禁止写入已废弃的历史镜像目录。</span><span data-lang="en">A new skill must be registered in the route table, or nobody can find it; writes into deprecated mirror directories are blocked.</span></p>
+      </div>
+    </div>
+
+    <div class="gate-sub"><span data-lang="zh">三档处置</span><span data-lang="en">Three Severities</span></div>
+    <div class="gate-sev">
+      <div class="gate-sev-item gsv-block">
+        <div class="gsv-tag">BLOCK</div>
+        <p><span data-lang="zh">直接拒绝写入，并把「修法」回传给 agent，让它自己改对再来。</span><span data-lang="en">Rejects the write outright and hands the agent a concrete fix, so it can correct itself and retry.</span></p>
+      </div>
+      <div class="gate-sev-item gsv-ask">
+        <div class="gsv-tag">ASK</div>
+        <p><span data-lang="zh">交还用户确认。新建 skill / rule 一律必须由人点头 &mdash; 由 harness 强制，agent 绕不过去。</span><span data-lang="en">Hands the decision back to you. Creating a new skill or rule always needs human approval &mdash; enforced by the harness, not by the agent's goodwill.</span></p>
+      </div>
+      <div class="gate-sev-item gsv-warn">
+        <div class="gsv-tag">WARN</div>
+        <p><span data-lang="zh">放行但提示，不打断工作流。适用于风格与可维护性问题。</span><span data-lang="en">Passes with a note, never interrupting the flow. Used for style and maintainability issues.</span></p>
+      </div>
+    </div>
+
+    <div class="gate-failopen">
+      <p><span data-lang="zh"><strong>fail-open 原则：</strong>脚本异常、git 超时、输入畸形 &mdash; 无论闸门自身出什么故障，一律放行。闸门绝不因为自己坏了而挡住你的工作。</span><span data-lang="en"><strong>Fail-open by design:</strong> script errors, git timeouts, malformed input &mdash; whatever breaks inside the gate, the write is allowed through. The gate never blocks your work because of its own failure.</span></p>
+    </div>
+
+    <div class="gate-stats">
+      <div class="gate-stat"><div class="gst-n">17</div><div class="gst-l"><span data-lang="zh">违规码</span><span data-lang="en">Violation codes</span></div></div>
+      <div class="gate-stat"><div class="gst-n">4</div><div class="gst-l"><span data-lang="zh">校验维度</span><span data-lang="en">Dimensions</span></div></div>
+      <div class="gate-stat"><div class="gst-n">3</div><div class="gst-l"><span data-lang="zh">拦截时机</span><span data-lang="en">Gate points</span></div></div>
+      <div class="gate-stat"><div class="gst-n">0</div><div class="gst-l"><span data-lang="zh">第三方依赖</span><span data-lang="en">Dependencies</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 选择器自愈 -->
+<section class="selfheal-section reveal" id="selfheal">
+  <div class="section-inner">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;"><span data-lang="zh">选择器自愈</span><span data-lang="en">Self-Healing</span></div>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">选择器自愈 &middot; 让 UI 微调不再误报</span><span data-lang="en">Selector Self-Healing &middot; No More False Failures From UI Tweaks</span></h2>
+      <p class="section-desc" style="margin:0 auto;">
+        <span data-lang="zh">选择器因页面改版失效时，默认行为是判用例失败 &mdash; 但这多半是误报：功能没坏，只是定位符过期了。自愈基于该定位符上次成功命中时留下的意图，把它重建出来。</span><span data-lang="en">When a selector breaks after a UI change the test fails &mdash; usually a false alarm: the feature still works, only the locator went stale. Self-healing rebuilds it from the intent recorded the last time it matched.</span>
+      </p>
+    </div>
+
+    <div class="gate-loop">
+      <div class="gl-icon">&#128737;&#65039;</div>
+      <p><span data-lang="zh"><strong>安全底线：自愈只修复「定位」，绝不把真失败变成假通过。</strong>真正的危险不是修不好，而是候选顶替到另一个恰好存在的元素 &mdash; 用例照样绿，功能其实已经坏了。误报只是吵，假通过是骗。因此候选必须<strong>同时</strong>满足：意图指纹一致、全页唯一命中、元素可见。任一不满足即放弃自愈，按原样失败。</span><span data-lang="en"><strong>The hard line: self-healing may fix location only &mdash; it must never turn a real failure into a false pass.</strong> The danger isn't failing to heal; it's a candidate standing in for some other element that happens to exist &mdash; the test goes green while the feature is broken. A false alarm is noise; a false pass is a lie. So a candidate must satisfy <strong>all three</strong>: matching intent fingerprint, exactly one match on the page, and visible. Fail any one and healing is abandoned.</span></p>
+    </div>
+
+    <div class="gate-sub"><span data-lang="zh">四步重建</span><span data-lang="en">Four Steps</span></div>
+    <div class="gate-heal-steps">
+      <div class="ghs"><div class="ghs-n">01</div><p><span data-lang="zh"><strong>记忆</strong><br>定位成功时记下命中元素的形态 &mdash; 标签、ARIA role、可及名称。这份指纹就是日后自愈所依据的「旧有逻辑」。</span><span data-lang="en"><strong>Remember</strong><br>On every successful match, record the element's shape &mdash; tag, ARIA role, accessible name. That fingerprint is the prior logic healing later relies on.</span></p></div>
+      <div class="ghs"><div class="ghs-n">02</div><p><span data-lang="zh"><strong>推断</strong><br>失效时抓当前 DOM 快照，结合指纹与常量注释还原它本来想选中什么。</span><span data-lang="en"><strong>Infer</strong><br>On failure, snapshot the live DOM and combine fingerprint with the constant's own comment to recover intent.</span></p></div>
+      <div class="ghs"><div class="ghs-n">03</div><p><span data-lang="zh"><strong>验证</strong><br>按稳定性排序候选（testid &rarr; id &rarr; role+名称），逐个在真实页面上实跑，必须唯一命中。</span><span data-lang="en"><strong>Verify</strong><br>Rank candidates by durability (testid &rarr; id &rarr; role+name) and actually run each against the live page &mdash; must match exactly once.</span></p></div>
+      <div class="ghs"><div class="ghs-n">04</div><p><span data-lang="zh"><strong>写回</strong><br>运行期只写提案，<strong>绝不改源码</strong>；写回由 skill 复核后进行，并同样要过落库闸门。</span><span data-lang="en"><strong>Write back</strong><br>The run only emits a proposal &mdash; it <strong>never rewrites source</strong>. Write-back happens under review, and must clear the sediment gate too.</span></p></div>
+    </div>
+
+    <div class="gate-sub"><span data-lang="zh">三种模式</span><span data-lang="en">Three Modes</span></div>
+    <div class="gate-sev">
+      <div class="gate-sev-item gsv-warn">
+        <div class="gsv-tag">off</div>
+        <p><span data-lang="zh">默认。行为与未引入自愈时逐字一致，零额外开销。</span><span data-lang="en">The default. Behaves exactly as before self-healing existed, with zero overhead.</span></p>
+      </div>
+      <div class="gate-sev-item gsv-ask">
+        <div class="gsv-tag">on</div>
+        <p><span data-lang="zh">失效时尝试重建，用例继续。终端逐条列出被修复的定位符。</span><span data-lang="en">Attempts a rebuild on failure so the run continues, listing every healed locator in the summary.</span></p>
+      </div>
+      <div class="gate-sev-item gsv-block">
+        <div class="gsv-tag">strict</div>
+        <p><span data-lang="zh">同 on，但只要发生过自愈就以非零码结束 &mdash; 让 CI 看见定位符漂移。</span><span data-lang="en">Same as on, but exits non-zero if anything was healed &mdash; so CI sees the drift.</span></p>
+      </div>
+    </div>
+
+    <div class="gate-failopen">
+      <p><span data-lang="zh"><strong>自愈过的用例不算干净通过。</strong>自愈成功说明定位符已经漂移；沉默地放过去，下次就是真失败，而且没人知道从哪一次开始坏的。</span><span data-lang="en"><strong>A healed test is not a clean pass.</strong> A successful heal means the locator has drifted; let it slide silently and the next run is a real failure nobody can trace back to its start.</span></p>
+    </div>
+  </div>
+</section>
+
 <!-- 安装 -->
 <section class="qs-section reveal" id="install">
   <div class="section-inner">
@@ -2016,6 +2224,8 @@
       <a href="#skills"><span data-lang="zh">技能</span><span data-lang="en">Skills</span></a>
       <a href="#rules"><span data-lang="zh">规则</span><span data-lang="en">Rules</span></a>
       <a href="#workflow"><span data-lang="zh">工作流</span><span data-lang="en">Workflow</span></a>
+      <a href="#gate"><span data-lang="zh">落库闸门</span><span data-lang="en">Gate</span></a>
+      <a href="#selfheal"><span data-lang="zh">选择器自愈</span><span data-lang="en">Self-Healing</span></a>
       <a href="#efficiency"><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></a>
       <a href="#install"><span data-lang="zh">安装</span><span data-lang="en">Install</span></a>
       <a href="https://github.com/DanielSuo117/velocitai" target="_blank">GitHub</a>
