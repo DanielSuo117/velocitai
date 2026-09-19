@@ -16,6 +16,14 @@
 
 **规则**：一次无反应立即降级到 JS 点击，禁止反复重试。
 
+❌ 反例：
+
+```bash
+agent-browser click @e27   # 没反应
+agent-browser click @e27   # 再点一次 —— 仍然没反应
+agent-browser click @e27   # 第三次 —— CDP 合成事件不会因为重试而生效，纯浪费 token
+```
+
 ✅ 正例：
 
 ```bash
@@ -31,6 +39,14 @@ agent-browser eval "(function(){ document.querySelectorAll('.target-selector')[0
 **触发**：`agent-browser click` 或 `eval` 触发了新 tab。
 
 **规则**：agent-browser 不会自动切换到新 tab。操作后必须 list → 切换 → snapshot。
+
+❌ 反例：
+
+```bash
+agent-browser click @e11
+agent-browser snapshot -i -c   # 抓到的仍是旧 tab 的内容
+# → 误判为"点击没生效"，转而去改定位符，排查方向从一开始就是错的
+```
 
 ✅ 正例：
 
@@ -50,6 +66,13 @@ agent-browser snapshot -i -c      # 新页面内容
 **原因**：`browser_navigate` 不等 `networkidle`，token 登录后 SSO cookie 可能还在异步写入，直接跳转子域名时 cookie 未就绪 → 被重定向到登录页。
 
 **规则**：token 免登后，必须用 `browser_wait_for` 确认登录成功标识出现，再导航到子域名。
+
+❌ 反例：
+
+```
+browser_navigate → <BASE_URL>/entry?token=JWT
+browser_navigate → <TARGET_SUBDOMAIN>/...   # SSO cookie 仍在异步写入 → 被重定向回登录页
+```
 
 ✅ 正例：
 
@@ -79,10 +102,19 @@ page.wait_for_load_state("networkidle")
 
 **规则**：用 `agent-browser` 打开真实页面验证目标区域的现有定位符。发现不匹配时：修正定位符 → 同步更新 `docs/regression-points.md` → 检查其他用例引用。
 
+❌ 反例：
+
+```python
+# 直接照抄 PageObject 里的现有定位符写新用例，不开页面验证
+COURSE_TAB = "text=课程"          # 页面早已改版，该文案不复存在
+# → 新用例一跑就 TimeoutError，而问题根本不在新写的代码里
+```
+
 ✅ 正例：
 
 ```bash
 agent-browser open <页面URL>
+agent-browser set viewport 1024 768
 agent-browser snapshot -s "<目标容器选择器>"
 # 确认实际文本与代码中定位符一致，不一致则先修正再写用例
 ```
@@ -94,6 +126,15 @@ agent-browser snapshot -s "<目标容器选择器>"
 **触发**：需采集多个 tab / 菜单项 / 面板内容（N ≥ 3）。
 
 **规则**：用 JS eval 循环批量采集，禁止逐个 click + snapshot（N 个元素 = 2N 条命令）。
+
+❌ 反例：
+
+```bash
+agent-browser click @e31 && agent-browser snapshot -i -c
+agent-browser click @e32 && agent-browser snapshot -i -c
+agent-browser click @e33 && agent-browser snapshot -i -c
+# ... 14 个元素 = 28 条命令，token 消耗是 eval 循环的十几倍
+```
 
 ✅ 正例：
 
