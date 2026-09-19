@@ -12,7 +12,9 @@ _URL_RE = re.compile(r"https?://[^\s)\]\"'`，。）、；：]+")
 # 前缀表严格对齐 spec §6.2：/Users/ 、/Applications/ 、C:\ 。不含 /home/ ——
 # 正则不锚定行首，加上它会把 page.goto("/home/dashboard")、
 # https://example.com/home/list 这类普通 URL 路径段判成本地绝对路径。
-_ABS_PATH_RE = re.compile(r"(?:/Users/|/Applications/|[A-Za-z]:\\)[^\s)\]\"'`，。）]*")
+# 尾部用 + 而非 *：裸前缀「/Users/ 开头的绝对路径」这类描述性提及不是路径本身，
+# 判成违规属误报；真实路径必然还有至少一段。
+_ABS_PATH_RE = re.compile(r"(?:/Users/|/Applications/|[A-Za-z]:\\)[^\s)\]\"'`，。）]+")
 # 判别依据：构建工具的哈希段必然含数字（abc123 / 1x2y3 / 1a2b3c），
 # 而 Python 方法名每一段都是纯字母（is_page_loaded / set_default_timeout）。
 # 不要求数字就会把整个 Playwright 项目的方法名全判成哈希类名。
@@ -38,10 +40,25 @@ _WORDLIST = pathlib.Path(__file__).resolve().parent.parent / "wordlist.txt"
 
 
 def _is_teaching_line(line: str) -> bool:
-    """反例教学语境豁免 —— 注释 / 表格 / 清单 / 显式反例标记。"""
+    """宽豁免 —— 注释 / 表格 / 清单 / 显式反例标记。供 GEN003 / GEN004 使用。
+
+    这两条检查的目标（哈希类名、业务术语）在表格与标题里天然大量出现于
+    对照说明中，沿用宽判据是已验证过的零误报行为。
+    """
     s = line.lstrip()
     if s.startswith(("#", "|", "- [ ]", "- [x]")):
         return True
+    return any(mark in line for mark in _EXEMPT_MARKERS)
+
+
+def _is_counterexample_line(line: str) -> bool:
+    """窄豁免 —— 仅显式反例标记。供 GEN001 / GEN002 使用。
+
+    结构前缀（# 标题、| 表格行）不算教学语境。skills 正文里表格极其常见，
+    把它们整体豁免等于让这两条检查对表格内的硬编码 URL 与绝对路径彻底失明，
+    而堵住这类标识符正是它们存在的唯一理由。
+    真正需要豁免的是「❌ 反例：...」这类显式对照，显式标记已足够覆盖。
+    """
     return any(mark in line for mark in _EXEMPT_MARKERS)
 
 
@@ -62,31 +79,32 @@ def check(rel, text, root=None):
     words = _wordlist()
 
     for i, line in enumerate(text.splitlines(), 1):
-        # 反例教学豁免统一作用于 GEN001–GEN004，不只 GEN003。本项目自己的规范
-        # 要求每条规则配 ❌ 反例（含 P0.5「skill 正文不得写入项目专有标识」这一条
-        # 本身），若只豁免 GEN003，闸门就会拦下它自己要求人写的那些反例 ——
-        # 「❌ 反例：page.goto("https://portal.example-x.net")」会被判 GEN001。
+        # 反例教学豁免作用于 GEN001–GEN004，不只 GEN003：本项目规范要求每条规则
+        # 配 ❌ 反例（含 P0.5「skill 正文不得写入项目专有标识」这一条本身），
+        # 若只豁免 GEN003，闸门就会拦下它自己要求人写的那些反例。
+        # 但两组用的判据宽窄不同 —— 见 _is_counterexample_line 的说明。
+        if not _is_counterexample_line(line):
+            for m in _URL_RE.finditer(line):
+                url = m.group(0)
+                if url.startswith(_URL_PLACEHOLDER_PREFIXES):
+                    continue
+                if any(w in url for w in _URL_WHITELIST):
+                    continue
+                out.append(Violation(
+                    "GEN001", Severity.BLOCK, rel_s, i,
+                    f"skill 正文出现具体 URL：{url}",
+                    "抽象为占位符（如 <目标页面URL>）；项目级 URL 放 docs/ 或 config/",
+                ))
+
+            for m in _ABS_PATH_RE.finditer(line):
+                out.append(Violation(
+                    "GEN002", Severity.BLOCK, rel_s, i,
+                    f"skill 正文出现本地绝对路径：{m.group(0)}",
+                    "改为相对仓库根的路径，或抽象为占位符",
+                ))
+
         if _is_teaching_line(line):
             continue
-
-        for m in _URL_RE.finditer(line):
-            url = m.group(0)
-            if url.startswith(_URL_PLACEHOLDER_PREFIXES):
-                continue
-            if any(w in url for w in _URL_WHITELIST):
-                continue
-            out.append(Violation(
-                "GEN001", Severity.BLOCK, rel_s, i,
-                f"skill 正文出现具体 URL：{url}",
-                "抽象为占位符（如 <目标页面URL>）；项目级 URL 放 docs/ 或 config/",
-            ))
-
-        for m in _ABS_PATH_RE.finditer(line):
-            out.append(Violation(
-                "GEN002", Severity.BLOCK, rel_s, i,
-                f"skill 正文出现本地绝对路径：{m.group(0)}",
-                "改为相对仓库根的路径，或抽象为占位符",
-            ))
 
         m = _HASH_CLASS_RE.search(line)
         if m:

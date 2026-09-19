@@ -169,6 +169,25 @@ class TestTeachingLineExemptionCoversAllCodes(unittest.TestCase):
         vs = genericity.check(SKILL, 'BASE = "/Users/alice/proj"\n')
         self.assertIn("GEN002", codes(vs))
 
+    # ---- 结构前缀本身不构成教学语境：表格与标题在 skills 正文里极其常见，
+    # 整体豁免会让 GEN001/GEN002 对表格内的硬编码标识符彻底失明 ----
+    def test_table_row_without_marker_still_blocks(self):
+        vs = genericity.check(SKILL, "| 登录页 | https://portal.example-x.net/login | 入口 |\n")
+        self.assertIn("GEN001", codes(vs))
+
+    def test_heading_without_marker_still_blocks(self):
+        vs = genericity.check(SKILL, "# 部署到 https://portal.example-x.net\n")
+        self.assertIn("GEN001", codes(vs))
+
+    def test_table_row_abs_path_without_marker_still_blocks(self):
+        vs = genericity.check(SKILL, "| 配置 | /Users/alice/proj/config.py |\n")
+        self.assertIn("GEN002", codes(vs))
+
+    def test_bare_prefix_mention_is_not_a_path(self):
+        # 「/Users/ 开头的」是在描述规则，不是写死路径
+        vs = genericity.check(SKILL, "正文不得出现 /Users/ 开头的绝对路径\n")
+        self.assertEqual(codes(vs), [])
+
     def test_good_marked_line_is_not_a_teaching_line(self):
         # ✅ 正例里写死真 URL 依然是写死真 URL —— 豁免只认反例标记
         vs = genericity.check(SKILL, '✅ 正例：page.goto("https://portal.example-x.net")\n')
