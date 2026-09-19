@@ -216,9 +216,35 @@
     background: rgba(255,255,255,0.1);
   }
 
+  /* 首屏机制条：光有数字说不清这两套机制是什么，这里用一句话点名 */
+  .hero-mechs {
+    margin-top: 2.4rem;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+    animation: fadeInUp 0.8s ease-out 0.35s both;
+  }
+  .hero-mech {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 1.05rem 1.25rem; border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    text-decoration: none; transition: all 0.25s;
+  }
+  .hero-mech:hover {
+    background: rgba(255,255,255,0.075);
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-2px);
+  }
+  .hero-mech .hm-icon {
+    flex: none; width: 30px; height: 30px; border-radius: 8px;
+    display: grid; place-items: center; font-size: 0.95rem;
+    background: var(--accent-glow); color: var(--accent-light);
+  }
+  .hero-mech .hm-t { font-size: 0.92rem; font-weight: 700; color: var(--text-inverse); letter-spacing: -0.01em; }
+  .hero-mech .hm-d { font-size: 0.79rem; color: rgba(245,243,239,0.48); margin-top: 4px; line-height: 1.6; }
+
   .hero-metrics {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; margin-top: 4rem;
+    gap: 1px; margin-top: 2.2rem;
     background: rgba(255,255,255,0.06);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -714,7 +740,7 @@
   }
 
   /* ─── EVOLUTION ─── */
-  .evo-section { background: #F5F3EF; }
+  .evo-section { background: var(--bg); }
   .evo-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem; margin-top: 3rem;
@@ -1011,6 +1037,7 @@
     .savings-grid { grid-template-columns: 1fr; }
     .efficiency-grid { grid-template-columns: 1fr; }
     .hero-actions { flex-direction: column; align-items: flex-start; }
+    .hero-mechs { grid-template-columns: 1fr; }
     #install .section-inner > div[style*="grid-template-columns"] {
       grid-template-columns: 1fr !important;
     }
@@ -1269,6 +1296,22 @@
         <span data-lang="zh">在 GitHub 上 Star</span><span data-lang="en">Star on GitHub</span>
       </a>
       <a href="#install" class="hero-btn hero-btn-outline"><span data-lang="zh">安装 &rarr;</span><span data-lang="en">Install &rarr;</span></a>
+    </div>
+    <div class="hero-mechs">
+      <a href="#gate" class="hero-mech">
+        <div class="hm-icon">&#9878;</div>
+        <div>
+          <div class="hm-t"><span data-lang="zh">落库闸门</span><span data-lang="en">Sediment Gate</span></div>
+          <div class="hm-d"><span data-lang="zh">写入即校验，挡住会污染知识库的沉淀 &mdash; 让 agent 的自我进化不反噬</span><span data-lang="en">Validates at write time, keeping polluting entries out &mdash; so self-evolution never backfires</span></div>
+        </div>
+      </a>
+      <a href="#selfheal" class="hero-mech">
+        <div class="hm-icon">&#8635;</div>
+        <div>
+          <div class="hm-t"><span data-lang="zh">LLM 选择器自愈</span><span data-lang="en">LLM Selector Self-Healing</span></div>
+          <div class="hm-d"><span data-lang="zh">定位符失效后自动重建，规则先上、模型兜底，三道闸保证绝不假通过</span><span data-lang="en">Rebuilds dead locators automatically &mdash; rules first, model as fallback, three gates against false passes</span></div>
+        </div>
+      </a>
     </div>
     <div class="hero-metrics">
       <div class="hero-metric">
@@ -1704,140 +1747,6 @@
   </div>
 </section>
 
-<!-- 开发效率 -->
-<section class="efficiency-section reveal" id="efficiency">
-  <div class="section-inner">
-    <div class="section-header">
-      <div class="section-label"><span data-lang="zh">开发效率</span><span data-lang="en">Dev Efficiency</span></div>
-      <h2 class="section-title"><span data-lang="zh">60 天的工作量，15 天交付</span><span data-lang="en">60 Days of Work, Delivered in 15 Days</span></h2>
-      <p class="section-desc">
-        <span data-lang="zh">实测数据：构建完整的 UI 自动化 Agent Harness（含 13 个 Skills、14 个 Rule 文件、4 个文档、1 个 Sub-Agent），
-        VelocitAI + AI Agent 协作仅需 15 个工作日，传统人工编码预估需 60 个工作日。</span><span data-lang="en">Real-world data: building a complete UI Automation Agent Harness (13 Skills, 14 Rule files, 4 docs, 1 Sub-Agent),
-        VelocitAI + AI Agent collaboration takes only 15 working days, vs. an estimated 60 working days with traditional manual coding.</span>
-      </p>
-    </div>
-    <div class="efficiency-grid">
-      <div class="efficiency-left">
-        <div class="eff-bar-group">
-          <div class="eff-bar">
-            <div class="eff-bar-label">
-              <span><span data-lang="zh">传统人工编码</span><span data-lang="en">Traditional Manual Coding</span></span>
-              <span class="days slow"><span data-lang="zh">60 天</span><span data-lang="en">60 days</span></span>
-            </div>
-            <div class="eff-bar-track">
-              <div class="eff-bar-fill manual"><span data-lang="zh">12 周</span><span data-lang="en">12 weeks</span></div>
-            </div>
-          </div>
-          <div class="eff-bar">
-            <div class="eff-bar-label">
-              <span>VelocitAI + AI Agent</span>
-              <span class="days fast"><span data-lang="zh">15 天</span><span data-lang="en">15 days</span></span>
-            </div>
-            <div class="eff-bar-track">
-              <div class="eff-bar-fill ai"><span data-lang="zh">3 周</span><span data-lang="en">3 weeks</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="eff-callouts">
-          <div class="eff-callout">
-            <div class="big accent">4x</div>
-            <div class="label"><span data-lang="zh">开发效率提升</span><span data-lang="en">Dev Efficiency Boost</span></div>
-          </div>
-          <div class="eff-callout">
-            <div class="big green">75%</div>
-            <div class="label"><span data-lang="zh">工时节省</span><span data-lang="en">Time Saved</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="eff-right">
-        <h3><span data-lang="zh">提效来自哪里？</span><span data-lang="en">Where Does the Efficiency Come From?</span></h3>
-        <div class="eff-breakdown">
-          <div class="eff-item">
-            <div class="eff-item-icon" style="background:var(--accent-bg);color:var(--accent);">&#9889;</div>
-            <div class="eff-item-text">
-              <h4><span data-lang="zh">Skill 驱动的代码生成</span><span data-lang="en">Skill-Driven Code Generation</span></h4>
-              <p><span data-lang="zh">gen-page-test 一键生成 PageObject + 测试骨架，Agent 自动填充定位符和断言逻辑</span><span data-lang="en">gen-page-test generates PageObject + test scaffolding in one shot; Agent auto-fills locators and assertion logic</span></p>
-              <span class="time-save"><span data-lang="zh">节省 ~70% 页面编码时间</span><span data-lang="en">Saves ~70% of page coding time</span></span>
-            </div>
-          </div>
-          <div class="eff-item">
-            <div class="eff-item-icon" style="background:var(--red-bg);color:var(--red);">&#128295;</div>
-            <div class="eff-item-text">
-              <h4><span data-lang="zh">规则前置 &middot; 错误归零</span><span data-lang="en">Rules-First &middot; Zero Errors</span></h4>
-              <p><span data-lang="zh">14 个 Rule 文件提前拦截脆弱定位符、无效断言、cookie 污染等常见错误，避免返工</span><span data-lang="en">14 Rule files proactively catch fragile locators, invalid assertions, cookie pollution, and other common errors — no rework</span></p>
-              <span class="time-save"><span data-lang="zh">减少 ~80% 调试返工</span><span data-lang="en">Reduces ~80% of debug rework</span></span>
-            </div>
-          </div>
-          <div class="eff-item">
-            <div class="eff-item-icon" style="background:var(--green-bg);color:var(--green);">&#128161;</div>
-            <div class="eff-item-text">
-              <h4><span data-lang="zh">自我进化 &middot; 知识复利</span><span data-lang="en">Self-Evolution &middot; Compounding Knowledge</span></h4>
-              <p><span data-lang="zh">踩过的坑自动沉淀为 Skill/Rule，后续同类任务直接命中最佳实践，越用越快</span><span data-lang="en">Lessons learned auto-persist as Skills/Rules; future similar tasks hit best practices directly — gets faster over time</span></p>
-              <span class="time-save"><span data-lang="zh">后期任务加速 ~50%</span><span data-lang="en">Later tasks accelerate by ~50%</span></span>
-            </div>
-          </div>
-          <div class="eff-item">
-            <div class="eff-item-icon" style="background:var(--purple-bg);color:var(--purple);">&#128202;</div>
-            <div class="eff-item-text">
-              <h4><span data-lang="zh">code-reviewer 自动审查</span><span data-lang="en">code-reviewer Automated Review</span></h4>
-              <p><span data-lang="zh">P0/P1/P2 分级审查 + AST 图谱影响分析，替代人工 Code Review 环节</span><span data-lang="en">P0/P1/P2 tiered review + AST graph impact analysis, replacing manual code review steps</span></p>
-              <span class="time-save"><span data-lang="zh">审查效率提升 ~3x</span><span data-lang="en">Review efficiency up ~3x</span></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Token 节省 -->
-<section class="savings-section reveal" id="savings">
-  <div class="section-inner">
-    <div class="section-header">
-      <div class="section-label"><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></div>
-      <h2 class="section-title"><span data-lang="zh">agent-browser 集成 &middot; Token 消耗直降 88%</span><span data-lang="en">agent-browser Integration &middot; Token Consumption Down 88%</span></h2>
-      <p class="section-desc">
-        <span data-lang="zh">传统 Playwright MCP 每次页面交互消耗大量 token。VelocitAI 集成 agent-browser，用 Rust CLI 替代 MCP 快照。</span><span data-lang="en">Traditional Playwright MCP consumes a large number of tokens per page interaction. VelocitAI integrates agent-browser, replacing MCP snapshots with a Rust CLI.</span>
-      </p>
-    </div>
-    <div class="savings-grid">
-      <div class="savings-chart">
-        <div class="savings-bar">
-          <div class="savings-bar-label">
-            <span><span data-lang="zh">Playwright MCP 快照</span><span data-lang="en">Playwright MCP Snapshot</span></span>
-            <span><span data-lang="zh">~3,500 tokens/次</span><span data-lang="en">~3,500 tokens/call</span></span>
-          </div>
-          <div class="savings-bar-track">
-            <div class="savings-bar-fill traditional">3,500 tokens</div>
-          </div>
-        </div>
-        <div class="savings-bar">
-          <div class="savings-bar-label">
-            <span><span data-lang="zh">agent-browser 快照</span><span data-lang="en">agent-browser Snapshot</span></span>
-            <span><span data-lang="zh">~200-400 tokens/次</span><span data-lang="en">~200-400 tokens/call</span></span>
-          </div>
-          <div class="savings-bar-track">
-            <div class="savings-bar-fill velocitai">~300</div>
-          </div>
-        </div>
-      </div>
-      <div class="savings-callout">
-        <div class="big-number">82-93%</div>
-        <div class="desc">
-          <span data-lang="zh">单次 DOM 探索的 Token 节省率。<br>
-          10 个页面的回归测试生成流程，总计可节省 <strong>~30,000 tokens</strong>。</span><span data-lang="en">Token savings rate per DOM exploration.<br>
-          For a 10-page regression test generation workflow, total savings reach <strong>~30,000 tokens</strong>.</span>
-        </div>
-        <div class="detail">
-          <span data-lang="zh">agent-browser 基于 CDP 协议直接获取无障碍树，绕过 MCP 序列化开销。
-          点击失败时自动降级到 JS eval，新 tab 自动 list &rarr; switch &rarr; snapshot。</span><span data-lang="en">agent-browser fetches the accessibility tree directly via CDP, bypassing MCP serialization overhead.
-          On click failure it auto-falls back to JS eval; new tabs are automatically list &rarr; switch &rarr; snapshot.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- 自我进化 -->
 <section class="evo-section reveal" id="evolution">
   <div class="section-inner">
@@ -1871,7 +1780,6 @@
   </div>
 </section>
 
-<!-- 落库闸门 -->
 <!-- 两套机制速览 -->
 <section class="mech-section reveal" id="mechanisms">
   <div class="section-inner">
@@ -1907,6 +1815,7 @@
   </div>
 </section>
 
+<!-- 落库闸门 -->
 <section class="gate-section reveal" id="gate">
   <div class="section-inner">
     <div class="section-header" style="text-align:center;">
@@ -2098,6 +2007,140 @@
 
     <div class="gate-failopen">
       <p><span data-lang="zh"><strong>自愈过的用例不算干净通过。</strong>自愈成功说明定位符已经漂移；沉默地放过去，下次就是真失败，而且没人知道从哪一次开始坏的。</span><span data-lang="en"><strong>A healed test is not a clean pass.</strong> A successful heal means the locator has drifted; let it slide silently and the next run is a real failure nobody can trace back to its start.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 开发效率 -->
+<section class="efficiency-section reveal" id="efficiency">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label"><span data-lang="zh">开发效率</span><span data-lang="en">Dev Efficiency</span></div>
+      <h2 class="section-title"><span data-lang="zh">60 天的工作量，15 天交付</span><span data-lang="en">60 Days of Work, Delivered in 15 Days</span></h2>
+      <p class="section-desc">
+        <span data-lang="zh">实测数据：构建完整的 UI 自动化 Agent Harness（含 13 个 Skills、14 个 Rule 文件、4 个文档、1 个 Sub-Agent），
+        VelocitAI + AI Agent 协作仅需 15 个工作日，传统人工编码预估需 60 个工作日。</span><span data-lang="en">Real-world data: building a complete UI Automation Agent Harness (13 Skills, 14 Rule files, 4 docs, 1 Sub-Agent),
+        VelocitAI + AI Agent collaboration takes only 15 working days, vs. an estimated 60 working days with traditional manual coding.</span>
+      </p>
+    </div>
+    <div class="efficiency-grid">
+      <div class="efficiency-left">
+        <div class="eff-bar-group">
+          <div class="eff-bar">
+            <div class="eff-bar-label">
+              <span><span data-lang="zh">传统人工编码</span><span data-lang="en">Traditional Manual Coding</span></span>
+              <span class="days slow"><span data-lang="zh">60 天</span><span data-lang="en">60 days</span></span>
+            </div>
+            <div class="eff-bar-track">
+              <div class="eff-bar-fill manual"><span data-lang="zh">12 周</span><span data-lang="en">12 weeks</span></div>
+            </div>
+          </div>
+          <div class="eff-bar">
+            <div class="eff-bar-label">
+              <span>VelocitAI + AI Agent</span>
+              <span class="days fast"><span data-lang="zh">15 天</span><span data-lang="en">15 days</span></span>
+            </div>
+            <div class="eff-bar-track">
+              <div class="eff-bar-fill ai"><span data-lang="zh">3 周</span><span data-lang="en">3 weeks</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="eff-callouts">
+          <div class="eff-callout">
+            <div class="big accent">4x</div>
+            <div class="label"><span data-lang="zh">开发效率提升</span><span data-lang="en">Dev Efficiency Boost</span></div>
+          </div>
+          <div class="eff-callout">
+            <div class="big green">75%</div>
+            <div class="label"><span data-lang="zh">工时节省</span><span data-lang="en">Time Saved</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="eff-right">
+        <h3><span data-lang="zh">提效来自哪里？</span><span data-lang="en">Where Does the Efficiency Come From?</span></h3>
+        <div class="eff-breakdown">
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--accent-bg);color:var(--accent);">&#9889;</div>
+            <div class="eff-item-text">
+              <h4><span data-lang="zh">Skill 驱动的代码生成</span><span data-lang="en">Skill-Driven Code Generation</span></h4>
+              <p><span data-lang="zh">gen-page-test 一键生成 PageObject + 测试骨架，Agent 自动填充定位符和断言逻辑</span><span data-lang="en">gen-page-test generates PageObject + test scaffolding in one shot; Agent auto-fills locators and assertion logic</span></p>
+              <span class="time-save"><span data-lang="zh">节省 ~70% 页面编码时间</span><span data-lang="en">Saves ~70% of page coding time</span></span>
+            </div>
+          </div>
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--red-bg);color:var(--red);">&#128295;</div>
+            <div class="eff-item-text">
+              <h4><span data-lang="zh">规则前置 &middot; 错误归零</span><span data-lang="en">Rules-First &middot; Zero Errors</span></h4>
+              <p><span data-lang="zh">14 个 Rule 文件提前拦截脆弱定位符、无效断言、cookie 污染等常见错误，避免返工</span><span data-lang="en">14 Rule files proactively catch fragile locators, invalid assertions, cookie pollution, and other common errors — no rework</span></p>
+              <span class="time-save"><span data-lang="zh">减少 ~80% 调试返工</span><span data-lang="en">Reduces ~80% of debug rework</span></span>
+            </div>
+          </div>
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--green-bg);color:var(--green);">&#128161;</div>
+            <div class="eff-item-text">
+              <h4><span data-lang="zh">自我进化 &middot; 知识复利</span><span data-lang="en">Self-Evolution &middot; Compounding Knowledge</span></h4>
+              <p><span data-lang="zh">踩过的坑自动沉淀为 Skill/Rule，后续同类任务直接命中最佳实践，越用越快</span><span data-lang="en">Lessons learned auto-persist as Skills/Rules; future similar tasks hit best practices directly — gets faster over time</span></p>
+              <span class="time-save"><span data-lang="zh">后期任务加速 ~50%</span><span data-lang="en">Later tasks accelerate by ~50%</span></span>
+            </div>
+          </div>
+          <div class="eff-item">
+            <div class="eff-item-icon" style="background:var(--purple-bg);color:var(--purple);">&#128202;</div>
+            <div class="eff-item-text">
+              <h4><span data-lang="zh">code-reviewer 自动审查</span><span data-lang="en">code-reviewer Automated Review</span></h4>
+              <p><span data-lang="zh">P0/P1/P2 分级审查 + AST 图谱影响分析，替代人工 Code Review 环节</span><span data-lang="en">P0/P1/P2 tiered review + AST graph impact analysis, replacing manual code review steps</span></p>
+              <span class="time-save"><span data-lang="zh">审查效率提升 ~3x</span><span data-lang="en">Review efficiency up ~3x</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Token 节省 -->
+<section class="savings-section reveal" id="savings">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label"><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></div>
+      <h2 class="section-title"><span data-lang="zh">agent-browser 集成 &middot; Token 消耗直降 88%</span><span data-lang="en">agent-browser Integration &middot; Token Consumption Down 88%</span></h2>
+      <p class="section-desc">
+        <span data-lang="zh">传统 Playwright MCP 每次页面交互消耗大量 token。VelocitAI 集成 agent-browser，用 Rust CLI 替代 MCP 快照。</span><span data-lang="en">Traditional Playwright MCP consumes a large number of tokens per page interaction. VelocitAI integrates agent-browser, replacing MCP snapshots with a Rust CLI.</span>
+      </p>
+    </div>
+    <div class="savings-grid">
+      <div class="savings-chart">
+        <div class="savings-bar">
+          <div class="savings-bar-label">
+            <span><span data-lang="zh">Playwright MCP 快照</span><span data-lang="en">Playwright MCP Snapshot</span></span>
+            <span><span data-lang="zh">~3,500 tokens/次</span><span data-lang="en">~3,500 tokens/call</span></span>
+          </div>
+          <div class="savings-bar-track">
+            <div class="savings-bar-fill traditional">3,500 tokens</div>
+          </div>
+        </div>
+        <div class="savings-bar">
+          <div class="savings-bar-label">
+            <span><span data-lang="zh">agent-browser 快照</span><span data-lang="en">agent-browser Snapshot</span></span>
+            <span><span data-lang="zh">~200-400 tokens/次</span><span data-lang="en">~200-400 tokens/call</span></span>
+          </div>
+          <div class="savings-bar-track">
+            <div class="savings-bar-fill velocitai">~300</div>
+          </div>
+        </div>
+      </div>
+      <div class="savings-callout">
+        <div class="big-number">82-93%</div>
+        <div class="desc">
+          <span data-lang="zh">单次 DOM 探索的 Token 节省率。<br>
+          10 个页面的回归测试生成流程，总计可节省 <strong>~30,000 tokens</strong>。</span><span data-lang="en">Token savings rate per DOM exploration.<br>
+          For a 10-page regression test generation workflow, total savings reach <strong>~30,000 tokens</strong>.</span>
+        </div>
+        <div class="detail">
+          <span data-lang="zh">agent-browser 基于 CDP 协议直接获取无障碍树，绕过 MCP 序列化开销。
+          点击失败时自动降级到 JS eval，新 tab 自动 list &rarr; switch &rarr; snapshot。</span><span data-lang="en">agent-browser fetches the accessibility tree directly via CDP, bypassing MCP serialization overhead.
+          On click failure it auto-falls back to JS eval; new tabs are automatically list &rarr; switch &rarr; snapshot.</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
