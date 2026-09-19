@@ -7,33 +7,10 @@ description: 表单保存后验证（Toast / 重定向 / 数据对比 / 富文�
 
 ---
 
-## 一、macOS 富文本编辑器全选必须用 Meta+A
+## 一、macOS 富文本编辑器全选
 
-macOS Chromium 中 `Control+A` 是 Emacs 快捷键（光标移到行首），**不是**"全选"。在 CKEditor / TinyMCE / Quill 等富文本编辑器中，`Control+A` 无法选中全部内容，导致旧内容残留。
-
-❌ 反例：
-
-```python
-def fill_rich_text(self, text: str):
-    self.click(self.EDITOR)
-    self.page.keyboard.press("Control+A")   # macOS 上只移动光标到行首
-    self.page.keyboard.press("Backspace")   # 只删一个字符，旧内容残留
-    self.page.keyboard.type(text)           # 新内容追加在旧内容后面
-```
-
-✅ 正例：
-
-```python
-def fill_rich_text(self, text: str):
-    self.click(self.EDITOR)
-    self.page.keyboard.press("Meta+A")      # macOS Command+A = 全选
-    self.page.keyboard.press("Backspace")   # 清空全部内容
-    self.page.keyboard.type(text)           # 写入纯新内容
-```
-
-**排查信号**：填入的数据末尾多了旧内容残片（如 `"2026-05-06 10:30:00123"` 尾部多了 `123`）→ 全选快捷键无效。
-
----
+macOS 上富文本编辑器的全选按键差异（Control+A 无效）→
+[references/macos-select-all.md](./references/macos-select-all.md)
 
 ## 二、保存后验证策略：三级选择
 
@@ -113,59 +90,10 @@ assert edit_page.is_save_success()        # 编辑页 header 消失 = 保存成�
 
 ## 三、多 tab 保存后：关闭旧 tab，从原始 tab 重入
 
-保存后如果需要重新访问同一页面验证数据，**不要**尝试在重定向后的页面内导航（重定向目的地不确定，元素可能不存在）。关闭旧 tab，从原始 tab（状态稳定）重新打开新 tab 进入。
-
-❌ 反例：
-
-```python
-# 保存后尝试在重定向页面内导航回去
-redirected_page = SomePage(new_page)
-assert redirected_page.is_page_loaded()    # 重定向目的地不确定 → 失败
-redirected_page.click(breadcrumb)          # 元素可能不存在
-```
-
-✅ 正例：
-
-```python
-# 保存后关闭旧 tab
-finally:
-    new_page.close()
-
-# 原始 tab 状态稳定，从这里重新进入
-assert original_home.is_page_loaded()
-new_page_2 = original_home.open_target_in_new_tab(name)
-try:
-    # 在新 tab 中导航到编辑页 → 验证数据
-finally:
-    new_page_2.close()
-```
-
----
+保存动作发生在新开 tab 中时的处理 →
+[references/multi-tab-reentry.md](./references/multi-tab-reentry.md)
 
 ## 四、数据对比验证模式（最终验证）
 
-当没有 Toast 或 UI 反馈时，用「写入标记 → 保存 → 重新打开 → 读取对比」作为最终验证闭环。
-
-```python
-# ── 写入阶段 ──
-timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-edit_page.fill_description(timestamp)
-write_test_data("标记键名", timestamp)          # 持久化到配置文件
-
-# ... 保存操作 ...
-
-# ── 验证阶段（重新打开编辑页）──
-saved = read_test_data().get("标记键名")
-actual = edit_page.get_description_text()
-allure.attach(saved, name="期望时间戳", ...)     # 无论成败都记录到报告
-allure.attach(actual, name="实际时间戳", ...)
-assert actual == saved, (
-    f"数据不一致：期望='{saved}'，实际='{actual}'"
-)
-```
-
-**关键要点**：
-1. 标记数据必须**写入配置文件**（跨用例共享，非内存变量），便于后续用例复用
-2. 无论断言成败，都用 `allure.attach()` 将期望值和实际值写入报告
-3. 断言失败信息必须包含**两个值的对比**，方便排查
-
+保存前后做数据比对的实现方式 →
+[references/data-comparison.md](./references/data-comparison.md)
