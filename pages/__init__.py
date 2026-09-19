@@ -1,17 +1,13 @@
-"""pages 包。
+"""业务页面对象层。
 
-BasePage 采用惰性导出（PEP 562）：`from pages import BasePage` 行为不变，
-但 `import pages.self_heal` 不再被动拉起 Playwright —— 自愈引擎是纯逻辑层，
-必须能在没有浏览器的环境里单测。
+这里只放具体页面的 PageObject，一律继承 core.base.BasePage：
+
+    from core.base.base_page import BasePage
+
+    class LoginPage(BasePage):
+        USERNAME = "#username"   # P0: 用户名输入框
+        ...
+
+框架能力（基类、自愈、日志、异常）在 core/ —— 写登录页的人不该在这个目录
+里读到自愈引擎。
 """
-
-__all__ = [
-    "BasePage",
-]
-
-
-def __getattr__(name):
-    if name == "BasePage":
-        from pages.base_page import BasePage
-        return BasePage
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

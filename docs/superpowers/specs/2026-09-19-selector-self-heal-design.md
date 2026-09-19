@@ -45,17 +45,20 @@ UI 回归里最常见的失败不是功能坏了，而是**定位符过期**：�
 
 | 模块 | 职责 | 是否依赖 Playwright |
 |------|------|-------------------|
-| `pages/self_heal.py` | 纯逻辑：给定意图与 DOM 快照，算出并排序候选 | **否** |
-| `pages/heal_runtime.py` | 运行时：抓快照、实跑验证、记录提案、指纹存取 | 否（只调用传入的 page） |
-| `pages/base_page.py` | 把所有定位汇聚到 `_locate()` 这一个入口 | 是 |
+| `core/healing/engine.py` | 纯逻辑：给定意图与 DOM 快照，算出并排序候选 | **否** |
+| `core/healing/runtime.py` | 运行时：抓快照、实跑验证、记录提案、指纹存取 | 否（只调用传入的 page） |
+| `core/healing/interceptor.py` | 拦截器：定位失败的统一入口，判定失败类型并调度自愈 | 否 |
+| `core/healing/llm.py` | 模型推理后端，规则交白卷时出场 | 否 |
+| `core/healing/patcher.py` | 把修复写回 PageObject 源码 | 否 |
+| `core/base/base_page.py` | 把所有定位汇聚到 `_locate()`，委派给拦截器 | 是 |
 | `conftest.py` | `--self-heal` 开关、终端汇总、strict 退出码 | 否 |
 
 两个核心模块都不 `import playwright`，因此可以用假 page 对象脱离浏览器单测。
 这不是洁癖：自愈的判定逻辑是整个机制风险最集中的地方，如果它只能靠跑真实
 浏览器来验证，就等于没法充分验证。
 
-`pages/__init__.py` 改为 PEP 562 惰性导出，使 `import pages.self_heal` 不再
-被动拉起 Playwright；`from pages import BasePage` 行为不变。
+`core/base/__init__.py` 采用 PEP 562 惰性导出，使 `core.healing.*` 可在没有
+Playwright 的环境里被单测，而不会因导入 `core.base` 被动拉起浏览器依赖。
 
 ## 5. 意图从哪来
 

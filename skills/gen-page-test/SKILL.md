@@ -42,7 +42,7 @@ description: 一键生成 PageObject + 配套测试。触发：新增页面、�
 
 ```python
 # 页面名称：<中文名>
-from pages.base_page import BasePage
+from core.base.base_page import BasePage
 
 
 class <ClassName>(BasePage):

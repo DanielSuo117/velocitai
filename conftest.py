@@ -99,7 +99,7 @@ def pytest_configure(config):
     """按需开启自愈。默认关闭 —— 它会改变「失败」的含义，不能悄悄生效。"""
     if config.getoption("--self-heal") == "off":
         return
-    from pages.base_page import BasePage
+    from core.base.base_page import BasePage
 
     BasePage.self_heal_enabled = True
     if config.getoption("--self-heal") == "auto":
@@ -116,7 +116,7 @@ def pytest_configure(config):
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
     """自愈过的用例不能被当成干净通过，必须在报告里显式点名。"""
-    from pages import heal_runtime
+    from core.healing import runtime as heal_runtime
 
     if not heal_runtime.HEALED:
         return
@@ -150,7 +150,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
 
 def pytest_sessionfinish(session, exitstatus):
     """strict 模式下，发生过自愈即以非零码结束，避免定位符漂移被沉默吞掉。"""
-    from pages import heal_runtime
+    from core.healing import runtime as heal_runtime
 
     if heal_runtime.HEALED and session.config.getoption("--self-heal") == "strict":
         session.exitstatus = 1

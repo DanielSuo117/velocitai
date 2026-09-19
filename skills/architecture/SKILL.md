@@ -41,7 +41,7 @@ description: POM 分层与 context 共享决策树。触发：架构、分层、
 
 ```python
 # 页面名称：<中文名>
-from pages.base_page import BasePage
+from core.base.base_page import BasePage
 
 
 class <PageName>(BasePage):

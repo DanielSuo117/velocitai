@@ -12,7 +12,7 @@ import os
 import tempfile
 import unittest
 
-from pages.self_heal import (
+from core.healing.engine import (
     Candidate,
     HealProposal,
     Intent,

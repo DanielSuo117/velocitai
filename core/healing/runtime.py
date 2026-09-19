@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import os
 
-from pages.self_heal import (
+from core.healing.engine import (
     Candidate, HealProposal, Intent, matches_intent, rank, record,
 )
 
@@ -236,7 +236,7 @@ def _llm_candidate(page, intent: Intent, elements: list, tried: list):
     否则「让模型来判断」就成了绕过防假通过保证的后门。
     """
     try:
-        from pages import heal_llm
+        from core.healing import llm as heal_llm
 
         if not heal_llm.available():
             return None

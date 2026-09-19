@@ -50,7 +50,7 @@ def click_some_button(self):
 
 ```python
 # 页面名称：<页面中文名>
-from pages.base_page import BasePage
+from core.base.base_page import BasePage
 class SomeFeaturePage(BasePage):
     FEATURE_TITLE = "css=span.feature-title"  # P3
     LEFT_MENU = "css=ul.menu-box"             # P3

@@ -7,9 +7,9 @@ import os
 import tempfile
 import unittest
 
-from pages import heal_runtime
-from pages.heal_runtime import FingerprintStore, attempt, capture_fingerprint, snapshot
-from pages.self_heal import Intent, intent_from_source
+from core.healing import runtime as heal_runtime
+from core.healing.runtime import FingerprintStore, attempt, capture_fingerprint, snapshot
+from core.healing.engine import Intent, intent_from_source
 
 SRC = '''class LoginPage(BasePage):
     LOGIN_BUTTON = "#login-btn"    # P0: 登录按钮
