@@ -150,6 +150,8 @@ class Violation:
 
 按此规则，现有 8 处命中全部豁免，零误报。
 
+**GEN003 的第二条判别（实现期发现，spec 补订）**：哈希类名的正则本身还必须**要求哈希段含数字**。仅按「下划线分段」匹配会命中 `.is_page_loaded`、`.set_default_timeout` 等 Python 方法名 —— 实测在本仓库 skills 正文中造成 36 处误报。构建工具哈希段必含数字（`abc123` / `1x2y3` / `1a2b3c`），而方法名每段纯字母，这是可靠的区分点。
+
 **GEN004 的 `wordlist.txt` 默认为空**。项目专有业务术语无法通用检测，由使用者按自己项目填写；空文件时该检查静默跳过。
 
 ### 6.3 registry.py — 注册闭环与镜像弃用守卫
@@ -159,6 +161,8 @@ class Violation:
 | REG001 | `skills/<name>/SKILL.md` 存在，但 CLAUDE.md 路由表无指向 `./skills/<name>/` 的条目 | BLOCK | 仅 commit |
 | REG002 | CLAUDE.md 路由表中的链接指向不存在的路径 | BLOCK | 仅 commit |
 | REG003 | 写入 `zh/**` 或 `en/**` | BLOCK | write |
+
+**REG001 的注册判定必须匹配真实链接目标（实现期发现，spec 补订）**：不得用全文子串匹配 `./skills/<name>/`。实测该写法双向失效 —— 正文里一句顺带提及即可满足检查（假阴性，REG001 形同虚设），而合法的无尾斜杠写法 `[foo](./skills/foo)` 反被判为未注册（假阳性）。正确做法是用链接正则提取真实的 `](...)` 目标、归一化尾斜杠后再比对。
 
 **REG001 / REG002 为何只在 commit 模式运行**：新建 skill 必然是 `SKILL.md` 先写、CLAUDE.md 路由表后写。挂在写入前会把每一次正常新建都拦死。commit 时两边都已写完，是正确的校验时机。
 

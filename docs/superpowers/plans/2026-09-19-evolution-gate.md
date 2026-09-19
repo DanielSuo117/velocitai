@@ -666,7 +666,7 @@ def _check_skill_frontmatter(rel, rel_s, text):
         return [Violation(
             "STR001", Severity.BLOCK, rel_s, 1,
             "SKILL.md 缺少 YAML frontmatter",
-            "在文件开头加 ---\\nname: <目录名>\\ndescription: <触发词>\\n---",
+            "在文件开头加：\n---\nname: <目录名>\ndescription: <触发词>\n---",
         )]
     name = _fm_field(fm, "name")
     if name is None or _fm_field(fm, "description") is None:
@@ -866,8 +866,16 @@ from ..violation import Severity, Violation
 # 全角标点需排除，否则中文正文里的 URL 会一路吞到句末
 _URL_RE = re.compile(r"https?://[^\s)\]\"'`，。）、；：]+")
 _ABS_PATH_RE = re.compile(r"(?:/Users/|/Applications/|/home/|[A-Za-z]:\\)[^\s)\]\"'`，。）]*")
+# 判别依据：构建工具的哈希段必然含数字（abc123 / 1x2y3 / 1a2b3c），
+# 而 Python 方法名每一段都是纯字母（is_page_loaded / set_default_timeout）。
+# 不要求数字就会把整个 Playwright 项目的方法名全判成哈希类名。
 _HASH_CLASS_RE = re.compile(
-    r"\.(?:sc-[A-Za-z]{4,}|css-[0-9a-z]{5,}|[A-Za-z]*_[A-Za-z]+_[0-9a-z]{3,})"
+    r"\."
+    r"(?:"
+    r"sc-[A-Za-z]{4,}"                                       # styled-components: .sc-bdVaJa
+    r"|css-(?=[0-9a-z]*[0-9])[0-9a-z]{5,}"                   # Emotion: .css-1a2b3c
+    r"|[A-Za-z_]*_(?=[0-9a-z]*[0-9])[0-9a-z]{3,}"            # CSS Modules: ._component_1x2y3 / .header_abc123
+    r")"
 )
 
 _URL_WHITELIST = (
@@ -1066,6 +1074,7 @@ Expected: FAIL，`ImportError: cannot import name 'registry'`
 """维度④ 注册闭环 + 镜像弃用守卫 —— REG001–REG003。"""
 from __future__ import annotations
 
+import pathlib
 import re
 
 from ..context import MIRROR_ROOTS, git_ignored
@@ -1085,6 +1094,24 @@ def check_write(rel):
     return []
 
 
+def _registered_skills(text):
+    """从 CLAUDE.md 的真实 Markdown 链接目标中提取已注册的 skill 名。
+
+    不做全文子串匹配 —— 正文里顺带提到 ./skills/foo/ 不构成注册（否则 REG001
+    会被一句无关说明满足而失效）；同时容忍 ./skills/foo 与 ./skills/foo/ 两种
+    等价写法（否则合法的无尾斜杠写法会被误判为未注册）。
+    """
+    names = set()
+    for m in _LINK_RE.finditer(text):
+        target = m.group(1).split("#")[0].strip().rstrip("/")
+        if target.startswith("./"):
+            target = target[2:]
+        parts = pathlib.PurePosixPath(target).parts
+        if len(parts) >= 2 and parts[0] == "skills":
+            names.add(parts[1])
+    return names
+
+
 def check_repo(root):
     """commit / audit 时机：全局注册闭环。"""
     claude_md = root / "CLAUDE.md"
@@ -1095,10 +1122,11 @@ def check_repo(root):
     except Exception:
         return []
 
+    registered = _registered_skills(text)
     out = []
     for skill_md in sorted(root.glob("skills/*/SKILL.md")):
         name = skill_md.parent.name
-        if f"./skills/{name}/" not in text:
+        if name not in registered:
             out.append(Violation(
                 "REG001", Severity.BLOCK, f"skills/{name}/SKILL.md", None,
                 f"skill '{name}' 未在 CLAUDE.md 路由表注册",
