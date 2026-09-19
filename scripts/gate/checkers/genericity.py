@@ -10,8 +10,16 @@ from ..violation import Severity, Violation
 # 全角标点需排除，否则中文正文里的 URL 会一路吞到句末
 _URL_RE = re.compile(r"https?://[^\s)\]\"'`，。）、；：]+")
 _ABS_PATH_RE = re.compile(r"(?:/Users/|/Applications/|/home/|[A-Za-z]:\\)[^\s)\]\"'`，。）]*")
+# 判别依据：构建工具的哈希段必然含数字（abc123 / 1x2y3 / 1a2b3c），
+# 而 Python 方法名每一段都是纯字母（is_page_loaded / set_default_timeout）。
+# 不要求数字就会把整个 Playwright 项目的方法名全判成哈希类名。
 _HASH_CLASS_RE = re.compile(
-    r"\.(?:sc-[A-Za-z]{4,}|css-[0-9a-z]{5,}|[A-Za-z]*_[A-Za-z]+_[0-9a-z]{3,})"
+    r"\."
+    r"(?:"
+    r"sc-[A-Za-z]{4,}"                                       # styled-components: .sc-bdVaJa
+    r"|css-(?=[0-9a-z]*[0-9])[0-9a-z]{5,}"                   # Emotion: .css-1a2b3c
+    r"|[A-Za-z_]*_(?=[0-9a-z]*[0-9])[0-9a-z]{3,}"            # CSS Modules: ._component_1x2y3 / .header_abc123
+    r")"
 )
 
 _URL_WHITELIST = (

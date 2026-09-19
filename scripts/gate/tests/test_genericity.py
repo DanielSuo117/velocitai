@@ -73,6 +73,28 @@ class TestHashClass(unittest.TestCase):
         vs = genericity.check(SKILL, '❌ 反例：LOGIN = "css=.css-1a2b3c"\n')
         self.assertNotIn("GEN003", codes(vs))
 
+    def test_python_method_name_not_flagged(self):
+        # 本仓库 skills 正文里大量出现 Playwright/Python 方法调用，
+        # 早期正则未要求哈希段含数字，把这些全判成了哈希类名（实测 36 处误报）
+        for line in (
+            'self.page.set_default_timeout(30000)',
+            'assert page.is_page_loaded()',
+            'page.wait_for_load_state("networkidle")',
+            'count = self.get_element_count(sel)',
+        ):
+            with self.subTest(line=line):
+                self.assertNotIn("GEN003", codes(genericity.check(SKILL, line + "\n")))
+
+    def test_business_class_name_not_flagged(self):
+        for line in ('CARD = "css=.list-card"', 'FORM = "css=.login-form"', 'NAV = "css=.main-navigation"'):
+            with self.subTest(line=line):
+                self.assertNotIn("GEN003", codes(genericity.check(SKILL, line + "\n")))
+
+    def test_css_modules_hash_flagged(self):
+        for line in ('X = "css=._component_1x2y3"', 'Y = "css=.header_abc123"', 'Z = "css=.module_1a2b3c"'):
+            with self.subTest(line=line):
+                self.assertIn("GEN003", codes(genericity.check(SKILL, line + "\n")))
+
 
 if __name__ == "__main__":
     unittest.main()
