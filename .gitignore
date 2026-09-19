@@ -13,3 +13,7 @@ config/settings.py
 
 .claude-plugin
 
+# Mermaid VS Code 扩展自动生成的 Copilot 指令，不入库
+# （applyTo: "**" 会载入每个 Copilot 会话，属未经审查的 agent 上下文）
+.github/copilot-instructions.md
+.github/instructions/
