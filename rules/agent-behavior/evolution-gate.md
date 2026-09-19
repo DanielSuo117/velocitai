@@ -75,7 +75,7 @@ paths:
 
 | 码 | 含义 | 修法 |
 |---|---|---|
-| STR001 | SKILL.md 缺 frontmatter 或缺 name/description | 补齐 `name` 与 `description` 两个字段 |
+| STR001 | SKILL.md 缺 frontmatter 或缺 name/description | 缺整个 frontmatter 时补 `---` 块；缺字段时补齐 `name` / `description` |
 | STR002 | frontmatter `name` 与目录名不一致 | 把 `name` 改为目录名 |
 | STR003 | 规则文件缺 ❌ 反例或 ✅ 正例 | 为每条规则补一组 ❌/✅ 代码块 |
 | STR004 | Markdown 链接指向不存在的路径 | 修正相对路径层级，或补上目标文件 |
@@ -84,14 +84,14 @@ paths:
 | GEN001 | skill 正文出现具体 URL | 抽象为占位符；项目级 URL 放 `docs/` 或 `config/` |
 | GEN002 | skill 正文出现本地绝对路径 | 改为相对仓库根的路径 |
 | GEN003 | skill 正文出现哈希类名 | 升级到 P0 role 或 P1 text 定位 |
-| GEN004 | skill 正文出现业务术语黑名单词 | 抽象为占位符或移入 `docs/` |
+| GEN004 | skill 正文出现业务术语黑名单词 | 抽象为占位符或移入 `docs/`（仅提示） |
 | REG001 | skill 未在 CLAUDE.md 路由表注册 | 在路由表新增一行 |
 | REG002 | 路由表链接指向不存在的路径 | 修正链接或补上目标文件 |
 | REG003 | 写入已弃用的 `zh/` 或 `en/` 目录 | 改为写入仓库根的对应路径 |
 | EVI001 | 在 skills/ 或 rules/ 下新建文件 | 按 P0.10 先提案（需用户确认，非错误） |
 | EVI002 | 含 P 级条款但全文无 `**触发**：` 行 | 按 P0.9 补触发条件 |
 | EVI003 | 条款内部无 `**触发**：` 行 | 补条款级触发行（仅提示） |
-| EVI004 | 标题与既有条款高度重叠 | 按 P0.8 合并进原文件 |
+| EVI004 | 标题与既有条款高度重叠 | 按 P0.8 合并进原文件（仅提示） |
 
 ---
 
