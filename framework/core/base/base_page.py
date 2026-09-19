@@ -43,10 +43,43 @@ class BasePage:
         return self._interceptor
 
     def _locate(self, selector: str) -> Locator:
-        """所有定位的唯一入口。自愈关闭时与直接 locator() 逐字等价。"""
+        """取一个 Locator。已愈过的选择器会返回修复后的版本。
+
+        注意：经由本方法拿到 Locator 后再自行调用 .click() 等操作时，
+        **自愈无法介入** —— 异常在本方法之外抛出。需要自愈保护的操作请走
+        下面封装好的方法，或用 _act()。
+        """
         if not self.self_heal_enabled:
             return self.page.locator(selector)
-        return self.page.locator(self.interceptor.resolve(selector))
+        return self.page.locator(self.interceptor.current(selector))
+
+    def _act(self, selector: str, op):
+        """执行一次定位操作；**仅在操作真正因定位失败而报错后**才自愈并重试一次。
+
+        为什么不在操作前预探测（例如 locator.count() > 0）：count() 不做
+        自动等待。SPA 页面尚在渲染时，目标元素还没挂载，预探测会把「还没到」
+        误判成「定位失效」，于是在半渲染的页面上启动自愈 —— 极易顶替到一个
+        恰好已渲染的无关元素，用例照绿而点的是别的按钮。那正是本机制存在
+        的意义所在的反面。
+
+        反应式的另一个好处：Playwright 自身的自动等待先跑完，只有它都等不到
+        才算真的失效，判定依据比预探测强得多。
+        """
+        if not self.self_heal_enabled:
+            return op(self.page.locator(selector))
+        itc = self.interceptor
+        effective = itc.current(selector)
+        try:
+            result = op(self.page.locator(effective))
+        except Exception as exc:
+            new = itc.handle_failure(exc, selector)
+            if not new:
+                raise                      # 愈不了就按原样失败，绝不吞异常
+            result = op(self.page.locator(new))
+            itc.note_success(selector, new)
+            return result
+        itc.note_success(selector, effective)
+        return result
 
     # ── 导航 ────────────────────────────────────────────────────────
     def goto(self, url: str, **kwargs):
@@ -65,63 +98,65 @@ class BasePage:
 
     # ── 交互 ────────────────────────────────────────────────────────
     def click(self, selector: str, **kwargs):
-        self._locate(selector).click(**kwargs)
+        self._act(selector, lambda loc: loc.click(**kwargs))
 
     def double_click(self, selector: str, **kwargs):
-        self._locate(selector).dblclick(**kwargs)
+        self._act(selector, lambda loc: loc.dblclick(**kwargs))
 
     def fill(self, selector: str, value: str, **kwargs):
-        self._locate(selector).fill(value, **kwargs)
+        self._act(selector, lambda loc: loc.fill(value, **kwargs))
 
     def type_text(self, selector: str, value: str, **kwargs):
         """逐字符输入。仅在目标控件依赖 keydown 事件时使用，否则用 fill。"""
-        self._locate(selector).type(value, **kwargs)
+        self._act(selector, lambda loc: loc.type(value, **kwargs))
 
     def clear(self, selector: str, **kwargs):
-        self._locate(selector).fill("", **kwargs)
+        self._act(selector, lambda loc: loc.fill("", **kwargs))
 
     def hover(self, selector: str, **kwargs):
-        self._locate(selector).hover(**kwargs)
+        self._act(selector, lambda loc: loc.hover(**kwargs))
 
     def check(self, selector: str, **kwargs):
-        self._locate(selector).check(**kwargs)
+        self._act(selector, lambda loc: loc.check(**kwargs))
 
     def uncheck(self, selector: str, **kwargs):
-        self._locate(selector).uncheck(**kwargs)
+        self._act(selector, lambda loc: loc.uncheck(**kwargs))
 
     def select_option(self, selector: str, value, **kwargs):
-        self._locate(selector).select_option(value, **kwargs)
+        self._act(selector, lambda loc: loc.select_option(value, **kwargs))
 
     def upload(self, selector: str, files, **kwargs):
-        self._locate(selector).set_input_files(files, **kwargs)
+        self._act(selector, lambda loc: loc.set_input_files(files, **kwargs))
 
     def press(self, selector: str, key: str, **kwargs):
-        self._locate(selector).press(key, **kwargs)
+        self._act(selector, lambda loc: loc.press(key, **kwargs))
 
     def scroll_into_view(self, selector: str, **kwargs):
-        self._locate(selector).scroll_into_view_if_needed(**kwargs)
+        self._act(selector, lambda loc: loc.scroll_into_view_if_needed(**kwargs))
 
     # ── 读取 ────────────────────────────────────────────────────────
     def get_text(self, selector: str) -> str:
-        return self._locate(selector).inner_text()
+        return self._act(selector, lambda loc: loc.inner_text())
 
     def get_value(self, selector: str) -> str:
-        return self._locate(selector).input_value()
+        return self._act(selector, lambda loc: loc.input_value())
 
     def get_attribute(self, selector: str, name: str):
-        return self._locate(selector).get_attribute(name)
+        return self._act(selector, lambda loc: loc.get_attribute(name))
 
     def get_element_count(self, selector: str) -> int:
+        """元素个数。**不触发自愈**：返回 0 是合法答案（断言「列表为空」），
+        把它当成定位失效会导致在正常页面上乱找元素。"""
         return self._locate(selector).count()
 
     def get_all_texts(self, selector: str) -> list:
-        return self._locate(selector).all_inner_texts()
+        return self._act(selector, lambda loc: loc.all_inner_texts())
 
     # ── 状态判定 ────────────────────────────────────────────────────
     def is_visible(self, selector: str, timeout: int | None = None) -> bool:
         try:
             kwargs = {"timeout": timeout} if timeout is not None else {}
-            self._locate(selector).wait_for(state="visible", **kwargs)
+            self._act(selector, lambda loc: loc.wait_for(state="visible", **kwargs))
             return True
         except Exception:
             return False
@@ -140,7 +175,7 @@ class BasePage:
 
     # ── 等待 ────────────────────────────────────────────────────────
     def wait_for_element(self, selector: str, state: str = "visible", timeout: int = 15000):
-        self._locate(selector).wait_for(state=state, timeout=timeout)
+        self._act(selector, lambda loc: loc.wait_for(state=state, timeout=timeout))
 
     def wait_for_url(self, url, **kwargs):
         self.page.wait_for_url(url, **kwargs)

@@ -49,7 +49,14 @@ class LocatorInterceptor:
     """把每一次定位收口到这里，失败时决定是否自愈。
 
     职责：指纹记忆、定位失败判定、自愈调度、可选的源码写回。
+
+    **自愈是反应式的**：只在操作真正抛出定位失败之后介入，绝不在操作前
+    预探测。预探测会在页面尚未渲染完时误判，详见 current() 的说明。
     """
+
+    # 单个页面对象实例内的自愈次数上限。定位符大面积失效时，逐个抓全页快照
+    # 既慢又没有意义 —— 那已经不是「某个选择器过期」，而是页面整体变了。
+    MAX_ATTEMPTS = 25
 
     def __init__(self, page, owner, *, artifact: str = "", fingerprints: str = "",
                  use_llm: bool = False, patch: bool = False):
@@ -60,30 +67,36 @@ class LocatorInterceptor:
         self.patch = patch
         self._store = runtime.FingerprintStore(fingerprints) if fingerprints else None
         self._healed: dict = {}             # 本次运行内已修复的选择器
+        self._failed: set = set()           # 已尝试且愈不了的，不再重复抓快照
+        self._attempts = 0
         self._seen: set = set()
 
     # ── 对外入口 ──────────────────────────────────────────────────────
-    def resolve(self, selector: str) -> str:
-        """返回本次应当使用的选择器。
+    def current(self, selector: str) -> str:
+        """返回本次应当使用的选择器：已愈过就用新的，否则用原来的。
 
-        命中则原样返回并记指纹；失效则尝试自愈，愈不了仍返回原选择器 ——
-        让调用方按原样失败，绝不放宽标准硬凑一个。
+        **不碰页面**。自愈是反应式的 —— 只有操作真正失败后才介入。
+        曾经这里用 locator.count() 做前置探测，那是错的：count() 不做自动
+        等待，SPA 页面尚在渲染时会把「还没挂载」误判成「定位失效」，于是在
+        半渲染的页面上启动自愈，极易顶替到一个恰好已渲染的无关元素 ——
+        用例照绿而点的是别的按钮，正是本机制要防的假通过。
         """
-        if selector in self._healed:
-            return self._healed[selector]
-        try:
-            if self.page.locator(selector).count() > 0:
-                self._remember(selector)
-                return selector
-        except Exception:
-            return selector          # 定位器本身异常不归自愈管
-        healed = self.heal(selector)
-        return healed or selector
+        return self._healed.get(selector, selector)
+
+    def note_success(self, selector: str, effective: str | None = None) -> None:
+        """操作成功后记下命中元素的形态，作为将来自愈的依据。
+
+        effective 是本次实际生效的选择器：自愈之后它与原始选择器不同，
+        必须拿它去采指纹 —— 用已失效的原始选择器查，只会拿到 null。
+        归档仍按原始选择器为键，因为那才是源码里写着的那个。
+        """
+        self._remember(selector, effective or selector)
 
     def handle_failure(self, exc: BaseException, selector: str) -> str | None:
-        """反应式入口：给定一个已经抛出的异常，若属定位失败则尝试自愈。
+        """反应式入口：操作抛出异常后调用。属定位失败才自愈，否则返回 None。
 
-        供在 BasePage 之外捕获到异常的调用方使用（例如自定义等待逻辑）。
+        断言不通过、参数错误等一律不介入 —— 自愈碰那些场景就等于替业务
+        掩盖真实缺陷。
         """
         if not is_location_failure(exc):
             return None
@@ -93,7 +106,7 @@ class LocatorInterceptor:
     def _fp_key(self, selector: str) -> str:
         return f"{self.owner.__name__}.{selector}"
 
-    def _remember(self, selector: str) -> None:
+    def _remember(self, selector: str, effective: str | None = None) -> None:
         """定位成功时记下命中元素的形态，作为将来自愈的依据。
 
         每个选择器只记一次，避免给每次点击都加一趟 evaluate。
@@ -102,7 +115,7 @@ class LocatorInterceptor:
             return
         self._seen.add(selector)
         self._store.put(self._fp_key(selector),
-                        runtime.capture_fingerprint(self.page, selector))
+                        runtime.capture_fingerprint(self.page, effective or selector))
 
     def _intent(self, selector: str):
         try:
@@ -114,12 +127,22 @@ class LocatorInterceptor:
 
     def heal(self, selector: str) -> str | None:
         """尝试为一个失效的定位符找出替代选择器。"""
+        if selector in self._healed:
+            return self._healed[selector]
+        if selector in self._failed:
+            return None      # 愈不了的不反复重试：is_page_loaded 这类轮询会
+                             # 让每次调用都抓一次全页快照，代价高且结论不变
+        if self._attempts >= self.MAX_ATTEMPTS:
+            log.warning("自愈次数已达上限 %d，不再尝试：%s", self.MAX_ATTEMPTS, selector)
+            return None
+        self._attempts += 1
         intent = self._intent(selector)
         log.info("定位失败，尝试自愈：%s.%s = %s",
                  intent.page_object or "?", intent.constant, selector)
         new = runtime.attempt(self.page, intent, self.artifact, use_llm=self.use_llm)
         if not new:
             log.info("未找到可靠替代，按原样失败：%s", selector)
+            self._failed.add(selector)
             return None
         self._healed[selector] = new
         log.info("已自愈：%s -> %s", selector, new)

@@ -85,46 +85,55 @@ class TestExceptionHierarchy(unittest.TestCase):
         self.assertIn("LoginPage.LOGIN_BTN", str(e))
 
 
-class TestResolve(unittest.TestCase):
+class TestCurrent(unittest.TestCase):
+    """current() 只查缓存，不碰页面。
+
+    曾经这里是 resolve()，用 locator.count() > 0 做前置探测 —— 那是错的：
+    count() 不做自动等待，SPA 页面尚在渲染时会把「还没挂载」误判成
+    「定位失效」，于是在半渲染的页面上启动自愈，极易顶替到一个恰好已渲染
+    的无关元素。见 TestReactiveHealing。
+    """
+
     def setUp(self):
         runtime.HEALED.clear()
         runtime.PATCHED.clear()
 
-    def test_hit_returns_selector_unchanged(self):
-        page = FakePage(hits={"#login-btn": 1})
+    def test_returns_original_when_never_healed(self):
+        page = FakePage()
         itc = LocatorInterceptor(page, OwnerPage)
-        self.assertEqual(itc.resolve("#login-btn"), "#login-btn")
+        self.assertEqual(itc.current("#login-btn"), "#login-btn")
+        self.assertEqual(page.evaluated, 0)      # 没碰页面
 
-    def test_unhealable_returns_original_selector(self):
-        # 找不到可靠替代时必须按原样失败，绝不放宽标准硬凑一个
+    def test_returns_healed_when_cached(self):
+        itc = LocatorInterceptor(FakePage(), OwnerPage)
+        itc._healed["#old"] = "#new"
+        self.assertEqual(itc.current("#old"), "#new")
+
+
+class TestHealBudget(unittest.TestCase):
+    """愈不了的不反复重试，且总次数有上限。
+
+    is_page_loaded() 这类轮询会对同一个选择器反复调用；若每次都抓一遍全页
+    快照，代价极高而结论不变。
+    """
+
+    def setUp(self):
+        runtime.HEALED.clear()
+
+    def test_failed_selector_not_retried(self):
         page = FakePage(hits={}, elements=[])
         itc = LocatorInterceptor(page, OwnerPage)
-        self.assertEqual(itc.resolve("#login-btn"), "#login-btn")
-        self.assertEqual(runtime.HEALED, [])
+        self.assertIsNone(itc.heal("#gone"))
+        first = page.evaluated
+        self.assertIsNone(itc.heal("#gone"))
+        self.assertEqual(page.evaluated, first)   # 没有再抓一次快照
 
-    def test_heals_and_caches(self):
-        el = {"tag": "button", "attrs": {"data-testid": "login"}, "role": "button",
-              "name": "登录", "text": "登录", "classes": []}
-        page = FakePage(hits={'[data-testid="login"]': 1}, elements=[el])
-        with tempfile.TemporaryDirectory() as d:
-            itc = LocatorInterceptor(page, OwnerPage,
-                                     artifact=os.path.join(d, "p.jsonl"),
-                                     fingerprints=os.path.join(d, "fp.json"))
-            itc._store.put("OwnerPage.#login-btn",
-                           {"tag": "button", "role": "button", "name": "登录"})
-            got = itc.resolve("#login-btn")
-            self.assertEqual(got, '[data-testid="login"]')
-            before = page.evaluated
-            self.assertEqual(itc.resolve("#login-btn"), '[data-testid="login"]')
-            self.assertEqual(page.evaluated, before)   # 命中缓存，不再重复推断
-
-    def test_locator_exception_is_not_healed(self):
-        # 定位器本身报错不归自愈管，原样交还调用方
-        class Boom(FakePage):
-            def locator(self, sel):
-                raise RuntimeError("browser closed")
-        itc = LocatorInterceptor(Boom(), OwnerPage)
-        self.assertEqual(itc.resolve("#x"), "#x")
+    def test_attempt_cap_enforced(self):
+        page = FakePage(hits={}, elements=[])
+        itc = LocatorInterceptor(page, OwnerPage)
+        itc._attempts = itc.MAX_ATTEMPTS
+        self.assertIsNone(itc.heal("#anything"))
+        self.assertEqual(page.evaluated, 0)       # 达到上限后直接放弃
 
 
 class TestWriteBackDisabledByDefault(unittest.TestCase):
