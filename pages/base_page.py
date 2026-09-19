@@ -2,7 +2,7 @@ import inspect
 
 from playwright.sync_api import Page
 
-from pages import heal_runtime
+from pages import heal_patch, heal_runtime
 from pages.self_heal import intent_from_source
 
 
@@ -10,6 +10,11 @@ class BasePage:
     # 自愈默认关闭。开启会改变「失败」的含义，必须由使用者显式选择
     # （pytest --self-heal=on|strict，见 conftest.py）。
     self_heal_enabled = False
+    # 让模型在规则交白卷时出场。需要 ANTHROPIC_API_KEY，取不到则静默退回纯规则。
+    self_heal_use_llm = False
+    # 自愈成功后把新选择器写回 PageObject 源码。默认关闭 —— 测试进程里改源码
+    # 是不可逆的副作用，必须由使用者显式选择（--self-heal=auto）。
+    self_heal_patch = False
     heal_artifact = "reports/self-heal/proposals.jsonl"
     heal_fingerprints = "reports/self-heal/fingerprints.json"
 
@@ -48,7 +53,26 @@ class BasePage:
             source, selector, type(self).__name__,
             self._fingerprints().get(self._fp_key(selector)),
         )
-        return heal_runtime.attempt(self.page, intent, self.heal_artifact)
+        new = heal_runtime.attempt(self.page, intent, self.heal_artifact,
+                                   use_llm=self.self_heal_use_llm)
+        if new and self.self_heal_patch:
+            self._patch_source(intent, new)
+        return new
+
+    def _patch_source(self, intent, new_selector: str) -> None:
+        """把修复写回 PageObject 源码。失败不抛 —— 本次运行已经healed，
+        写回失败只意味着下次还要再修一遍，不该因此让用例失败。"""
+        try:
+            path = inspect.getsourcefile(type(self))
+        except Exception:
+            return
+        if not path:
+            return
+        ok = heal_patch.patch_file(path, intent.constant, intent.selector, new_selector)
+        heal_runtime.PATCHED.append({
+            "file": path, "constant": intent.constant,
+            "old": intent.selector, "new": new_selector, "ok": ok,
+        })
 
     def _locate(self, selector: str):
         """所有定位的唯一入口。自愈关闭时行为与直接 locator() 完全一致。"""

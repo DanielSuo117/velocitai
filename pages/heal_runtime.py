@@ -11,7 +11,9 @@ from __future__ import annotations
 import json
 import os
 
-from pages.self_heal import HealProposal, Intent, rank, record
+from pages.self_heal import (
+    Candidate, HealProposal, Intent, matches_intent, rank, record,
+)
 
 # 隐式 ARIA role 推导。
 # 页面 JS 里没有 element.computedRole（实测确认不存在于 Element.prototype），
@@ -86,6 +88,10 @@ SNAPSHOT_JS = """
 # 沉默地放过去，下次就是真失败，而且没人知道从哪一次开始坏的。
 HEALED: list = []
 
+# 本次运行中被写回源码的定位符。写回是不可逆副作用，必须在终端显式点名，
+# 不能只躺在文件里等人发现。
+PATCHED: list = []
+
 FINGERPRINT_JS = """
 (sel) => {""" + _ROLE_JS + """
   const e = document.querySelector(sel);
@@ -159,20 +165,51 @@ def _resolves_uniquely(page, selector: str) -> bool:
         return False
 
 
-def attempt(page, intent: Intent, artifact_path: str = "",
-            test_id: str = "") -> str | None:
+ELEMENT_FP_JS = """
+(e) => {""" + _ROLE_JS + """
+  return { tag: e.tagName.toLowerCase(), role: implicitRole(e), name: accName(e),
+           text: (e.innerText || e.value || '').trim().slice(0, 120),
+           classes: Array.from(e.classList || []) };
+}
+"""
+
+
+def _element_of(page, selector: str):
+    """取出候选实际命中的那个元素的形态，用于校验它是否真是原来那个。
+
+    不能用 document.querySelector：候选可能是 Playwright 的 role= / text= 语法，
+    CSS 引擎不认。必须经由 locator 求值。
+    """
+    try:
+        return page.locator(selector).first.evaluate(ELEMENT_FP_JS)
+    except Exception:
+        return None
+
+
+def attempt(page, intent: Intent, artifact_path: str = "", test_id: str = "",
+            use_llm: bool = False) -> str | None:
     """尝试为一个失效的定位符找出替代选择器。
 
+    顺序是「规则优先，模型兜底」：有 testid 摆在那儿时调模型既慢又贵，
+    结论也不会更好；模型只在规则交白卷时出场。
+
     返回可用的新选择器，或 None（找不到就按原样失败 —— 绝不放宽标准硬凑一个）。
-    无论结果如何都会留下提案记录，供 agent 侧复核与写回。
+    无论结果如何都会留下提案记录，供复核与写回。
     """
     elements = snapshot(page)
     candidates = rank(intent, elements)
     chosen = None
+    tried = []
     for cand in candidates:
+        tried.append(cand.selector)
         if _resolves_uniquely(page, cand.selector):
             chosen = cand
             break
+
+    if chosen is None and use_llm:
+        chosen = _llm_candidate(page, intent, elements, tried)
+        if chosen:
+            candidates = candidates + [chosen]
 
     if chosen:
         HEALED.append({"page_object": intent.page_object, "constant": intent.constant,
@@ -189,3 +226,28 @@ def attempt(page, intent: Intent, artifact_path: str = "",
         record(HealProposal(intent=intent, candidates=candidates, chosen=chosen,
                             url=url, test_id=test_id), artifact_path)
     return chosen.selector if chosen else None
+
+
+def _llm_candidate(page, intent: Intent, elements: list, tried: list):
+    """让模型看页面结构推断，再用与规则候选完全相同的闸逐条校验。
+
+    模型可以提出规则拼不出的候选，但**不能豁免任何一道闸**：
+    它的建议同样必须唯一命中、可见、且命中的元素符合意图指纹。
+    否则「让模型来判断」就成了绕过防假通过保证的后门。
+    """
+    try:
+        from pages import heal_llm
+
+        if not heal_llm.available():
+            return None
+        for sel in heal_llm.infer(intent, elements, tried):
+            if not _resolves_uniquely(page, sel):          # 闸②③：唯一 + 可见
+                continue
+            el = _element_of(page, sel)
+            if not el or not matches_intent(intent, el):   # 闸①：意图指纹
+                continue
+            return Candidate(sel, "llm", 80,
+                             "模型依据常量注释与历史指纹推断，并已通过全部三道闸校验")
+    except Exception:
+        return None       # 推理层任何故障都不得影响测试结论
+    return None

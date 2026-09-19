@@ -98,6 +98,18 @@ def _matches_fingerprint(intent: Intent, el: dict) -> bool:
     return True
 
 
+def matches_intent(intent: Intent, el: dict) -> bool:
+    """元素是否符合意图指纹。公开入口，供运行时校验 LLM 给出的候选。
+
+    LLM 的建议必须过与规则候选完全相同的闸 —— 否则「让模型来判断」就成了
+    绕过防假通过保证的后门，而那正是整套机制唯一不能失守的地方。
+    无指纹时退回注释语义比对，与 rank() 的收紧逻辑保持一致。
+    """
+    if intent.has_fingerprint():
+        return _matches_fingerprint(intent, el)
+    return _describe_hit(intent, el)
+
+
 def _describe_hit(intent: Intent, el: dict) -> bool:
     """无指纹时的兜底语义比对：常量注释里的说明是否与元素文本吻合。"""
     desc = _norm(intent.description)

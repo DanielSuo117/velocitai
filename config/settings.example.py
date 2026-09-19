@@ -25,3 +25,7 @@ VIEWPORT_HEIGHT = 900
 # 「旧有逻辑」—— 定位符上次成功命中时的元素形态。
 SELF_HEAL_ARTIFACT = "reports/self-heal/proposals.jsonl"
 SELF_HEAL_FINGERPRINTS = "reports/self-heal/fingerprints.json"
+
+# 自愈的 LLM 推理后端（--self-heal=auto 时使用）。
+# 留空则自愈退回纯规则模式，不会因此报错。也可改用环境变量 ANTHROPIC_API_KEY。
+ANTHROPIC_API_KEY = ""
