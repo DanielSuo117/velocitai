@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VelocitAI — Redirecting to homepage</title>
+<link rel="canonical" href="../">
+<meta http-equiv="refresh" content="0; url=../">
+<style>body{font-family:system-ui,-apple-system,"PingFang SC",sans-serif;margin:4rem auto;max-width:32rem;padding:0 1rem;line-height:1.7;color:#333}a{color:#2563eb}</style>
+</head>
+<body>
+<script>
+  // Redirect stub for the legacy /en/ path. The site is now a single bilingual index.html at the root
+  // (data-lang switching); this directory no longer holds content and exists only to keep old links alive.
+  // The language is preset before redirecting; the root page reads velocitai-lang on init.
+  try { localStorage.setItem('velocitai-lang', 'en'); } catch (e) {}
+  location.replace('../');
+</script>
+<p>This page has moved to the <a href="../">VelocitAI homepage</a>. Redirecting…</p>
+<noscript><p>Please follow the link above.</p></noscript>
+</body>
+</html>

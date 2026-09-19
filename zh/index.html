@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VelocitAI — 正在跳转至主页</title>
+<link rel="canonical" href="../">
+<meta http-equiv="refresh" content="0; url=../">
+<style>body{font-family:system-ui,-apple-system,"PingFang SC",sans-serif;margin:4rem auto;max-width:32rem;padding:0 1rem;line-height:1.7;color:#333}a{color:#2563eb}</style>
+</head>
+<body>
+<script>
+  // 旧路径 /zh/ 的跨转页。站点已合并为根目录单文件双语（index.html 内 data-lang 切换），
+  // 此目录不再承载内容，仅保留以免旧链接与搜索引擎收录失效。
+  // 预设语言后跳转，根页面初始化时会读取 velocitai-lang 并自动切到中文。
+  try { localStorage.setItem('velocitai-lang', 'zh'); } catch (e) {}
+  location.replace('../');
+</script>
+<p>本页已合并至 <a href="../">VelocitAI 项目主页</a>，正在跳转…</p>
+<noscript><p>请点击上方链接前往主页。</p></noscript>
+</body>
+</html>
