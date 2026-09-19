@@ -58,10 +58,11 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash(git commit *)",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
+            "if": "Bash(git commit *)",
             "command": "code-review-graph build",
             "timeout": 30
           }
