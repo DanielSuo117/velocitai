@@ -6,10 +6,17 @@
 velocitai/
 ├── framework/          代码部分 —— Python UI 自动化框架
 │   ├── core/           框架核心（base · healing · exceptions · logger）
-│   ├── pages/          业务页面对象
-│   ├── tests/          业务用例
+│   ├── pages/          业务页面对象：<name>_page.py
+│   │   └── components/ 跨页面复用的组件：<name>_component.py
+│   ├── tests/          业务用例，按角色分目录
+│   │   └── <role>/     <role>_base_test.py + test_<role>_flow.py
+│   ├── data/           测试数据：<role>/<feature>.json
+│   ├── utils/          业务无关小工具（data_loader 等）
 │   ├── config/         环境与浏览器配置
 │   └── conftest.py     fixture 层
+│
+├── scripts/scaffold_role.py   生成 tests/<role>/ 骨架
+├── reports/            运行产物（allure-results · self-heal），不入库
 │
 ├── skills/             harness —— agent 操作方法论
 ├── rules/              harness —— 强制约束
@@ -58,11 +65,23 @@ velocitai/
 **为什么 core/ 与 pages/ 要分开**：两者混在一起时，页面对象目录里会逐渐堆进
 自愈引擎、日志、异常这类谁都不该在写登录页时读到的代码。
 
+## 生成代码的落点
+
+| 产物 | 目录 | 由谁生成 |
+|------|------|---------|
+| 页面对象 | `framework/pages/<name>_page.py`，并登记到 `pages/__init__.py` | gen-page-test |
+| 复用组件 | `framework/pages/components/<name>_component.py` | 手写或 gen-page-test |
+| 角色基类 / 流程用例 | `framework/tests/<role>/` | `python scripts/scaffold_role.py <role> --label <中文名>` |
+| 单个用例 | 追加到 `tests/<role>/test_<role>_flow.py` 类末尾 | gen-page-test · add-regression-point |
+| 测试数据 | `framework/data/<role>/<feature>.json`，用例里 `utils.data_loader.load_json("<role>/<feature>")` 读取 | 手写 |
+| 运行产物 | `reports/allure-results`、`reports/self-heal/`（gitignore） | pytest · 自愈运行期 |
+| 页面清单 / 回归点 | `docs/pages-catalog.md`、`docs/regression-points.md` | gen-page-test 第 6 步 |
+
 ## 角色与 context 共享
 
 | 角色 | 基类 | context scope | 起点页面 |
 |------|------|--------------|---------|
-| （新增角色时在此追加） | | | |
+| （新增角色时在此追加；`scripts/scaffold_role.py` 生成的基类默认 class scope） | | | |
 
 ## 决策树
 

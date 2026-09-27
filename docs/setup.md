@@ -9,7 +9,7 @@
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate   # Windows：source .venv/Scripts/activate（Git Bash）或 .venv\Scripts\Activate.ps1（PowerShell）
 pip install -r requirements.txt
 playwright install chromium
 ```
@@ -20,6 +20,14 @@ playwright install chromium
 2. 填入各环境的 URL 和 Token
 3. 配置 `--env=pre` 或 `--env=prod`
 
+## 新建角色
+
+```bash
+python scripts/scaffold_role.py teacher --label 教师
+```
+
+生成 `framework/tests/teacher/`：角色基类 `TeacherBaseTest`（class 级登录一次，用例共享 `self.teacher_page`）和主流程文件 `test_teacher_flow.py`。之后按 `teacher_base_test.py` 里的 `LOGIN_PATH` 调整登录方式，并在 `docs/architecture.md` 的角色表登记。页面对象放 `framework/pages/`，测试数据放 `framework/data/<role>/`。
+
 ## 可选工具
 
 - **agent-browser**：AI 驱动的浏览器 DOM 探索工具（节省 82-93% token）
@@ -27,7 +35,7 @@ playwright install chromium
 - **code-review-graph**：AST 知识图谱 MCP 工具
   - 安装：参考 code-review-graph 文档
 - **allure**：测试报告生成
-  - 安装：`brew install allure`（macOS）
+  - 安装：`brew install allure`（macOS）；`scoop install allure` 或 `npm i -g allure-commandline`（Windows）
 
 ## 运行测试
 

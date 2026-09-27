@@ -28,9 +28,9 @@ class TestClassify(unittest.TestCase):
     def test_doc_md(self):
         self.assertEqual(self._c("docs/architecture.md"), context.DOC)
 
-    def test_superpowers_is_irrelevant(self):
+    def test_specs_is_irrelevant(self):
         # spec §6.1 豁免：spec 与 plan 是长篇流程文档，不受结构检查约束
-        self.assertEqual(self._c("docs/superpowers/plans/x.md"), context.IRRELEVANT)
+        self.assertEqual(self._c("docs/specs/plans/x.md"), context.IRRELEVANT)
 
     def test_entry_files(self):
         self.assertEqual(self._c("CLAUDE.md"), context.ENTRY)

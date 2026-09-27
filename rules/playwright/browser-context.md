@@ -1,7 +1,7 @@
 ---
 paths:
   - "conftest.py"
-  - "tests/**/base_test.py"
+  - "core/base/base_test.py"
   - "tests/**/*_base_test.py"
 ---
 
@@ -11,8 +11,8 @@ paths:
 
 ## 认证机制
 
-- 认证通过 URL token 完成，由 `BaseTest._login_setup` 每个测试独立执行
-- 每个用例获取独立 **context + page**（`conftest.py` 的 `page` fixture 管理）
+- 认证通过 URL token 完成，由角色基类 `<Role>BaseTest` 的 class 级 fixture 执行**一次**，同类用例共享已登录的 `self.<role>_page`（`class_page` fixture）
+- 不需要登录态的用例用 `page` fixture，每个用例独立 **context + page**
 - **不要**在测试中手动管理浏览器生命周期
 
 ---

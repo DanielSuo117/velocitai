@@ -9,6 +9,7 @@
 <meta property="og:title" content="VelocitAI — AI 驱动的 UI 自动化 Agent Harness">
 <meta property="og:description" content="用 AI Agent 驱动 UI 自动化测试。13 个 Skills + 14 个 Rule 文件，4 倍编码提效，从生成到审查全自动化。">
 <meta property="og:type" content="website">
+<meta name="theme-color" content="#0F0F0F">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23D4783C'/><text x='50' y='72' font-size='60' font-weight='bold' text-anchor='middle' fill='white'>V</text></svg>">
 <style>
   :root {
@@ -41,7 +42,7 @@
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 24px;
-    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'JetBrains Mono', monospace;
     --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
     --max-w: 1140px;
   }
@@ -62,10 +63,18 @@
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     background: rgba(250,250,249,0.82);
-    backdrop-filter: blur(20px) saturate(1.8);
-    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transform: translateZ(0);
     border-bottom: 1px solid transparent;
     transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    nav {
+      background: var(--bg);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
   }
   nav.scrolled {
     border-bottom-color: var(--border-light);
@@ -160,8 +169,8 @@
     animation: pulse 2s infinite;
   }
   @keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent-glow); }
-    50% { opacity: 0.5; box-shadow: 0 0 16px var(--accent-glow); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
   }
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -1051,6 +1060,11 @@
   .reveal.visible {
     opacity: 1; transform: translateY(0);
   }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .hero-badge .dot { animation: none; }
+  }
 
   /* ─── TYPEWRITER ─── */
   .typewriter-wrap {
@@ -1302,14 +1316,14 @@
         <div class="hm-icon">&#9878;</div>
         <div>
           <div class="hm-t"><span data-lang="zh">落库闸门</span><span data-lang="en">Sediment Gate</span></div>
-          <div class="hm-d"><span data-lang="zh">写入即校验，挡住会污染知识库的沉淀 &mdash; 让 agent 的自我进化不反噬</span><span data-lang="en">Validates at write time, keeping polluting entries out &mdash; so self-evolution never backfires</span></div>
+          <div class="hm-d"><span data-lang="zh">AI 把经验写进笔记本之前先检查一遍，错的不许写</span><span data-lang="en">Checks every lesson before the agent writes it down. Wrong ones stay out.</span></div>
         </div>
       </a>
       <a href="#selfheal" class="hero-mech">
         <div class="hm-icon">&#8635;</div>
         <div>
           <div class="hm-t"><span data-lang="zh">LLM 选择器自愈</span><span data-lang="en">LLM Selector Self-Healing</span></div>
-          <div class="hm-d"><span data-lang="zh">定位符失效后自动重建，规则先上、模型兜底，三道闸保证绝不假通过</span><span data-lang="en">Rebuilds dead locators automatically &mdash; rules first, model as fallback, three gates against false passes</span></div>
+          <div class="hm-d"><span data-lang="zh">按钮换了门牌号，测试自动重新找到它，但绝不认错人</span><span data-lang="en">A button moves, the test finds it again. It never grabs the wrong one.</span></div>
         </div>
       </a>
     </div>
@@ -1332,11 +1346,11 @@
       </div>
       <div class="hero-metric">
         <div class="num" data-target="17" data-suffix="">0</div>
-        <div class="label"><span data-lang="zh">落库违规码</span><span data-lang="en">Gate Codes</span></div>
+        <div class="label"><span data-lang="zh">落库检查项</span><span data-lang="en">Gate Checks</span></div>
       </div>
       <div class="hero-metric">
         <div class="num" data-target="3" data-suffix="">0</div>
-        <div class="label"><span data-lang="zh">自愈防护闸</span><span data-lang="en">Healing Gates</span></div>
+        <div class="label"><span data-lang="zh">自愈关卡</span><span data-lang="en">Healing Gates</span></div>
       </div>
     </div>
   </div>
@@ -1787,29 +1801,29 @@
       <div class="section-label" style="justify-content:center;"><span data-lang="zh">两套机制</span><span data-lang="en">Two Mechanisms</span></div>
       <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">两套机制 &middot; 速览</span><span data-lang="en">Two Mechanisms &middot; At a Glance</span></h2>
       <p class="section-desc" style="margin:0 auto;">
-        <span data-lang="zh">一套防知识库变脏，一套防测试误报。解决的问题不同，遵循的却是同一条底线。</span><span data-lang="en">One keeps the knowledge base from rotting; the other keeps the suite from crying wolf. Different problems &mdash; the same hard line underneath.</span>
+        <span data-lang="zh">一套管 AI 的笔记本别记错，一套管测试别瞎报错。两件事，一条底线。</span><span data-lang="en">One keeps the agent's notebook clean; the other keeps the tests from crying wolf. Two jobs, one hard line.</span>
       </p>
     </div>
 
     <div class="gate-dims">
       <div class="gate-dim">
         <div class="gd-code">HARNESS &middot; <span data-lang="zh">落库闸门</span><span data-lang="en">Sediment Gate</span></div>
-        <h4><span data-lang="zh">让自我进化不反噬</span><span data-lang="en">Keep Self-Evolution From Backfiring</span></h4>
+        <h4><span data-lang="zh">别让 AI 越学越歪</span><span data-lang="en">Don't Let the Agent Learn Wrong</span></h4>
         <p>
-          <span data-lang="zh"><strong>问题</strong>&nbsp;写进 skills / rules / docs 的经验，会被之后每个会话当权威加载 &mdash; 一条错的会自我强化。<br><strong>做法</strong>&nbsp;写入、提交、巡检三个时机校验，4 个维度 17 个违规码。<br><strong>处置</strong>&nbsp;BLOCK 拒绝并回传修法 &middot; ASK 交人确认 &middot; WARN 放行提示。<br><strong>底线</strong>&nbsp;闸门自身出故障一律放行，绝不因为自己坏了而挡住你。</span><span data-lang="en"><strong>Problem</strong>&nbsp;Lessons written into skills / rules / docs load as authority in every later session &mdash; one bad entry reinforces itself.<br><strong>How</strong>&nbsp;Validates at write, at commit and in a full audit; 4 dimensions, 17 violation codes.<br><strong>Verdicts</strong>&nbsp;BLOCK rejects and hands back a fix &middot; ASK defers to you &middot; WARN passes with a note.<br><strong>Hard line</strong>&nbsp;Any internal failure means the write goes through &mdash; the gate never blocks you because it broke.</span>
+          <span data-lang="zh"><strong>问题</strong>&nbsp;AI 会把经验记进笔记本，以后照着做。记错一条，以后就一直错。<br><strong>做法</strong>&nbsp;写进去之前先查。错的打回，拿不准的问你，小毛病提醒一下就放行。<br><strong>底线</strong>&nbsp;检查工具自己坏了就直接放行，绝不因为自己的问题耽误你。</span><span data-lang="en"><strong>Problem</strong>&nbsp;The agent writes lessons to a notebook and follows them later. One wrong entry stays wrong for good.<br><strong>How</strong>&nbsp;Every entry is checked before it goes in. Wrong ones bounce back, doubtful ones go to you, minor ones pass with a note.<br><strong>Hard line</strong>&nbsp;If the checker itself breaks, everything passes. It never blocks you over its own bug.</span>
         </p>
       </div>
       <div class="gate-dim">
         <div class="gd-code">RUNTIME &middot; <span data-lang="zh">选择器自愈</span><span data-lang="en">Self-Healing</span></div>
-        <h4><span data-lang="zh">让 UI 改版不再制造误报</span><span data-lang="en">Stop UI Churn From Faking Failures</span></h4>
+        <h4><span data-lang="zh">页面改了，测试别瞎报错</span><span data-lang="en">Page Changed? Don't Cry Wolf</span></h4>
         <p>
-          <span data-lang="zh"><strong>问题</strong>&nbsp;定位符被前端构建改没了，用例报红 &mdash; 功能其实没坏，只是定位符过期。<br><strong>做法</strong>&nbsp;操作<strong>真正失败后</strong>才介入；先按规则重建（testid &rarr; id &rarr; role+名称），规则交白卷才让模型看页面推断。<br><strong>处置</strong>&nbsp;候选必须同时过三道闸 &mdash; 意图指纹一致、唯一命中、元素可见。<br><strong>底线</strong>&nbsp;找不到可靠替代就按原样失败，绝不凑一个。</span><span data-lang="en"><strong>Problem</strong>&nbsp;A build strips the locator and the test goes red &mdash; the feature is fine, the selector is just stale.<br><strong>How</strong>&nbsp;Steps in <strong>only after a real failure</strong>; rebuilds by rule first (testid &rarr; id &rarr; role+name), and calls the model only when the rules come back empty.<br><strong>Verdicts</strong>&nbsp;A candidate must clear all three gates &mdash; matching intent fingerprint, exactly one match, visible.<br><strong>Hard line</strong>&nbsp;No reliable replacement means the test fails as it would have. Nothing gets forced.</span>
+          <span data-lang="zh"><strong>问题</strong>&nbsp;页面改版，按钮换了「门牌号」。按钮还在，测试却说找不到，报错。<br><strong>做法</strong>&nbsp;真找不到了才出手。先按规矩找，找不到再让 AI 看页面。<br><strong>底线</strong>&nbsp;找到的必须确认就是原来那个。认不准就照常报错，绝不随便抓一个凑数。</span><span data-lang="en"><strong>Problem</strong>&nbsp;A page update changes a button's &ldquo;address&rdquo;. The button is still there, but the test can't find it and fails.<br><strong>How</strong>&nbsp;Steps in only after a real miss. Rules look first; the model only if rules find nothing.<br><strong>Hard line</strong>&nbsp;Whatever it finds must be proven the same button. If unsure, the test fails as before. Nothing gets forced.</span>
         </p>
       </div>
     </div>
 
     <div class="gate-failopen">
-      <p><span data-lang="zh"><strong>共同底线：宁可什么都不做，也不制造假象。</strong>闸门宁可放过一条待改进的沉淀，也不因自身故障挡住你的工作；自愈宁可让用例照常失败，也不顶替到另一个元素让它假通过。两者的失败方向，都朝着安全的那一侧。</span><span data-lang="en"><strong>Shared hard line: do nothing rather than fake something.</strong> The gate would rather let an imperfect entry through than block your work over its own bug; healing would rather let the test fail than stand in for some other element and call it green. Both fail toward the safe side.</span></p>
+      <p><span data-lang="zh"><strong>共同底线：宁可不做，也不装样子。</strong>闸门宁可放过一条不太好的记录，也不挡你的路；自愈宁可让测试报错，也不认错按钮骗你说通过。</span><span data-lang="en"><strong>Shared hard line: better to do nothing than to fake it.</strong> The gate would rather let a so-so entry in than block you; healing would rather let the test fail than pass it on the wrong button.</span></p>
     </div>
 
   </div>
@@ -1820,85 +1834,85 @@
   <div class="section-inner">
     <div class="section-header" style="text-align:center;">
       <div class="section-label" style="justify-content:center;"><span data-lang="zh">落库闸门</span><span data-lang="en">Sediment Gate</span></div>
-      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">落库闸门 &middot; 让沉淀不反噬</span><span data-lang="en">Sediment Gate &middot; Keep Evolution From Backfiring</span></h2>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">落库闸门 &middot; 别让 AI 越学越歪</span><span data-lang="en">Sediment Gate &middot; Don't Let the Agent Learn Wrong</span></h2>
       <p class="section-desc" style="margin:0 auto;">
-        <span data-lang="zh">自我进化会把经验写进 skills/、rules/、docs/，而这些内容会被之后每一个会话当作高优先级上下文加载。闸门在写入那一刻校验，阻止垃圾进入知识库。</span><span data-lang="en">Self-evolution writes lessons into skills/, rules/ and docs/ &mdash; and every later session loads those as high-priority context. The gate validates at the moment of writing, keeping garbage out of the knowledge base.</span>
+        <span data-lang="zh">AI 干完活，会把学到的经验写进笔记本（skills/、rules/、docs/），以后每次干活都先翻它。闸门就是笔记本的门卫：每一条要写进去的内容，先检查，再放行。</span><span data-lang="en">After each job the agent writes what it learned into a notebook (skills/, rules/, docs/) and reads it before every job after. The gate is the notebook's doorman: every entry is checked before it gets in.</span>
       </p>
     </div>
 
     <div class="gate-loop">
       <div class="gl-icon">&#9888;&#65039;</div>
-      <p><span data-lang="zh"><strong>垃圾沉淀不是静态污染，而是自我强化的循环。</strong>一条错误经验被写入后，下个会话会把它当作权威上下文照做，产出更多错误，再沉淀回去。放任不管，agent 会越用越差 &mdash; 这正是闸门存在的理由。</span><span data-lang="en"><strong>Bad sediment isn't static pollution &mdash; it's a self-reinforcing loop.</strong> Once a wrong lesson is written, the next session treats it as authoritative context, produces more errors, and persists those too. Left alone, the agent gets worse with use &mdash; which is exactly why the gate exists.</span></p>
+      <p><span data-lang="zh"><strong>为什么要有门卫？</strong>记错一条，下次 AI 会照着错的做，做错了又记下来。没人拦着，AI 会越用越笨。</span><span data-lang="en"><strong>Why a doorman?</strong> One wrong entry, and the agent follows it next time, makes more mistakes, and writes those down too. Left alone, it gets worse with use.</span></p>
     </div>
 
     <div class="gate-stages">
       <div class="gate-stage">
         <div class="gs-when">write</div>
-        <h4><span data-lang="zh">写入时拦截</span><span data-lang="en">At Write Time</span></h4>
-        <p><span data-lang="zh">PreToolUse 钩子拦下 Write / Edit，问题内容在落盘之前就被拒绝。</span><span data-lang="en">A PreToolUse hook intercepts Write / Edit &mdash; bad content is rejected before it ever hits disk.</span></p>
+        <h4><span data-lang="zh">写的时候查</span><span data-lang="en">At Write Time</span></h4>
+        <p><span data-lang="zh">AI 每次要写笔记，先经门卫过目。有问题的，根本写不进去。</span><span data-lang="en">Every note the agent tries to write passes the doorman first. Bad ones never reach disk.</span></p>
       </div>
       <div class="gate-arrow">&#8594;</div>
       <div class="gate-stage">
         <div class="gs-when">commit</div>
-        <h4><span data-lang="zh">提交时复核</span><span data-lang="en">At Commit Time</span></h4>
-        <p><span data-lang="zh">校验暂存区内容，检查注册闭环与路由表死链。</span><span data-lang="en">Validates staged content, checking registration closure and dead links in the route table.</span></p>
+        <h4><span data-lang="zh">提交前再查</span><span data-lang="en">Before Commit</span></h4>
+        <p><span data-lang="zh">代码提交前再看一遍：新技能有没有登记到目录，链接有没有指向不存在的文件。</span><span data-lang="en">One more look before commit: is the new skill listed in the index, does every link point to a real file?</span></p>
       </div>
       <div class="gate-arrow">&#8594;</div>
       <div class="gate-stage">
         <div class="gs-when">audit</div>
-        <h4><span data-lang="zh">全库巡检</span><span data-lang="en">Full Audit</span></h4>
-        <p><span data-lang="zh">一次性扫描全部 skills / rules / docs，充当零误报回归基线。</span><span data-lang="en">Scans all skills / rules / docs at once, serving as a zero-false-positive regression baseline.</span></p>
+        <h4><span data-lang="zh">定期全查</span><span data-lang="en">Full Audit</span></h4>
+        <p><span data-lang="zh">把整本笔记从头到尾扫一遍，确认没有漏网之鱼。</span><span data-lang="en">Scans the whole notebook front to back, so nothing slips through.</span></p>
       </div>
     </div>
 
-    <div class="gate-sub"><span data-lang="zh">四个校验维度</span><span data-lang="en">Four Validation Dimensions</span></div>
+    <div class="gate-sub"><span data-lang="zh">查什么</span><span data-lang="en">What Gets Checked</span></div>
     <div class="gate-dims">
       <div class="gate-dim">
         <div class="gd-code">EVI</div>
-        <h4><span data-lang="zh">证据门槛 + 语义去重</span><span data-lang="en">Evidence Threshold + Semantic Dedup</span></h4>
-        <p><span data-lang="zh">新沉淀必须写明触发条件与失败现象，不能只留一句结论；与既有条款标题重叠过高的，判为重复沉淀。</span><span data-lang="en">New sediment must state its trigger and the failure it prevents &mdash; not just a conclusion. Content overlapping too heavily with existing clauses is flagged as duplicate.</span></p>
+        <h4><span data-lang="zh">要有证据，不能重复</span><span data-lang="en">Evidence, No Duplicates</span></h4>
+        <p><span data-lang="zh">新经验必须写清楚：什么情况下会出错，出错了什么样。只留一句结论不行，和已有的重复也不行。</span><span data-lang="en">A new lesson must say when it applies and what goes wrong otherwise. A bare conclusion is rejected, and so is a repeat of an existing entry.</span></p>
       </div>
       <div class="gate-dim">
         <div class="gd-code">STR</div>
-        <h4><span data-lang="zh">结构合规</span><span data-lang="en">Structural Compliance</span></h4>
-        <p><span data-lang="zh">frontmatter 的 name 必须与目录名一致；规则必含 &#10060; 反例 + &#9989; 正例；篇幅有上限；链接不得指向不存在的文件。</span><span data-lang="en">Frontmatter name must match the directory; rules must carry a &#10060; counter-example and a &#9989; example; length is capped; links must not point at missing files.</span></p>
+        <h4><span data-lang="zh">格式要对</span><span data-lang="en">Right Format</span></h4>
+        <p><span data-lang="zh">名字要和文件夹一致，规则必须带 &#10060; 反例和 &#9989; 正例，篇幅不能太长，链接不能是死的。</span><span data-lang="en">Name must match the folder, rules need a &#10060; counter-example and a &#9989; example, length is capped, and no dead links.</span></p>
       </div>
       <div class="gate-dim">
         <div class="gd-code">GEN</div>
-        <h4><span data-lang="zh">通用化检测</span><span data-lang="en">Genericity Detection</span></h4>
-        <p><span data-lang="zh">禁止把项目专有域名、本地绝对路径、构建工具生成的哈希类名写进 skill 正文 &mdash; 它们换个项目就失效。</span><span data-lang="en">Project-specific hostnames, local absolute paths and build-tool hash class names are barred from skill bodies &mdash; they break on any other project.</span></p>
+        <h4><span data-lang="zh">不能只对一个项目管用</span><span data-lang="en">Must Work Beyond One Project</span></h4>
+        <p><span data-lang="zh">不许写死某个项目的网址、本机路径、自动生成的乱码类名。换个项目就全废了。</span><span data-lang="en">No project hostnames, local paths or auto-generated hash class names. They break the moment you switch projects.</span></p>
       </div>
       <div class="gate-dim">
         <div class="gd-code">REG</div>
-        <h4><span data-lang="zh">注册闭环 + 镜像守卫</span><span data-lang="en">Registration Closure + Mirror Guard</span></h4>
-        <p><span data-lang="zh">新建 skill 必须登记进路由表，否则写了也没人找得到；同时禁止写入已废弃的历史镜像目录。</span><span data-lang="en">A new skill must be registered in the route table, or nobody can find it; writes into deprecated mirror directories are blocked.</span></p>
+        <h4><span data-lang="zh">要登记，别写错地方</span><span data-lang="en">Registered, in the Right Place</span></h4>
+        <p><span data-lang="zh">新技能必须登记进目录，不然没人找得到。旧的废弃文件夹，禁止再往里写。</span><span data-lang="en">A new skill must be listed in the index, or nobody finds it. Writing into retired folders is blocked.</span></p>
       </div>
     </div>
 
-    <div class="gate-sub"><span data-lang="zh">三档处置</span><span data-lang="en">Three Severities</span></div>
+    <div class="gate-sub"><span data-lang="zh">查完怎么办</span><span data-lang="en">Then What</span></div>
     <div class="gate-sev">
       <div class="gate-sev-item gsv-block">
         <div class="gsv-tag">BLOCK</div>
-        <p><span data-lang="zh">直接拒绝写入，并把「修法」回传给 agent，让它自己改对再来。</span><span data-lang="en">Rejects the write outright and hands the agent a concrete fix, so it can correct itself and retry.</span></p>
+        <p><span data-lang="zh">打回去。顺便告诉 AI 错在哪、怎么改，改对了再来。</span><span data-lang="en">Bounced. The agent is told what's wrong and how to fix it, then tries again.</span></p>
       </div>
       <div class="gate-sev-item gsv-ask">
         <div class="gsv-tag">ASK</div>
-        <p><span data-lang="zh">交还用户确认。新建 skill / rule 一律必须由人点头 &mdash; 由 harness 强制，agent 绕不过去。</span><span data-lang="en">Hands the decision back to you. Creating a new skill or rule always needs human approval &mdash; enforced by the harness, not by the agent's goodwill.</span></p>
+        <p><span data-lang="zh">问你。新建技能或规则，必须由人点头，AI 绕不过去。</span><span data-lang="en">Your call. A new skill or rule always needs a human yes. The agent can't skip this.</span></p>
       </div>
       <div class="gate-sev-item gsv-warn">
         <div class="gsv-tag">WARN</div>
-        <p><span data-lang="zh">放行但提示，不打断工作流。适用于风格与可维护性问题。</span><span data-lang="en">Passes with a note, never interrupting the flow. Used for style and maintainability issues.</span></p>
+        <p><span data-lang="zh">放行，但提醒一句。小毛病不耽误干活。</span><span data-lang="en">Passes with a note. Minor issues never interrupt the work.</span></p>
       </div>
     </div>
 
     <div class="gate-failopen">
-      <p><span data-lang="zh"><strong>fail-open 原则：</strong>脚本异常、git 超时、输入畸形 &mdash; 无论闸门自身出什么故障，一律放行。闸门绝不因为自己坏了而挡住你的工作。</span><span data-lang="en"><strong>Fail-open by design:</strong> script errors, git timeouts, malformed input &mdash; whatever breaks inside the gate, the write is allowed through. The gate never blocks your work because of its own failure.</span></p>
+      <p><span data-lang="zh"><strong>门卫自己坏了怎么办？一律放行。</strong>脚本出错、git 超时，不管什么原因，闸门绝不因为自己的问题挡你的路。</span><span data-lang="en"><strong>What if the doorman itself breaks? Everything passes.</strong> Script error, git timeout, whatever it is, the gate never blocks you over its own bug.</span></p>
     </div>
 
     <div class="gate-stats">
-      <div class="gate-stat"><div class="gst-n">17</div><div class="gst-l"><span data-lang="zh">违规码</span><span data-lang="en">Violation codes</span></div></div>
-      <div class="gate-stat"><div class="gst-n">4</div><div class="gst-l"><span data-lang="zh">校验维度</span><span data-lang="en">Dimensions</span></div></div>
-      <div class="gate-stat"><div class="gst-n">3</div><div class="gst-l"><span data-lang="zh">拦截时机</span><span data-lang="en">Gate points</span></div></div>
+      <div class="gate-stat"><div class="gst-n">17</div><div class="gst-l"><span data-lang="zh">检查项</span><span data-lang="en">Checks</span></div></div>
+      <div class="gate-stat"><div class="gst-n">4</div><div class="gst-l"><span data-lang="zh">检查类别</span><span data-lang="en">Categories</span></div></div>
+      <div class="gate-stat"><div class="gst-n">3</div><div class="gst-l"><span data-lang="zh">检查时机</span><span data-lang="en">Checkpoints</span></div></div>
       <div class="gate-stat"><div class="gst-n">0</div><div class="gst-l"><span data-lang="zh">第三方依赖</span><span data-lang="en">Dependencies</span></div></div>
     </div>
 
@@ -1910,103 +1924,83 @@
   <div class="section-inner">
     <div class="section-header" style="text-align:center;">
       <div class="section-label" style="justify-content:center;"><span data-lang="zh">选择器自愈</span><span data-lang="en">Self-Healing</span></div>
-      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">选择器自愈 &middot; 让 UI 微调不再误报</span><span data-lang="en">Selector Self-Healing &middot; No More False Failures From UI Tweaks</span></h2>
+      <h2 class="section-title" style="margin:0 auto 0.8rem;"><span data-lang="zh">选择器自愈 &middot; 页面改了，测试别瞎报错</span><span data-lang="en">Selector Self-Healing &middot; Page Changed? Don't Cry Wolf</span></h2>
       <p class="section-desc" style="margin:0 auto;">
-        <span data-lang="zh">选择器因页面改版失效时，默认行为是判用例失败 &mdash; 但这多半是误报：功能没坏，只是定位符过期了。自愈基于该定位符上次成功命中时留下的意图，把它重建出来。</span><span data-lang="en">When a selector breaks after a UI change the test fails &mdash; usually a false alarm: the feature still works, only the locator went stale. Self-healing rebuilds it from the intent recorded the last time it matched.</span>
+        <span data-lang="zh">测试脚本靠「门牌号」找页面上的按钮。页面一改版，门牌号变了，按钮明明还在，测试却说找不到，报错。这多半是虚惊一场。自愈就是：记住按钮长什么样，门牌号失效了，就凭长相把它重新找回来。</span><span data-lang="en">Tests find buttons by an &ldquo;address&rdquo; called a selector. A page update changes the address, the button is still there, but the test can't find it and fails. Usually a false alarm. Self-healing remembers what the button looked like and finds it again by that.</span>
       </p>
     </div>
 
     <div class="gate-loop">
       <div class="gl-icon">&#128737;&#65039;</div>
-      <p><span data-lang="zh"><strong>安全底线：自愈只修复「定位」，绝不把真失败变成假通过。</strong>真正的危险不是修不好，而是候选顶替到另一个恰好存在的元素 &mdash; 用例照样绿，功能其实已经坏了。误报只是吵，假通过是骗。因此候选必须<strong>同时</strong>满足：意图指纹一致、全页唯一命中、元素可见。任一不满足即放弃自愈，按原样失败。</span><span data-lang="en"><strong>The hard line: self-healing may fix location only &mdash; it must never turn a real failure into a false pass.</strong> The danger isn't failing to heal; it's a candidate standing in for some other element that happens to exist &mdash; the test goes green while the feature is broken. A false alarm is noise; a false pass is a lie. So a candidate must satisfy <strong>all three</strong>: matching intent fingerprint, exactly one match on the page, and visible. Fail any one and healing is abandoned.</span></p>
+      <p><span data-lang="zh"><strong>底线：只准修「找不到」，不准把真坏了说成没坏。</strong>最怕的不是修不好，而是认错人：抓了另一个按钮凑数，测试显示通过，功能其实已经坏了。虚惊只是吵，假通过是骗。</span><span data-lang="en"><strong>Hard line: fix &ldquo;can't find it&rdquo;, never disguise &ldquo;it's broken&rdquo;.</strong> The real danger isn't failing to heal. It's grabbing some other button, so the test goes green while the feature is broken. A false alarm is noise; a false pass is a lie.</span></p>
     </div>
 
-    <div class="gate-sub"><span data-lang="zh">三道闸各防什么</span><span data-lang="en">What Each Gate Prevents</span></div>
+    <div class="gate-sub"><span data-lang="zh">找回来的按钮，要过三道关</span><span data-lang="en">Three Gates for Every Match</span></div>
     <div class="gate-sev">
       <div class="gate-sev-item gsv-block">
-        <div class="gsv-tag"><span data-lang="zh">意图指纹一致</span><span data-lang="en">Intent Fingerprint</span></div>
-        <p><span data-lang="zh">防顶替到<strong>无关元素</strong> &mdash; 例如把「取消」当成「提交」。</span><span data-lang="en">Prevents standing in for an <strong>unrelated element</strong> &mdash; e.g. mistaking Cancel for Submit.</span></p>
+        <div class="gsv-tag"><span data-lang="zh">长得对</span><span data-lang="en">Looks Right</span></div>
+        <p><span data-lang="zh">标签、角色、名字都和上次记下的一样。防止把「取消」当成「提交」。</span><span data-lang="en">Tag, role and name match what was recorded last time. Stops Cancel from passing as Submit.</span></p>
       </div>
       <div class="gate-sev-item gsv-ask">
-        <div class="gsv-tag"><span data-lang="zh">全页唯一命中</span><span data-lang="en">Unique Match</span></div>
-        <p><span data-lang="zh">防在<strong>同类元素里挑错一个</strong> &mdash; 例如页面上有两个「删除」按钮。</span><span data-lang="en">Prevents <strong>picking the wrong one</strong> among siblings &mdash; e.g. two Delete buttons on the page.</span></p>
+        <div class="gsv-tag"><span data-lang="zh">只有一个</span><span data-lang="en">Only One</span></div>
+        <p><span data-lang="zh">整页只有它一个符合。防止两个「删除」按钮里挑错。</span><span data-lang="en">Exactly one match on the whole page. Stops picking the wrong one of two Delete buttons.</span></p>
       </div>
       <div class="gate-sev-item gsv-warn">
-        <div class="gsv-tag"><span data-lang="zh">元素可见</span><span data-lang="en">Visible</span></div>
-        <p><span data-lang="zh">防命中<strong>隐藏的残留节点</strong> &mdash; DOM 里还在，但用户根本看不到。</span><span data-lang="en">Prevents matching a <strong>hidden leftover node</strong> &mdash; still in the DOM, invisible to the user.</span></p>
+        <div class="gsv-tag"><span data-lang="zh">看得见</span><span data-lang="en">Visible</span></div>
+        <p><span data-lang="zh">用户真的看得到它。防止抓到藏在页面里的废弃节点。</span><span data-lang="en">The user can actually see it. Stops matching a hidden leftover node.</span></p>
       </div>
     </div>
     <div class="gate-failopen" style="border-style:solid;border-color:var(--red);background:var(--red-bg);">
-      <p><span data-lang="zh"><strong>三道闸缺一即放弃自愈，按原样失败。</strong>这不是保守，而是因为失败模式不对称：修不好只是回到原状，顶替错了却是用例变绿而功能已坏。</span><span data-lang="en"><strong>Miss any one gate and healing is abandoned &mdash; the test fails as it would have.</strong> Not conservatism: the failure modes are asymmetric. Failing to heal just restores the status quo; healing to the wrong element turns the suite green while the feature is broken.</span></p>
+      <p><span data-lang="zh"><strong>一关没过，就不修，照常报错。</strong>修不好只是回到原样，认错人却会骗你说通过。</span><span data-lang="en"><strong>Miss one gate and it doesn't heal. The test fails as before.</strong> Failing to heal leaves things as they were; healing to the wrong button lies to you.</span></p>
     </div>
 
-    <div class="gate-sub"><span data-lang="zh">意图从哪来</span><span data-lang="en">Where Intent Comes From</span></div>
-    <p class="section-desc" style="margin:0 0 1rem;font-size:0.88rem;">
-      <span data-lang="zh">核心思路不是猜「哪个元素长得像」，而是问「这个定位符<strong>当初想选中什么</strong>」。答案有两个来源，互补。</span><span data-lang="en">The core idea isn't guessing which element <em>looks similar</em> &mdash; it's asking what this locator <strong>meant to target in the first place</strong>. Two complementary sources answer that.</span>
-    </p>
-    <div class="gate-dims">
-      <div class="gate-dim">
-        <div class="gd-code"><span data-lang="zh">静态</span><span data-lang="en">Static</span> · STATIC</div>
-        <h4><span data-lang="zh">常量名 + 注释说明</span><span data-lang="en">Constant Name + Its Comment</span></h4>
-        <p><span data-lang="zh">定位符写作 PageObject 类顶部常量，注释即语义 &mdash; <code>SUBMIT_BTN = "#submit-order"&nbsp;&nbsp;# P0: 提交订单</code>。这份说明本来就为人而写，顺手成了机器可读的意图。</span><span data-lang="en">Locators live as class constants whose comment carries the meaning &mdash; <code>SUBMIT_BTN = "#submit-order"&nbsp;&nbsp;# P0: submit order</code>. Written for humans, it doubles as machine-readable intent.</span></p>
-      </div>
-      <div class="gate-dim">
-        <div class="gd-code"><span data-lang="zh">动态</span><span data-lang="en">Learned</span> · REMEMBERED</div>
-        <h4><span data-lang="zh">历史指纹</span><span data-lang="en">Historical Fingerprint</span></h4>
-        <p><span data-lang="zh">定位符每次成功命中时，顺手记下它选中元素的标签、ARIA 角色与可及名称。<strong>这就是「基于旧有的逻辑」</strong> &mdash; 失效时据此重建，而不是凭空推测。</span><span data-lang="en">Every successful match records the element's tag, ARIA role and accessible name. <strong>This is the &ldquo;prior logic&rdquo;</strong> &mdash; healing rebuilds from it rather than guessing from scratch.</span></p>
-      </div>
-    </div>
-    <div class="gate-failopen">
-      <p><span data-lang="zh"><strong>没有指纹时，判定自动收紧。</strong>此时只剩注释一句话，证据不足以认定「页面上这个新元素就是原来那个」&mdash; 于是置信下限从 70 抬到 85，且注释必须与元素文本吻合，否则一个候选都不产出。<strong>没有证据就不猜。</strong></span><span data-lang="en"><strong>Without a fingerprint, the bar rises automatically.</strong> Only the comment remains &mdash; not enough to conclude this new element is the old one. The confidence floor goes from 70 to 85 and the comment must match the element's text, or no candidate is produced at all. <strong>No evidence, no guessing.</strong></span></p>
-    </div>
-
-    <div class="gate-sub"><span data-lang="zh">四步重建</span><span data-lang="en">Four Steps</span></div>
+    <div class="gate-sub"><span data-lang="zh">怎么修：四步</span><span data-lang="en">How It Heals: Four Steps</span></div>
     <div class="gate-heal-steps">
-      <div class="ghs"><div class="ghs-n">01</div><p><span data-lang="zh"><strong>记忆</strong><br>定位成功时记下命中元素的形态 &mdash; 标签、ARIA role、可及名称。这份指纹就是日后自愈所依据的「旧有逻辑」。</span><span data-lang="en"><strong>Remember</strong><br>On every successful match, record the element's shape &mdash; tag, ARIA role, accessible name. That fingerprint is the prior logic healing later relies on.</span></p></div>
-      <div class="ghs"><div class="ghs-n">02</div><p><span data-lang="zh"><strong>推断</strong><br><strong>只在操作真正失败之后</strong>才介入 &mdash; 绝不提前探测，否则 SPA 还没渲染完就会被误判成定位失效。确认确属定位失败，才抓当前 DOM 快照，结合指纹与常量注释还原它本来想选中什么。</span><span data-lang="en"><strong>Infer</strong><br>Steps in <strong>only after an operation genuinely fails</strong> &mdash; never probing ahead, which would misread a still-rendering SPA as a dead locator. Once it's confirmed a location failure, it snapshots the live DOM and combines fingerprint with the constant's own comment to recover intent.</span></p></div>
-      <div class="ghs"><div class="ghs-n">03</div><p><span data-lang="zh"><strong>验证</strong><br>按稳定性排序候选（testid &rarr; id &rarr; role+名称），逐个在真实页面上实跑，必须唯一命中。</span><span data-lang="en"><strong>Verify</strong><br>Rank candidates by durability (testid &rarr; id &rarr; role+name) and actually run each against the live page &mdash; must match exactly once.</span></p></div>
-      <div class="ghs"><div class="ghs-n">04</div><p><span data-lang="zh"><strong>写回</strong><br>运行期只写提案，<strong>绝不改源码</strong>；写回由 skill 复核后进行，并同样要过落库闸门。</span><span data-lang="en"><strong>Write back</strong><br>The run only emits a proposal &mdash; it <strong>never rewrites source</strong>. Write-back happens under review, and must clear the sediment gate too.</span></p></div>
+      <div class="ghs"><div class="ghs-n">01</div><p><span data-lang="zh"><strong>记住</strong><br>每次成功找到按钮，就记下它的标签、角色、名字。这就是它的「长相」。代码里定位符旁边的注释（比如「提交订单」）也算线索。没有记录时标准自动提高，猜不准就不猜。</span><span data-lang="en"><strong>Remember</strong><br>Every time a button is found, note its tag, role and name. That's its &ldquo;look&rdquo;. The comment next to the selector in code (say, &ldquo;submit order&rdquo;) counts as a clue too. With no record, the bar goes up: no evidence, no guessing.</span></p></div>
+      <div class="ghs"><div class="ghs-n">02</div><p><span data-lang="zh"><strong>真丢了才出手</strong><br>只在操作真的失败后才介入，绝不提前试探，否则页面还没加载完就会被误判。确认是找不到了，才拍下当前页面，对照长相找它去了哪。</span><span data-lang="en"><strong>Act Only After a Real Miss</strong><br>Steps in only after an action truly fails, never probing early, or a page still loading would be misread as broken. Once confirmed, it snapshots the page and looks for the button by its recorded look.</span></p></div>
+      <div class="ghs"><div class="ghs-n">03</div><p><span data-lang="zh"><strong>找候选，逐个试</strong><br>按稳定程度排序（testid &rarr; id &rarr; 角色+名字），一个个在真实页面上试，必须只命中一个。</span><span data-lang="en"><strong>Try Candidates One by One</strong><br>Ranked by durability (testid &rarr; id &rarr; role+name), each candidate runs against the live page and must match exactly once.</span></p></div>
+      <div class="ghs"><div class="ghs-n">04</div><p><span data-lang="zh"><strong>只提建议，不改代码</strong><br>运行时只写一份修复建议，绝不动源码。改代码要经人复核，还要过落库闸门。</span><span data-lang="en"><strong>Suggest, Never Rewrite</strong><br>The run only writes a proposal. It never touches source code. Write-back needs a human review and must pass the sediment gate too.</span></p></div>
     </div>
 
-    <div class="gate-sub"><span data-lang="zh">规则优先，模型兜底</span><span data-lang="en">Rules First, Model as Fallback</span></div>
+    <div class="gate-sub"><span data-lang="zh">先按规矩找，找不到才问 AI</span><span data-lang="en">Rules First, Then the Model</span></div>
     <div class="gate-dims">
       <div class="gate-dim">
         <div class="gd-code">01 &middot; RULES</div>
-        <h4><span data-lang="zh">规则先上</span><span data-lang="en">Rules Go First</span></h4>
-        <p><span data-lang="zh">按稳定性排序拼候选：testid &rarr; id &rarr; role+可及名称 &rarr; 文本 &rarr; 稳定类名；构建生成的哈希类名直接跳过 &mdash; 拿它当锚点等于把下一次失效写进代码。<strong>有稳定锚点摆在那儿时，模型根本不会被调用</strong> &mdash; 既慢又贵，结论也不会更好。</span><span data-lang="en">Candidates are built in order of durability: testid &rarr; id &rarr; role+accessible name &rarr; text &rarr; stable class. Build-generated hash classes are skipped outright &mdash; anchoring to one just schedules the next breakage. <strong>When a stable anchor is right there, the model is never called</strong> &mdash; slower, costlier, and no better.</span></p>
+        <h4><span data-lang="zh">按规矩找</span><span data-lang="en">Rules Go First</span></h4>
+        <p><span data-lang="zh">先按稳定程度拼候选：testid &rarr; id &rarr; 角色+名字 &rarr; 文字 &rarr; 稳定类名。自动生成的乱码类名直接跳过，用它下次还得坏。有稳定线索时根本不会去问 AI：又慢又贵，还不一定更准。</span><span data-lang="en">Candidates are built by durability: testid &rarr; id &rarr; role+name &rarr; text &rarr; stable class. Auto-generated hash classes are skipped; they just break again. With a stable clue in hand, the model is never called: slower, pricier, no more accurate.</span></p>
       </div>
       <div class="gate-dim">
         <div class="gd-code">02 &middot; MODEL</div>
-        <h4><span data-lang="zh">规则交白卷才轮到模型</span><span data-lang="en">The Model Only When Rules Come Back Empty</span></h4>
-        <p><span data-lang="zh">模型拿到的不是「猜一个选择器」，而是失效的定位符、常量名、代码注释里的意图、上次命中元素的形态，以及规则已经试过但不可用的候选。它能做规则做不到的事 &mdash; <strong>用结构上下文消歧</strong>，例如页面上两个按钮文案完全相同时，给出 <code>main &gt;&gt; role=button[name="登录"]</code>。规则不会拼这种复合选择器。</span><span data-lang="en">The model isn't asked to guess a selector. It receives the dead locator, the constant's name, the intent from its code comment, the shape of the element that last matched, and every candidate the rules already ruled out. It does what rules cannot &mdash; <strong>disambiguate by structural context</strong>, e.g. returning <code>main &gt;&gt; role=button[name="Login"]</code> when two buttons carry identical labels. Rules never compose selectors like that.</span></p>
+        <h4><span data-lang="zh">规矩没辙了才问 AI</span><span data-lang="en">The Model Only When Rules Fail</span></h4>
+        <p><span data-lang="zh">AI 拿到的不是「猜一个」，而是全部线索：失效的门牌号、代码注释、上次的长相、规则已经试过的候选。它擅长规则做不到的事：两个按钮文字一模一样时，靠位置区分，比如「主区域里那个登录按钮」。</span><span data-lang="en">The model isn't asked to guess. It gets every clue: the dead selector, the code comment, the last recorded look, and every candidate the rules already tried. It does what rules can't: when two buttons share a label, it tells them apart by position, like &ldquo;the Login button inside the main area&rdquo;.</span></p>
       </div>
     </div>
     <div class="gate-failopen" style="border-style:solid;border-color:var(--red);background:var(--red-bg);">
-      <p><span data-lang="zh"><strong>模型只有提名权，没有判决权。</strong>它给出的候选必须过<strong>与规则候选完全相同</strong>的三道闸 &mdash; 唯一命中、可见、意图指纹一致。少放行一条，「让模型判断」就成了绕过防假通过保证的后门。没有 API key 时静默退回纯规则模式，不会让任何用例因此失败。</span><span data-lang="en"><strong>The model nominates; it never decides.</strong> Every candidate it returns must clear <strong>exactly the same three gates</strong> as a rule-built one &mdash; unique match, visible, matching intent fingerprint. Waive even one and &ldquo;let the model decide&rdquo; becomes a backdoor around the no-false-pass guarantee. With no API key it silently falls back to rules only, and no test fails because of it.</span></p>
+      <p><span data-lang="zh"><strong>AI 只能提名，不能拍板。</strong>它给的候选，同样要过那三道关，一关都不能少。没配 API key 时自动退回纯规则模式，不会因此让任何测试失败。</span><span data-lang="en"><strong>The model nominates; it never decides.</strong> Its candidates pass the same three gates, no exceptions. With no API key it quietly falls back to rules only, and no test fails because of it.</span></p>
     </div>
 
-    <div class="gate-sub"><span data-lang="zh">四档模式</span><span data-lang="en">Four Modes</span></div>
+    <div class="gate-sub"><span data-lang="zh">四种开关</span><span data-lang="en">Four Modes</span></div>
     <div class="gate-sev sev-4">
       <div class="gate-sev-item gsv-warn">
         <div class="gsv-tag">off</div>
-        <p><span data-lang="zh">默认。行为与未引入自愈时逐字一致，零额外开销。</span><span data-lang="en">The default. Behaves exactly as before self-healing existed, with zero overhead.</span></p>
+        <p><span data-lang="zh">默认。完全不修，和没装自愈一模一样。</span><span data-lang="en">Default. No healing at all, exactly as before.</span></p>
       </div>
       <div class="gate-sev-item gsv-ask">
         <div class="gsv-tag">on</div>
-        <p><span data-lang="zh">失效时尝试重建，用例继续。终端逐条列出被修复的定位符。</span><span data-lang="en">Attempts a rebuild on failure so the run continues, listing every healed locator in the summary.</span></p>
+        <p><span data-lang="zh">找不到就修，测试继续跑。结束时列出修了哪些。</span><span data-lang="en">Heals on a miss and the run continues. Lists every fix at the end.</span></p>
       </div>
       <div class="gate-sev-item gsv-block">
         <div class="gsv-tag">strict</div>
-        <p><span data-lang="zh">同 on，但只要发生过自愈就以非零码结束 &mdash; 让 CI 看见定位符漂移。</span><span data-lang="en">Same as on, but exits non-zero if anything was healed &mdash; so CI sees the drift.</span></p>
+        <p><span data-lang="zh">同 on，但只要修过就算不通过，让 CI 知道门牌号变了。</span><span data-lang="en">Same as on, but any heal fails the run, so CI knows the address changed.</span></p>
       </div>
       <div class="gate-sev-item gsv-ask">
         <div class="gsv-tag">auto</div>
-        <p><span data-lang="zh">同 on，并在规则交白卷时让模型推断，同时把修复写回 PageObject 源码。需要 API key，且会改动工作区文件 &mdash; 因此必须显式选择。</span><span data-lang="en">Same as on, plus the model infers when rules come back empty, and the fix is written back into the PageObject source. Needs an API key and touches files in your working tree &mdash; hence opt-in only.</span></p>
+        <p><span data-lang="zh">同 on，规则没辙时问 AI，并把修复直接写进代码。要 API key，会改你的文件，所以必须手动打开。</span><span data-lang="en">Same as on, plus the model steps in when rules fail and fixes are written into code. Needs an API key and edits your files, so you must turn it on yourself.</span></p>
       </div>
     </div>
 
     <div class="gate-failopen">
-      <p><span data-lang="zh"><strong>自愈过的用例不算干净通过。</strong>自愈成功说明定位符已经漂移；沉默地放过去，下次就是真失败，而且没人知道从哪一次开始坏的。</span><span data-lang="en"><strong>A healed test is not a clean pass.</strong> A successful heal means the locator has drifted; let it slide silently and the next run is a real failure nobody can trace back to its start.</span></p>
+      <p><span data-lang="zh"><strong>修过的测试不算干净通过。</strong>修好了，说明门牌号已经变了。不吭声放过去，下次就是真的坏，还没人知道从哪次开始的。</span><span data-lang="en"><strong>A healed test is not a clean pass.</strong> Healing means the address already changed. Let it slide and the next run really breaks, with no one knowing when it started.</span></p>
     </div>
   </div>
 </section>
@@ -2389,6 +2383,7 @@
 
 <script>
   // ─── I18N LANGUAGE SWITCH ───
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let typewriterRafId = null;
   function switchLang(lang) {
     document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
@@ -2420,6 +2415,7 @@
     target.textContent = '';
     target.appendChild(textNode);
     target.appendChild(cursor);
+    if (prefersReducedMotion) { textNode.data = text; return; }
     let i = 0;
     let lastTime = 0;
     function step(timestamp) {
@@ -2448,9 +2444,9 @@
 
   // ─── NAV SCROLL ───
   const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
+  function updateNavScrolled() {
     nav.classList.toggle('scrolled', window.scrollY > 10);
-  });
+  }
 
   // ─── MOBILE MENU ───
   function toggleMenu() {
@@ -2467,6 +2463,7 @@
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
@@ -2479,6 +2476,7 @@
         entry.target.querySelectorAll('.savings-bar-fill').forEach(bar => {
           bar.classList.add('visible');
         });
+        savingsObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.3 });
@@ -2492,6 +2490,7 @@
         entry.target.querySelectorAll('.eff-bar-fill').forEach(bar => {
           bar.classList.add('animated');
         });
+        effObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.3 });
@@ -2501,7 +2500,7 @@
   // ─── SMOOTH NAV ACTIVE STATE ───
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a:not(.nav-github)');
-  window.addEventListener('scroll', () => {
+  function updateNavActive() {
     let current = '';
     sections.forEach(section => {
       const top = section.offsetTop - 100;
@@ -2513,7 +2512,21 @@
         link.style.color = href === '#' + current ? 'var(--accent)' : '';
       }
     });
-  });
+  }
+
+  // ─── SINGLE rAF-THROTTLED PASSIVE SCROLL LISTENER ───
+  let scrollTicking = false;
+  function onScrollFrame() {
+    scrollTicking = false;
+    updateNavScrolled();
+    updateNavActive();
+  }
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      scrollTicking = true;
+      requestAnimationFrame(onScrollFrame);
+    }
+  }, { passive: true });
 
   // ─── 2. HERO METRICS COUNT-UP ───
   (function () {
@@ -2525,6 +2538,7 @@
     function animateNum(el) {
       const target = parseInt(el.dataset.target, 10);
       const suffix = el.dataset.suffix || '';
+      if (prefersReducedMotion) { el.textContent = target + suffix; return; }
       const duration = 2000;
       const start = performance.now();
 

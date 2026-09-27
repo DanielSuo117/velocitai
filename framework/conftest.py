@@ -1,6 +1,11 @@
 import pytest
 from playwright.sync_api import sync_playwright
 
+try:
+    import allure
+except ImportError:      # 只跑闸门单测等无浏览器场景时允许缺席
+    allure = None
+
 from config.settings import (
     DEFAULT_NAVIGATION_TIMEOUT,
     DEFAULT_TIMEOUT,
@@ -93,6 +98,36 @@ def class_page(browser, request):
     yield new_page
     new_page.close()
     context.close()
+
+
+def _page_of(item):
+    """找出用例正在用的 page：函数级 page / 类级 class_page / 角色基类注入的 self.page。"""
+    funcargs = getattr(item, "funcargs", None) or {}
+    page = funcargs.get("page") or funcargs.get("class_page")
+    if page is None and getattr(item, "instance", None) is not None:
+        page = getattr(item.instance, "page", None)
+    return page
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """失败即截图附进 allure。只截 setup/call —— teardown 时 page 可能已经关闭。"""
+    outcome = yield
+    report = outcome.get_result()
+    if allure is None or report.when not in ("setup", "call") or not report.failed:
+        return
+    page = _page_of(item)
+    if page is None:
+        return
+    try:
+        allure.attach(
+            page.screenshot(),
+            name=f"失败截图 · {item.name}",
+            attachment_type=allure.attachment_type.PNG,
+        )
+        allure.attach(page.url, name="失败时 URL", attachment_type=allure.attachment_type.TEXT)
+    except Exception:
+        pass      # 截图失败不能掩盖用例本身的失败
 
 
 def pytest_configure(config):

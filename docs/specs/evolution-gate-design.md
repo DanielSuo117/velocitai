@@ -107,7 +107,7 @@ class Violation:
 
 ### 6.1 structure.py — 结构合规
 
-作用域：`skills/**/SKILL.md`、`rules/**/*.md`、`docs/*.md`（**不含 `docs/superpowers/**`**，见下方豁免）
+作用域：`skills/**/SKILL.md`、`rules/**/*.md`、`docs/*.md`（**不含 `docs/specs/**`**，见下方豁免）
 
 | 码 | 判定 | 级别 |
 |---|---|---|
@@ -122,7 +122,7 @@ class Violation:
 
 - STR002 豁免 `skills/SKILL.md` —— 该文件 `name` 为 `ui-automation-harness` 而目录名为 `skills`，是路由 skill，为唯一例外。
 - STR003 豁免索引类文件，判定为文件名匹配 `*-index.md` 或 `*-overview.md` —— `rules/rules-index.md` 与 `rules/playwright/playwright-overview.md` 是纯链接索引，天然无正反例。
-- **全部 STR 检查豁免 `docs/superpowers/**`** —— 该目录存放 brainstorming 与 writing-plans 产出的 spec 和 plan，是长篇流程文档而非 harness 知识，体量天然超标。实测：本设计文档 316 行触发 STR005，`2026-05-23-i18n-merge.md` 408 行触发 STR005，而实现计划通常超过 500 行会触发 STR006 —— 不豁免则闸门会把自己的设计文档与实现计划判为违规，无法写入。
+- **全部 STR 检查豁免 `docs/specs/**`** —— 该目录存放 brainstorming 与 writing-plans 产出的 spec 和 plan，是长篇流程文档而非 harness 知识，体量天然超标。实测：本设计文档 316 行触发 STR005，`2026-05-23-i18n-merge.md` 408 行触发 STR005，而实现计划通常超过 500 行会触发 STR006 —— 不豁免则闸门会把自己的设计文档与实现计划判为违规，无法写入。
 - STR004 豁免被 `.gitignore` 忽略的目标路径 —— `CLAUDE.md` 链接到的 `./CLAUDE.local.md` 是设计上可选的私有备忘（见 CLAUDE.md 末行「私有备忘：CLAUDE.local.md（不入库）」），不存在属正常状态，不得判为死链。
 
 **阈值依据**：现有 26 个 harness 文件最大 208 行，均值约 109 行。300 / 500 对现有库留有充足余量。
@@ -357,6 +357,6 @@ Windows 解释器名的说明已写入 README。
 
 **路由表注册闭环**：12 个 skill 在 CLAUDE.md 路由表中全部已注册，REG001 存量零违规。
 
-**`docs/superpowers/` 体量实测**：spec 316 行、`2026-05-23-i18n-merge.md` 408 行、`2026-05-22-harness-sync-and-generalize.md` 245 行 → 推出该目录的全量 STR 豁免。
+**`docs/specs/` 体量实测**：spec 316 行、`2026-05-23-i18n-merge.md` 408 行、`2026-05-22-harness-sync-and-generalize.md` 245 行 → 推出该目录的全量 STR 豁免。
 
 **文件体量分布**：26 个文件合计 2836 行，最大 208 行（`skills/page-load-assertion/SKILL.md`）→ 推出 STR005 = 300 行、STR006 = 500 行。

@@ -17,6 +17,14 @@ import os
 import pathlib
 import sys
 
+# Windows 上 stdin/stdout 默认走本地代码页（cp936 等），含中文的 hook JSON 会解码/编码失败；
+# 统一强制 UTF-8。失败也只是退回默认编码，不能成为新的抛错路径。
+try:
+    sys.stdin.reconfigure(encoding="utf-8", errors="replace")
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from gate import context, runner            # noqa: E402

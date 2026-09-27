@@ -6,7 +6,7 @@
   - locator-replacer 中 8 处哈希类名全为反例教学（GEN003 豁免）
   - skill-authoring.md 用文件级触发行覆盖 3 个条款（EVI002 文件级判定）
   - CLAUDE.md → CLAUDE.local.md 为 gitignore 的可选文件（STR004/REG002 豁免）
-  - docs/superpowers/** 为长篇流程文档（全量 STR 豁免）
+  - docs/specs/** 为长篇设计文档（全量 STR 豁免）
 
 任何 checker 改动导致本仓库出现 BLOCK，即为引入了误报。
 """
@@ -94,10 +94,10 @@ class TestAuditCoverage(unittest.TestCase):
         self.assertIn("docs/architecture.md", self.scanned, self._hint())
         self.assertIn("docs/setup.md", self.scanned, self._hint())
 
-    def test_superpowers_never_scanned(self):
+    def test_specs_never_scanned(self):
         # docs/*.md 是非递归的，且 classify 另有豁免 —— 两道防线都不该让 spec/plan 进来
-        leaked = [p for p in self.scanned if p.startswith("docs/superpowers/")]
-        self.assertEqual(leaked, [], f"docs/superpowers/ 不应被扫描：{leaked}")
+        leaked = [p for p in self.scanned if p.startswith("docs/specs/")]
+        self.assertEqual(leaked, [], f"docs/specs/ 不应被扫描：{leaked}")
 
     @classmethod
     def _hint(cls):

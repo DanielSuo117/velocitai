@@ -113,8 +113,8 @@ class TestSize(unittest.TestCase):
         self.assertIn("STR006", codes(vs))
         self.assertNotIn("STR005", codes(vs))
 
-    def test_superpowers_exempt(self):
-        vs = structure.check(P("docs/superpowers/plans/p.md"), "行\n" * 800, self.root)
+    def test_specs_exempt(self):
+        vs = structure.check(P("docs/specs/plans/p.md"), "行\n" * 800, self.root)
         self.assertEqual(codes(vs), [])
 
 

@@ -53,10 +53,11 @@ cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,scripts,docs,CLAUDE.m
 > **`scripts/` 不可省略**：`hooks/hooks.json` 调的落库校验闸门就在 `scripts/gate_cli.py`。
 > 漏拷这一层，hook 会因找不到脚本而静默失效 —— 规则层仍在，但没有强制力。
 >
-> **Windows 用户**：闸门以 `python3` 调用，而 Windows 上解释器常只叫 `python`。
-> 若如此，把 `hooks/hooks.json` 里的 `python3` 改成 `python`。不改也不会卡住你 ——
-> 解释器找不到时 hook 执行失败，Claude Code 视为无决策直接放行（fail-open），
-> 但闸门在那台机器上是静默失效的。
+> **Windows 用户**：hook 已自动按 `py -3` → `python3` → `python` 兜底找解释器，
+> 装 python.org 官方包（自带 `py` 启动器）即可，不必手改 `hooks/hooks.json`。
+> `py` 优先是为了绕开微软商店的 `python`/`python3` 存根。但要装 **Git for Windows**：
+> 没装时 Claude Code 用 PowerShell 跑 hook，这段 sh 语法跑不起来，闸门会静默放行
+> （fail-open）。Claude Code 本身也推荐装 Git for Windows。
 
 ---
 
@@ -152,9 +153,10 @@ velocitai/
 │   └── report-strategy/      # 1 个文件
 ├── hooks/                    # 会话与工具 hooks
 │   └── hooks.json
-├── scripts/                  # 落库校验闸门（零依赖 python3）
+├── scripts/                  # 落库校验闸门（零依赖 python3）+ 脚手架
 │   ├── gate_cli.py           # 唯一入口，被 hooks.json 调用
-│   └── gate/                 # 校验器 + stdlib unittest 测试
+│   ├── gate/                 # 校验器 + stdlib unittest 测试
+│   └── scaffold_role.py      # 生成 tests/<role>/ 角色骨架
 ├── docs/                     # 项目知识库
 │   ├── architecture.md
 │   ├── pages-catalog.md
@@ -166,10 +168,14 @@ velocitai/
     │   ├── healing/          # 选择器自愈（拦截器 · 引擎 · 运行时 · 模型 · 写回）
     │   ├── exceptions.py
     │   └── logger.py
-    ├── pages/                # 业务页面对象（继承 BasePage）
-    ├── tests/                # 业务用例（继承 BaseTest）
+    ├── pages/                # 业务页面对象 <name>_page.py（继承 BasePage）
+    │   └── components/       # 跨页面复用组件（继承 BaseComponent）
+    ├── tests/                # 业务用例，按角色分目录
+    │   └── <role>/           # <role>_base_test.py + test_<role>_flow.py
+    ├── data/                 # 测试数据 <role>/<feature>.json（utils.data_loader 读取）
+    ├── utils/                # 业务无关小工具
     ├── config/               # 环境与浏览器配置
-    └── conftest.py           # fixture 层
+    └── conftest.py           # fixture 层 + 失败截图附进 allure
 ```
 
 > **代码与 harness 分开存放**：上面 `framework/` 之外的部分都是 harness ——
@@ -215,6 +221,7 @@ cp -r velocitai/{skills,rules,hooks,scripts,docs,.claude,CLAUDE.md} your-project
 # 2. 安装依赖
 cd your-project
 python -m venv .venv && source .venv/bin/activate
+# Windows：Git Bash 用 source .venv/Scripts/activate；PowerShell 用 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 playwright install chromium
 
@@ -283,11 +290,13 @@ cp -r velocitai/{.claude,.claude-plugin,skills,rules,hooks,scripts,docs,CLAUDE.m
 > `hooks/hooks.json` lives in `scripts/gate_cli.py`. Without it the hook silently
 > does nothing — the rule layer survives, its enforcement does not.
 >
-> **Windows**: the gate is invoked as `python3`, which on Windows is often only
-> available as `python`. If so, change `python3` to `python` in
-> `hooks/hooks.json`. Leaving it alone will not block you — a missing interpreter
-> makes the hook fail, which Claude Code treats as "no decision" and allows
-> (fail-open) — but the gate is silently inert on that machine.
+> **Windows**: the hook already falls back through `py -3` → `python3` → `python`,
+> so the python.org installer (which ships the `py` launcher) is enough — no edit
+> to `hooks/hooks.json` needed. `py` goes first to skip the Microsoft Store
+> `python`/`python3` stubs.
+> Do install **Git for Windows**: without it Claude Code runs hooks under
+> PowerShell, this sh syntax cannot run, and the gate silently allows everything
+> (fail-open). Claude Code itself recommends Git for Windows.
 
 ---
 
@@ -383,9 +392,10 @@ velocitai/
 │   └── report-strategy/      # 1 file
 ├── hooks/                    # Session & tool hooks
 │   └── hooks.json
-├── scripts/                  # Sediment validation gate (zero-dependency python3)
+├── scripts/                  # Sediment validation gate (zero-dependency python3) + scaffolding
 │   ├── gate_cli.py           # Single entry point, invoked by hooks.json
-│   └── gate/                 # Checkers + stdlib unittest suite
+│   ├── gate/                 # Checkers + stdlib unittest suite
+│   └── scaffold_role.py      # Generates the tests/<role>/ skeleton
 ├── docs/                     # Project knowledge base
 │   ├── architecture.md
 │   ├── pages-catalog.md
@@ -397,10 +407,14 @@ velocitai/
     │   ├── healing/          # Selector self-healing (interceptor · engine · runtime · llm · patcher)
     │   ├── exceptions.py
     │   └── logger.py
-    ├── pages/                # Business page objects (extend BasePage)
-    ├── tests/                # Business test cases (extend BaseTest)
+    ├── pages/                # Business page objects <name>_page.py (extend BasePage)
+    │   └── components/       # Reusable cross-page components (extend BaseComponent)
+    ├── tests/                # Business test cases, one directory per role
+    │   └── <role>/           # <role>_base_test.py + test_<role>_flow.py
+    ├── data/                 # Test data <role>/<feature>.json (read via utils.data_loader)
+    ├── utils/                # Business-agnostic helpers
     ├── config/               # Environment and browser configuration
-    └── conftest.py           # Fixture layer
+    └── conftest.py           # Fixture layer + failure screenshots attached to allure
 ```
 
 > **Code and harness are stored separately.** Everything outside `framework/`
@@ -447,6 +461,7 @@ cp -r velocitai/{skills,rules,hooks,scripts,docs,.claude,CLAUDE.md} your-project
 # 2. Install dependencies
 cd your-project
 python -m venv .venv && source .venv/bin/activate
+# Windows: Git Bash `source .venv/Scripts/activate`; PowerShell `.venv\Scripts\Activate.ps1`
 pip install -r requirements.txt
 playwright install chromium
 

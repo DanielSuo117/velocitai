@@ -73,6 +73,8 @@ from pages.<snake_name>_page import <ClassName>
 
 目标文件：对应角色 `tests/<role>/test_<role>_flow.py`（继承 `<Role>BaseTest`）中的 `Test<Role>Flow` 类。
 
+角色目录还不存在时，先 `python scripts/scaffold_role.py <role> --label <中文名>` 生成基类与流程文件，再往类末尾追加；不要手搓目录。
+
 对应角色示例：
 
 ```python

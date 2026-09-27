@@ -60,7 +60,10 @@
 ## 命令
 
 ```bash
-source .venv/bin/activate
+source .venv/bin/activate   # Windows：source .venv/Scripts/activate（Git Bash）或 .venv\Scripts\Activate.ps1（PowerShell）
+
+# 新角色：生成 tests/<role>/ 骨架（角色基类 + 主流程文件），再用 gen-page-test 追加用例
+python scripts/scaffold_role.py <role> --label <中文名>
 
 # 按模块运行（--env 必须由用户指定）
 pytest framework/tests/<role>/test_<role>_flow.py --env=<pre|prod>

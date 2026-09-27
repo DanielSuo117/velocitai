@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode write",
+            "command": "if command -v py >/dev/null 2>&1; then py -3 \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode write; elif command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode write; else python \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode write; fi",
             "timeout": 10
           }
         ]
@@ -17,7 +17,7 @@
           {
             "type": "command",
             "if": "Bash(git commit *)",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode commit",
+            "command": "if command -v py >/dev/null 2>&1; then py -3 \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode commit; elif command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode commit; else python \"${CLAUDE_PLUGIN_ROOT}/scripts/gate_cli.py\" --mode commit; fi",
             "timeout": 20
           },
           {

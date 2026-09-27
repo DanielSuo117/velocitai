@@ -74,7 +74,7 @@ class SomeFeaturePage(BasePage):
 
 - 文件首行加 `# 文件用途：<中文概述>`；每文件对应一个 `Test<Role><Feature>` 类
 - 按角色拆分目录：`tests/<roleA>/`、`tests/<roleB>/`
-- 基类路径：各角色 `tests/<role>/<role>_base_test.py::<Role>BaseTest`；公共根基类 `tests/base_test.py::BaseTest`
+- 基类路径：各角色 `tests/<role>/<role>_base_test.py::<Role>BaseTest`（`scripts/scaffold_role.py` 生成）；公共根基类 `core/base/base_test.py::BaseTest`，它是框架能力，不放 `tests/`
 
 ### 测试方法新增与修改顺序
 

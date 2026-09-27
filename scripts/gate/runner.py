@@ -65,7 +65,7 @@ def _staged(root):
     try:
         r = subprocess.run(
             ["git", "-C", str(root), "diff", "--cached", "--name-only"],
-            capture_output=True, text=True, timeout=10,
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=10,
         )
     except Exception:
         return []
@@ -85,16 +85,14 @@ def _staged_text(root, name):
     try:
         r = subprocess.run(
             ["git", "-C", str(root), "show", f":{name}"],
-            capture_output=True, timeout=10,
+            capture_output=True, encoding="utf-8", errors="replace", timeout=10,
         )
     except Exception:
         return None
     if r.returncode != 0:
         return None
-    try:
-        return r.stdout.decode("utf-8")
-    except Exception:
-        return None
+    # encoding="utf-8", errors="replace" 已把 stdout 解成 str；非 UTF-8 字节被替换而非抛错
+    return r.stdout
 
 
 def run_commit(root):

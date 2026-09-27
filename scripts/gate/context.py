@@ -15,7 +15,7 @@ IRRELEVANT = "irrelevant"
 ENTRY_FILES = {"CLAUDE.md", "AGENTS.md", "GEMINI.md"}
 MIRROR_ROOTS = ("zh", "en")
 # spec §6.1 豁免：spec / plan 是长篇流程文档，不是 harness 知识
-EXEMPT_PREFIXES = ("docs/superpowers/",)
+EXEMPT_PREFIXES = ("docs/specs/",)
 
 
 def find_repo_root(start: pathlib.Path):
@@ -76,7 +76,7 @@ def git_ignored(path_str: str, root_str: str) -> bool:
     try:
         r = subprocess.run(
             ["git", "-C", root_str, "check-ignore", "-q", path_str],
-            capture_output=True, timeout=5,
+            capture_output=True, encoding="utf-8", errors="replace", timeout=5,
         )
     except Exception:
         return True
